@@ -1,7 +1,7 @@
 import { MeshBuilder, StandardMaterial, CubeTexture, Texture } from '@babylonjs/core';
 
 export function createSkybox(scene) {
-    const skybox = MeshBuilder.CreateBox("skyBox", { size: 1000 }, scene);
+    const skybox = MeshBuilder.CreateBox("skyBox", { size: 10000 }, scene); // Increase skybox size
     const skyboxMaterial = new StandardMaterial("skyBoxMaterial", scene);
     skyboxMaterial.backFaceCulling = false;
 

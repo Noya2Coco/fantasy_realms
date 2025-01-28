@@ -17,3 +17,33 @@ html, body, canvas {
   border-radius: 5px;
   font-family: Arial, sans-serif;
 }
+
+#axisIndicator {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  width: 100px;
+  height: 100px;
+  background-color: rgba(0, 0, 0, 0.5);
+  border-radius: 5px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#fpsPanel {
+  position: absolute;
+  bottom: 10px;
+  left: 10px;
+  color: white;
+  background-color: rgba(0, 0, 0, 0.5);
+  padding: 10px;
+  border-radius: 5px;
+  font-family: Arial, sans-serif;
+}
+
+#fpsCanvas {
+  margin-top: 5px;
+  width: 150px;
+  height: 75px;
+}
