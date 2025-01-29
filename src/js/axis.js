@@ -140,12 +140,22 @@ function createArrowhead(context, x, y, color) {
     context.fill();
 }
 
-export function createVelocityVector(scene, length) {
-    velocityVector = MeshBuilder.CreateLines(
+export function createVelocityVector(scene, startPoint, endPoint) {
+    let velocityVector = MeshBuilder.CreateLines(
         "velocityVector",
-        { points: [Vector3.Zero(), new Vector3(length, 0, 0)] },
+        { points: [startPoint, endPoint] },
         scene
     );
     velocityVector.color = new Color3(1, 0, 1); // Pink color
     return velocityVector;
+}
+
+export function createVelocityVectorArrow(scene, startPoint, endPoint, arrowLeft, arrowRight) {
+    let velocityVectorArrow = MeshBuilder.CreateLines(
+        "velocityVectorArrow",
+        { points: [startPoint, endPoint, arrowLeft, endPoint, arrowRight] },
+        scene
+    );
+    velocityVectorArrow.color = new Color3(1, 0, 1);
+    return velocityVectorArrow;
 }

@@ -13,20 +13,15 @@ export function makeTextPlane(scene, text, color, size, width, height, fontSize)
     return plane;
 }
 
-export function toggleInfoVisibility(ship, scene, velocityVector, velocityVectorArrow) {
+export function toggleInfoVisibility(ship, scene) {
     scene.infoVisible = !scene.infoVisible;
     document.getElementById('infoPanel').style.display = scene.infoVisible ? 'block' : 'none';
     document.getElementById('fpsPanel').style.display = scene.infoVisible ? 'block' : 'none';
     document.getElementById('axisIndicator').style.display = scene.infoVisible ? 'block' : 'none';
     ship.axes = setAxesVisibilityFromObject(ship.axes, scene.infoVisible);
     ship.velocityVector = setAxesVisibilityFromObject(ship.velocityVector, scene.infoVisible);
+    ship.velocityVectorArrow = setAxesVisibilityFromObject(ship.velocityVectorArrow, scene.infoVisible);
     scene.axes = setAxesVisibilityFromObject(scene.axes, scene.infoVisible);
-    if (velocityVector) {
-        velocityVector.isVisible = scene.infoVisible;
-    }
-    if (velocityVectorArrow) {
-        velocityVectorArrow.isVisible = scene.infoVisible;
-    }
 }
 
 export function setAxesVisibilityFromObject(axes, visible) {
