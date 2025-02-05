@@ -1,4 +1,4 @@
-import { MeshBuilder, Vector3, Color3, Matrix } from '@babylonjs/core';
+import { MeshBuilder, Vector3, Color3, Matrix } from 'babylonjs';
 import { makeTextPlane } from './utils.js';
 
 export function createSceneAxis(scene, size) {
@@ -36,7 +36,7 @@ export function createSceneAxis(scene, size) {
     scene.axes = { axisX, axisY, axisZ, xText, yText, zText };
 }
 
-export function createShipAxis(ship, scene, size) {
+export function createMeshAxis(mesh, scene, size) {
     // Axe X
     const axisX = MeshBuilder.CreateLines(
         "axisX",
@@ -44,10 +44,10 @@ export function createShipAxis(ship, scene, size) {
         scene
     );
     axisX.color = Color3.Red();
-    axisX.parent = ship;
+    axisX.parent = mesh;
     const xText = makeTextPlane(scene, "X", "red", size, 128, 128, 60);
     xText.position = new Vector3(size * 1.1, 0, 0);
-    xText.parent = ship;
+    xText.parent = mesh;
 
     // Axe Y
     const axisY = MeshBuilder.CreateLines(
@@ -56,10 +56,10 @@ export function createShipAxis(ship, scene, size) {
         scene
     );
     axisY.color = Color3.Green();
-    axisY.parent = ship;
+    axisY.parent = mesh;
     const yText = makeTextPlane(scene, "Y", "green", size, 128, 128, 60);
     yText.position = new Vector3(0, size * 1.1, 0);
-    yText.parent = ship;
+    yText.parent = mesh;
 
     // Axe Z
     const axisZ = MeshBuilder.CreateLines(
@@ -68,13 +68,14 @@ export function createShipAxis(ship, scene, size) {
         scene
     );
     axisZ.color = Color3.Blue();
-    axisZ.parent = ship;
+    axisZ.parent = mesh;
     const zText = makeTextPlane(scene, "Z", "blue", size, 128, 128, 60);
     zText.position = new Vector3(0.2, 0, size * 1.1);
-    zText.parent = ship;
+    zText.parent = mesh;
 
     // Attach axes to ship as attributes
-    ship.axes = { axisX, axisY, axisZ, xText, yText, zText };
+    mesh.axes = { axisX, axisY, axisZ, xText, yText, zText };
+    return mesh;
 }
 
 export function createSceneAxisIndicator(axisContext, rotationQuaternion) {

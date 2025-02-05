@@ -1,4 +1,4 @@
-import { MeshBuilder, DynamicTexture, StandardMaterial} from '@babylonjs/core';
+import { MeshBuilder, DynamicTexture, StandardMaterial} from 'babylonjs';
 
 export function makeTextPlane(scene, text, color, size, width, height, fontSize) {
     const dynamicTexture = new DynamicTexture("DynamicTexture", { width, height }, scene);
@@ -18,9 +18,9 @@ export function toggleInfoVisibility(ship, scene) {
     document.getElementById('infoPanel').style.display = scene.infoVisible ? 'block' : 'none';
     document.getElementById('fpsPanel').style.display = scene.infoVisible ? 'block' : 'none';
     document.getElementById('axisIndicator').style.display = scene.infoVisible ? 'block' : 'none';
-    ship.axes = setAxesVisibilityFromObject(ship.axes, scene.infoVisible);
-    ship.velocityVector = setAxesVisibilityFromObject(ship.velocityVector, scene.infoVisible);
-    ship.velocityVectorArrow = setAxesVisibilityFromObject(ship.velocityVectorArrow, scene.infoVisible);
+    ship.mesh.axes = setAxesVisibilityFromObject(ship.mesh.axes, scene.infoVisible);
+    ship.mesh.velocityVector = setAxesVisibilityFromObject(ship.mesh.velocityVector, scene.infoVisible);
+    ship.mesh.velocityVectorArrow = setAxesVisibilityFromObject(ship.mesh.velocityVectorArrow, scene.infoVisible);
     scene.axes = setAxesVisibilityFromObject(scene.axes, scene.infoVisible);
 }
 

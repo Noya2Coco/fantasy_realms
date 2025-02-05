@@ -1,5 +1,5 @@
 export function drawFpsGraph(fpsInfos) {
-    const fps = fpsInfos.fps; // Assurez-vous que fps est défini
+    const fps = fpsInfos.fps;
     fpsInfos.data.push(fps);
     if (fpsInfos.data.length > fpsInfos.canvas.width) {
         fpsInfos.data.shift();

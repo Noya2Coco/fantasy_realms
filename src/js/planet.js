@@ -1,4 +1,4 @@
-import { MeshBuilder, Vector3, StandardMaterial, Color3, PointLight } from '@babylonjs/core';
+import { MeshBuilder, Vector3, StandardMaterial, Color3, PointLight } from 'babylonjs';
 
 export function createPlanet(scene, size, position, isStar = false, auraEnable = false) {
     if (isStar) {
@@ -25,8 +25,8 @@ export function createPlanet(scene, size, position, isStar = false, auraEnable =
     planet.gravitationalConstant = isStar ? baseGravitationalConstant : baseGravitationalConstant * 0.75; // Reduce gravity for non-stars
 
     // Add gravitational force method
-    planet.applyGravitationalForce = function (ship) {
-        const direction = planet.position.subtract(ship.position);
+    planet.applyGravitationalForce = function (mesh) {
+        const direction = planet.position.subtract(mesh.position);
         const distance = direction.length();
         if (distance > planet.gravitationalRange) {
             return new Vector3(0, 0, 0); // No force if outside gravitational range
