@@ -1,20 +1,22 @@
 {
   "name": "space-battle-game",
   "private": true,
-  "version": "0.0.0",
-  "type": "module",
+  "version": "1.0.0",
+  "main": "back/server.js",
   "scripts": {
-    "dev": "vite",
-    "build": "vite build",
-    "preview": "vite preview"
-  },
-  "devDependencies": {
-    "vite": "^6.0.5"
+    "start": "node back/server.js",
+    "dev": "nodemon back/server.js"
   },
   "dependencies": {
-    "babylonjs": "^7.44.0",
     "@babylonjs/gui": "^7.44.0",
     "@babylonjs/loaders": "^7.44.0",
-    "vite-plugin-eslint": "^1.8.1"
-  }
+    "babylonjs": "^7.44.0",
+    "express": "^4.21.2",
+    "nodemon": "^3.1.9",
+    "ws": "^8.0.0"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": ""
 }
