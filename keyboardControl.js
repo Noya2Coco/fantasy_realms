@@ -1,9 +1,7 @@
 import { Vector3, MeshBuilder, StandardMaterial, Color3, PointLight, Sound } from 'babylonjs';
-import { setAxesVisibilityFromObject } from '../physicalObjets/ui/axis.js';
-import { toggleInfoVisibility } from '../physicalObjets/ui/utils.js';
-import { createVelocityVector, createVelocityVectorArrow } from '../physicalObjets/ui/vector.js';
-import { Particle } from '../physicalObjets/particles/particle.js';
-import { Projectile } from '../physicalObjets/projectile.js';
+import { toggleInfoVisibility, setAxesVisibilityFromObject } from './utils.js';
+import { createVelocityVector, createVelocityVectorArrow } from './axis.js';
+import { Particle } from './particle/particle.js';
 
 export function handleKeyPress(event, keysPressed) {
     keysPressed[event.key] = true;
@@ -15,7 +13,7 @@ export function handleKeyRelease(event, keysPressed) {
 
 let cameraSwitchCooldown = false;
 let infoVisibleSwitchCooldown = false;
-let lastProjectileTime = 0;
+let lastBulletTime = 0;
 
 export function setupKeyboardControls(keysPressed) {
     window.addEventListener('keydown', (event) => {
@@ -94,21 +92,62 @@ export function updateShipMovement(canvas, scene, ship, keysPressed, acceleratio
 
     // Fire projectiles
     const currentTime = performance.now();
-    if (keysPressed[' '] && currentTime - lastProjectileTime > 250) {
-        const projectile = new Projectile(scene, ship);
-        projectiles.push(projectile);
-        lastProjectileTime = currentTime;
+    if (keysPressed[' '] && currentTime - lastBulletTime > 250) { // Limit to one bullet every 500ms
+        const path = [
+            new Vector3(0, -1, 0), // Adjusted position to be slightly lower
+            new Vector3(0, -1, 2) // Adjust length as needed
+        ];
+        const bullet = MeshBuilder.CreateTube('bullet', { path: path, radius: 0.05 }, scene); // Create a thin tube
+        const bulletWorldPosition = Vector3.TransformCoordinates(path[0], ship.mesh.getWorldMatrix());
+        bullet.position.copyFrom(bulletWorldPosition);
+        bullet.rotationQuaternion = ship.mesh.rotationQuaternion.clone(); // Match the ship's orientation
+        bullet.direction = Vector3.TransformNormal(new Vector3(0, 0, 1), ship.mesh.getWorldMatrix()).normalize();
+        bullet.velocity = bullet.direction.scale(3).addInPlace(ship.mesh.velocity); // Increased bullet speed
+
+        // Change bullet color to neon red and make it emissive
+        const bulletMaterial = new StandardMaterial('bulletMaterial', scene);
+        bulletMaterial.emissiveColor = new Color3(1, 0, 0); // Neon red color
+        bulletMaterial.disableLighting = true; // Disable lighting effects on the bullet
+        bullet.material = bulletMaterial;
+
+        // Add light to the bullet
+        const bulletLight = new PointLight('bulletLight', bullet.position, scene);
+        bulletLight.diffuse = new Color3(1, 0, 0); // Neon red color
+        bulletLight.intensity = 2; // Adjust the intensity as needed
+        bulletLight.range = 5; // Adjust the range as needed
+        bullet.light = bulletLight;
+
+        // Add sound to the bullet
+        const bulletSound = new Sound('bulletSound', 'sound/laser1.mp3', scene, null, {
+            loop: false,
+            autoplay: true,
+            spatialSound: true,
+            maxDistance: 200,
+            refDistance: 1
+        });
+        bulletSound.attachToMesh(bullet);
+        bullet.sound = bulletSound;
+
+        projectiles.push(bullet);
+        lastBulletTime = currentTime; // Update the last bullet time
     }
 
-    // Mise à jour des projectiles
-    projectiles.forEach((projectile, index) => {
-        projectile.update();
-        if (projectile.shouldDispose(ship.mesh.position)) {
-            projectile.dispose();
+    // Update projectiles
+    projectiles.forEach((bullet, index) => {
+        bullet.position.addInPlace(bullet.velocity);
+        bullet.light.position = bullet.position; // Update light position
+        if (Vector3.Distance(bullet.position, ship.mesh.position) > 300) {
+            bullet.isVisible = false;
+        } else {
+            bullet.isVisible = true;
+        }
+        if (Vector3.Distance(bullet.position, ship.mesh.position) > 500) {
+            bullet.dispose();
+            bullet.light.dispose(); // Dispose of the light
             projectiles.splice(index, 1);
         }
     });
-    
+
     if (keysPressed['x'] && !infoVisibleSwitchCooldown) {
         toggleInfoVisibility(ship, scene);
         if (scene.isCockpitView) {
