@@ -40,15 +40,19 @@ export class Game {
     /** 🛸 Gère les messages WebSocket */
     handleClientMessage(ws, data) {
         if (data.type === 'newShip') {
-            const newShip = new Ship(data.id);
-            this.ships[data.id] = newShip;
-            ws.shipId = data.id;
+            const id = Math.random().toString(36).substr(2, 9); // Génère un ID unique pour le joueur
+
+            const newShip = new Ship(id);
+            this.ships[id] = newShip;
+            ws.shipId = id;
+            console.log('✅ Nouveau vaisseau créé:', id);
 
             ws.send(JSON.stringify({
                 type: 'init',
                 ships: Object.values(this.ships).map(s => s.toJSON()),
                 planets: this.planets,
-                projectiles: this.projectiles
+                projectiles: this.projectiles,
+                playerId: id
             }));
 
             this.broadcast({ type: 'newShip', ship: newShip.toJSON() });
@@ -76,7 +80,6 @@ export class Game {
         } else if (data.type === 'keyPress' || data.type === 'keyRelease') {
             const ship = this.ships[data.id];
             if (ship) {
-                ship.handleKeyEvent(data);
                 this.broadcast({ type: 'updateShip', ship: ship.toJSON() });
             }
         }

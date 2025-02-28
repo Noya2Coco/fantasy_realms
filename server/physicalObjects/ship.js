@@ -13,11 +13,11 @@ export class Ship {
         if (data.position) {
             this.position = new Vector3(data.position.x, data.position.y, data.position.z);
         }
-        if (data.rotation) {
-            this.rotation = new Quaternion(data.rotation.x, data.rotation.y, data.rotation.z, data.rotation.w);
-        }
         if (data.velocity) {
             this.velocity = new Vector3(data.velocity.x, data.velocity.y, data.velocity.z);
+        }
+        if (data.rotation) {
+            this.rotation = new Quaternion(data.rotation.x, data.rotation.y, data.rotation.z, data.rotation.w);
         }
     }
 

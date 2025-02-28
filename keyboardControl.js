@@ -26,10 +26,11 @@ export function setupKeyboardControls(keysPressed) {
 export function updateShipMovement(canvas, scene, ship, keysPressed, acceleration, maxAcceleration, damping, projectiles, planets) {
     const forward = new Vector3(0, 0, 1);
 
+/*
     // Apply forces based on pressed keys
     if (keysPressed['e'] || keysPressed['E']) {
         const forwardWorld = Vector3.TransformCoordinates(forward, ship.mesh.getWorldMatrix());
-        acceleration.addInPlace(forwardWorld.subtract(ship.mesh.position).normalize().scale(maxAcceleration));
+            .addInPlace(forwardWorld.subtract(ship.mesh.position).normalize().scale(maxAcceleration));
         
         // Add visual effects when moving forward
         if (scene.isCockpitView) {
@@ -60,7 +61,7 @@ export function updateShipMovement(canvas, scene, ship, keysPressed, acceleratio
             ship.mesh.particleLight = null;
         }
     }
-
+*/
     // Adjust camera FOV based on acceleration
     const accelerationMagnitude = acceleration.length();
     const fovAdjustment = accelerationMagnitude * 0.2; // Adjust the factor as needed
@@ -147,7 +148,7 @@ export function updateShipMovement(canvas, scene, ship, keysPressed, acceleratio
             projectiles.splice(index, 1);
         }
     });
-
+/*
     if (keysPressed['x'] && !infoVisibleSwitchCooldown) {
         toggleInfoVisibility(ship, scene);
         if (scene.isCockpitView) {
@@ -158,7 +159,7 @@ export function updateShipMovement(canvas, scene, ship, keysPressed, acceleratio
     } else if (!keysPressed['x']) {
         infoVisibleSwitchCooldown = false;
     }
-
+*/
     // Toggle view (cockpit / third person)
     if (keysPressed['v'] && !cameraSwitchCooldown) {
         scene.activeCamera.detachControl(canvas);
@@ -175,13 +176,13 @@ export function updateShipMovement(canvas, scene, ship, keysPressed, acceleratio
     } else if (!keysPressed['v']) {
         cameraSwitchCooldown = false;
     }
-
+/*
     // Update ship velocity and position
     ship.mesh.velocity.addInPlace(acceleration);
     ship.mesh.velocity.scaleInPlace(damping);
     ship.mesh.position.addInPlace(ship.mesh.velocity);
     acceleration.scaleInPlace(0);
-
+*/
     // Update velocity vector line
     if (ship.mesh.velocity.length() > 0.003 && !scene.isCockpitView && scene.infoVisible) {
         const displacement = ship.mesh.velocity.scale(100);

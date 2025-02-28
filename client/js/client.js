@@ -8,204 +8,171 @@ import { createSceneAxis } from './ui/axis.js';
 import { drawFpsGraph } from './ui/graph.js';
 import { toggleInfoVisibility } from './ui/utils.js';
 import { Mouse } from './controlManagers/mouse.js';
+import { Keyboard } from './controlManagers/keyboard.js';
 
-const socket = new WebSocket('ws://localhost:8080');
-const ships = {};
-const projectiles = {};
-const planets = {};
-const particles = {};
-let playerShip = null;
+class SpaceBattleGame {
+    constructor() {
+        this.socket = new WebSocket('ws://localhost:8080');
+        this.ships = {};
+        this.projectiles = {};
+        this.planets = {};
+        this.particles = {};
+        this.playerShip = null;
+        this.canvas = document.getElementById('renderCanvas');
+        this.engine = new Engine(this.canvas, true);
+        this.scene = new Scene(this.engine);
+        this.defaultCamera = new FreeCamera("defaultCamera", new Vector3(0, 5, -10), this.scene);
+        this.defaultCamera.setTarget(Vector3.Zero());
+        this.scene.activeCamera = this.defaultCamera;
+        this.defaultCamera.detachControl(this.canvas);
+        this.scene.isCockpitView = false;
+        this.scene.infoVisible = true;
+        createSceneAxis(this.scene, 5);
+        this.fpsInfos = {
+            fps: 0,
+            data: [],
+            canvas: document.getElementById('fpsCanvas'),
+            context: document.getElementById('fpsCanvas').getContext('2d')
+        };
+        this.lastMovementUpdateTime = Date.now();
+        this.movementUpdateInterval = 100;
 
-// Initialisation de Babylon.js
-const canvas = document.getElementById('renderCanvas');
-const engine = new Engine(canvas, true);
-const scene = new Scene(engine);
+        this.initializeSocket();
+        this.updatePlayerActions();
+        this.updateFps();
+        this.engine.runRenderLoop(() => {
+            this.scene.render();
+        });
+        window.addEventListener('resize', () => {
+            this.engine.resize();
+        });
+    }
 
-// ✅ Créer une caméra par défaut avant toute connexion WebSocket
-let defaultCamera = new FreeCamera("defaultCamera", new Vector3(0, 5, -10), scene);
-defaultCamera.setTarget(Vector3.Zero());
-scene.activeCamera = defaultCamera;
-defaultCamera.detachControl(canvas);
-scene.isCockpitView = false;
-scene.infoVisible = true;
+    initializeSocket() {
+        this.socket.onopen = () => {
+            console.log('✅ Connecté au serveur');
+            this.socket.send(JSON.stringify({ type: 'newShip' }));
+        };
 
-// Création des axes pour la scène
-createSceneAxis(scene, 5);
+        this.socket.onmessage = (event) => {
+            const data = JSON.parse(event.data);
 
-// Gestion du FPS
-const fpsInfos = {
-    fps: 0,
-    data: [],
-    canvas: document.getElementById('fpsCanvas'),
-    context: document.getElementById('fpsCanvas').getContext('2d')
-};
-
-// État des touches clavier
-const keysPressed = {};
-
-// Connexion au serveur
-socket.onopen = () => {
-    console.log('✅ Connecté au serveur');
-    const id = Math.random().toString(36).substr(2, 9); // Génère un ID unique pour le joueur
-    socket.send(JSON.stringify({ type: 'newShip', id })); // Envoie la requête pour créer un vaisseau
-};
-
-// 🔄 Gestion des messages WebSocket
-socket.onmessage = (event) => {
-    const data = JSON.parse(event.data);
-
-    if (data.type === 'init' || data.type === 'updateGameState') {
-        // 🔹 Mise à jour des vaisseaux
-        data.ships.forEach(shipData => {
-            if (!ships[shipData.id]) {
-                const isPlayer = shipData.id === playerShip?.id;
-                ships[shipData.id] = new Ship(scene, shipData.id, isPlayer);
-                ships[shipData.id].socket = socket; // Add socket reference
-                particles[shipData.id] = new Particle(scene, ships[shipData.id].mesh);
+            if (data.type === 'init' || data.type === 'updateGameState') {
+                this.updateGameState(data);
             }
-            ships[shipData.id].update(shipData);
+        };
+    }
 
-            // ✅ Assigner la caméra au premier vaisseau du joueur
-            if (!playerShip || playerShip.id === shipData.id) {
-                playerShip = ships[shipData.id];
+    updateGameState(data) {
+        data.ships.forEach(shipData => {
+            if (!this.ships[shipData.id]) {
+                this.ships[shipData.id] = new Ship(this.scene, shipData.id, !this.playerShip);
+                this.ships[shipData.id].socket = this.socket;
+            }
+            this.ships[shipData.id].update(shipData);
 
-                if (defaultCamera instanceof FreeCamera) {
-                    defaultCamera.dispose(); // Supprime la caméra par défaut
-                    playerShip.cockpitCamera = new Camera('cockpitCamera', [0, 0.2, 0], scene, playerShip.mesh, 1.4, 1.8);
-                    playerShip.thirdPersonCamera = new Camera('thirdPersonCamera', [0, 10, -20], scene, playerShip.mesh, 1.0, 1.4, Math.PI / 12);
-                    scene.activeCamera = playerShip.thirdPersonCamera;
+            if (data.playerId && shipData.id === data.playerId) {
+                this.playerShip = this.ships[shipData.id];
+
+                if (this.defaultCamera instanceof FreeCamera) {
+                    this.defaultCamera.dispose();
+                    this.playerShip.cockpitCamera = new Camera('cockpitCamera', [0, 0.2, 0], this.scene, this.playerShip.mesh, 1.4, 1.8);
+                    this.playerShip.thirdPersonCamera = new Camera('thirdPersonCamera', [0, 10, -20], this.scene, this.playerShip.mesh, 1.0, 1.4, Math.PI / 12);
+                    this.scene.activeCamera = this.playerShip.thirdPersonCamera;
                 }
 
-                playerShip.mouse = new Mouse(canvas, document, playerShip); // Assigner l'objet Mouse au vaisseau du joueur
+                this.playerShip.mouse = new Mouse(this.canvas, document, this.playerShip);
+                this.playerShip.keyboard = new Keyboard(this.scene, this.playerShip, this.socket);
             }
         });
 
-        // 🔹 Suppression des vaisseaux disparus
-        Object.keys(ships).forEach(id => {
+        Object.keys(this.ships).forEach(id => {
             if (!data.ships.some(s => s.id === id)) {
-                ships[id].dispose();
-                particles[id].dispose();
-                delete ships[id];
-                delete particles[id];
+                this.ships[id].dispose();
+                if (this.particles[id]) {
+                    this.particles[id].dispose();
+                }
+                delete this.ships[id];
+                delete this.particles[id];
             }
         });
 
-        // 🔹 Mise à jour des projectiles
-        Object.keys(projectiles).forEach(id => {
+        Object.keys(this.projectiles).forEach(id => {
             if (!data.projectiles.some(p => p.id === id)) {
-                projectiles[id].dispose();
-                delete projectiles[id];
+                this.projectiles[id].dispose();
+                delete this.projectiles[id];
             }
         });
 
         data.projectiles.forEach(projData => {
-            if (!projectiles[projData.id]) {
-                projectiles[projData.id] = new Projectile(scene, projData);
+            if (!this.projectiles[projData.id]) {
+                this.projectiles[projData.id] = new Projectile(this.scene, projData);
             } else {
-                projectiles[projData.id].update(projData);
+                this.projectiles[projData.id].update(projData);
             }
         });
 
-        // 🔹 Mise à jour des planètes
         data.planets.forEach(planetData => {
-            if (!planets[planetData.id]) {
-                planets[planetData.id] = new Planet(scene, planetData);
+            if (!this.planets[planetData.id]) {
+                this.planets[planetData.id] = new Planet(this.scene, planetData);
             }
         });
-    }
-};
 
-// 🔄 Gestion des commandes clavier
-document.addEventListener('keydown', (event) => {
-    keysPressed[event.key.toLowerCase()] = true;
-    socket.send(JSON.stringify({ type: 'keyPress', id: playerShip.id, key: event.key.toLowerCase() }));
-    if (event.key.toLowerCase() === 'x') {
-        toggleInfoVisibility(playerShip, scene);
-    }
-});
-
-document.addEventListener('keyup', (event) => {
-    keysPressed[event.key.toLowerCase()] = false;
-    socket.send(JSON.stringify({ type: 'keyRelease', id: playerShip.id, key: event.key.toLowerCase() }));
-});
-
-let lastMovementUpdateTime = Date.now();
-const movementUpdateInterval = 100; // Intervalle de mise à jour en ms
-
-// 🔄 Mise à jour du mouvement et des actions du joueur
-function updatePlayerActions() {
-    if (playerShip) {
-        let movement = { x: 0, y: 0, z: 0 };
-
-        if (keysPressed['arrowup']) movement.z += 1;
-        if (keysPressed['arrowdown']) movement.z -= 1;
-        if (keysPressed['arrowleft']) movement.x -= 1;
-        if (keysPressed['arrowright']) movement.x += 1;
-
-        const currentTime = Date.now();
-        if (currentTime - lastMovementUpdateTime > movementUpdateInterval) {
-            socket.send(JSON.stringify({ 
-                type: 'updateShip', 
-                id: playerShip.id, 
-                position: {
-                    x: playerShip.mesh.position.x,
-                    y: playerShip.mesh.position.y,
-                    z: playerShip.mesh.position.z
-                },
-                rotation: {
-                    x: playerShip.mesh.rotationQuaternion.x,
-                    y: playerShip.mesh.rotationQuaternion.y,
-                    z: playerShip.mesh.rotationQuaternion.z,
-                    w: playerShip.mesh.rotationQuaternion.w
-                }
-            }));
-            lastMovementUpdateTime = currentTime;
-        }
-
-        // 🔥 Appliquer la rotation interpolée en continu
-        if (playerShip.mouse) {
-            playerShip.mouse.applyRotationForce();
-        }
+        this.updateObjects(data);
     }
 
-    requestAnimationFrame(updatePlayerActions);
-}
+    updatePlayerActions() {
+        if (this.playerShip) {
+            const currentTime = Date.now();
+            if (currentTime - this.lastMovementUpdateTime > this.movementUpdateInterval) {
+                this.socket.send(JSON.stringify({
+                    type: 'updateShip',
+                    id: this.playerShip.id,
+                    position: {
+                        x: this.playerShip.mesh.position.x,
+                        y: this.playerShip.mesh.position.y,
+                        z: this.playerShip.mesh.position.z
+                    },
+                    rotation: {
+                        x: this.playerShip.mesh.rotationQuaternion.x,
+                        y: this.playerShip.mesh.rotationQuaternion.y,
+                        z: this.playerShip.mesh.rotationQuaternion.z,
+                        w: this.playerShip.mesh.rotationQuaternion.w
+                    }
+                }));
+                this.lastMovementUpdateTime = currentTime;
+            }
 
-// 🔄 Mise à jour continue des objets
-function updateObjects(data) {
-    if (!data || !data.ships) return;
-
-    Object.values(ships).forEach(ship => {
-        const shipData = data.ships.find(s => s.id === ship.id);
-        if (shipData && ship.id !== playerShip.id) {
-            ship.update(shipData); // ❌ Ne met pas à jour la position/rotation du joueur
+            if (this.playerShip.mouse) {
+                this.playerShip.mouse.applyRotationForce();
+            }
+            this.playerShip.updatePlayer(this.planets);
         }
-        
-    });
 
-    Object.values(projectiles).forEach(projectile => projectile.update());
-    Object.values(particles).forEach(particle => particle.particleSystem.updateFunction());
+        requestAnimationFrame(() => this.updatePlayerActions());
+    }
 
-    requestAnimationFrame(() => updateObjects(data));
+    updateObjects(data) {
+        if (!data || !data.ships) return;
+
+        Object.values(this.ships).forEach(ship => {
+            const shipData = data.ships.find(s => s.id === ship.id);
+            if (shipData && this.playerShip && ship.id !== this.playerShip.id) {
+                ship.update(shipData);
+            }
+        });
+
+        Object.values(this.projectiles).forEach(projectile => projectile.update());
+        Object.values(this.particles).forEach(particle => particle.particleSystem.update());
+
+        requestAnimationFrame(() => this.updateObjects(data));
+    }
+
+    updateFps() {
+        this.fpsInfos.fps = Math.round(1000 / this.engine.getDeltaTime());
+        drawFpsGraph(this.fpsInfos);
+        requestAnimationFrame(() => this.updateFps());
+    }
 }
 
-// 🔄 Mise à jour du FPS
-function updateFps() {
-    fpsInfos.fps = Math.round(1000 / engine.getDeltaTime());
-    drawFpsGraph(fpsInfos);
-    requestAnimationFrame(updateFps);
-}
-
-updatePlayerActions();
-updateObjects();
-updateFps();
-
-// 🔄 Boucle de rendu Babylon.js
-engine.runRenderLoop(() => {
-    scene.render();
-});
-
-// 🔄 Redimensionnement de la fenêtre
-window.addEventListener('resize', () => {
-    engine.resize();
-});
+const game = new SpaceBattleGame();

@@ -35,6 +35,12 @@ export class ParticleSys extends ParticleSystem {
         this.start();
     }
 
+    /** 🔄 Met à jour le système de particules */
+    update() {
+        // Ajoutez ici la logique de mise à jour si nécessaire
+        // Par exemple, ajuster les propriétés des particules en fonction du temps ou des événements
+    }
+
     /** 🛑 Arrête proprement le système de particules */
     dispose() {
         this.stop();

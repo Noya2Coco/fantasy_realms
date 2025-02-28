@@ -4,6 +4,7 @@ export class Planet {
     constructor(scene, data) {
         this.scene = scene;
         this.mesh = MeshBuilder.CreateSphere('planet', { diameter: data.size }, scene);
+        this.mesh.size = data.size;
         this.mesh.position.set(data.position.x, data.position.y, data.position.z);
         this.mesh.material = this.createMaterial(data.isStar);
     }

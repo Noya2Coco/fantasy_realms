@@ -1,7 +1,5 @@
 import express from 'express';
 import { createServer } from 'http';
-import path from 'path';
-import { fileURLToPath } from 'url';
 import { Game } from './game.js';
 
 const app = express();
@@ -12,11 +10,7 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 // Lancer le serveur WebSocket
-const game = new Game(server);
-
-// Configuration pour utiliser __dirname avec ES Modules
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+new Game(server);
 
 // Lancer le serveur HTTP
 const PORT = process.env.PORT || 8080;
