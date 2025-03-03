@@ -2,7 +2,7 @@ import { WebSocketServer } from 'ws';
 import { Vector3 } from '@babylonjs/core';
 import { Ship } from './physicalObjects/ship.js';
 import { Planet } from './physicalObjects/planet.js';
-import { Projectile } from './physicalObjects/projectile.js';
+import { Bullet } from './physicalObjects/bullet.js';
 
 export class Game {
     constructor(server) {
@@ -71,11 +71,11 @@ export class Game {
             }
 
         } else if (data.type === 'fireProjectile') {
-            const ship = this.ships[data.id];
+            const ship = this.ships[data.shipId];
             if (ship) {
-                const projectile = this.createProjectile(ship);
+                const projectile = new Bullet(ship, data);
                 this.projectiles.push(projectile);
-                this.broadcast({ type: 'newProjectile', projectile });
+                this.broadcast({ type: 'newProjectile', projectile: projectile.toJSON() });
             }
         } else if (data.type === 'keyPress' || data.type === 'keyRelease') {
             const ship = this.ships[data.id];
@@ -88,16 +88,6 @@ export class Game {
     /** 🚀 Crée un vaisseau */
     createShip(id) {
         return new Ship(id);
-    }
-
-    /** 💥 Crée un projectile */
-    createProjectile(ship) {
-        return {
-            id: `proj-${Math.random().toString(36).substr(2, 9)}`,
-            position: ship.position.clone(),
-            velocity: new Vector3(0, 0, 3).applyRotationQuaternion(ship.rotation),
-            lifeTime: 5000 // Durée de vie du projectile (5s)
-        };
     }
 
     /** 🌍 Génère des planètes */
@@ -117,9 +107,7 @@ export class Game {
     /** 🔄 Met à jour les projectiles */
     updateProjectiles(deltaTime) {
         this.projectiles = this.projectiles.filter(projectile => {
-            projectile.position.addInPlace(projectile.velocity.scale(deltaTime / 16)); // Ajuste selon le deltaTime
-            projectile.lifeTime -= deltaTime;
-
+            projectile.update(deltaTime);
             return projectile.lifeTime > 0 && 
                    Vector3.Distance(projectile.position, new Vector3(0, 0, 0)) < 500;
         });

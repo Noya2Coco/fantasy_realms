@@ -7,7 +7,8 @@ export function createVelocityVector(scene, startPoint, endPoint) {
         { points: [startPoint, endPoint] },
         scene
     );
-    velocityVector.color = new Color3(1, 0, 1); // Couleur rose
+    velocityVector.color = new Color3(1, 0, 1); // Rose
+    velocityVector.renderingGroupId = 2;
     return velocityVector;
 }
 
@@ -19,5 +20,6 @@ export function createVelocityVectorArrow(scene, startPoint, endPoint, arrowLeft
         scene
     );
     velocityVectorArrow.color = new Color3(1, 0, 1);
+    velocityVectorArrow.renderingGroupId = 2;
     return velocityVectorArrow;
 }

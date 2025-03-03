@@ -22,6 +22,9 @@ export function createSceneAxis(scene, size) {
     axes.zText = makeTextPlane(scene, "Z", "blue", 256, 256, 200);
     axes.zText.position = new Vector3(0, 0, size * 1.1);
 
+    for (let axisInfo of Object.values(axes)) {
+        axisInfo.isVisible = false;
+    }
     scene.axes = axes;
 }
 
@@ -63,6 +66,6 @@ export function setAxesVisibilityFromObject(axes, visible) {
                 axis.isVisible = visible;
             }
         });
+        return axes;
     }
-    return axes;
 }

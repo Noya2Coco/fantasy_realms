@@ -8,7 +8,7 @@ export class Skydome {
         // Matériau du Skydome
         const skydomeMaterial = new StandardMaterial("skyDomeMaterial", this.scene);
         skydomeMaterial.backFaceCulling = false;
-        skydomeMaterial.diffuseTexture = new Texture("/images/skydome.jpg", this.scene);
+        skydomeMaterial.diffuseTexture = new Texture("../../images/skydome.jpg", this.scene);
         skydomeMaterial.emissiveColor = new Color3(1, 1, 1);
         this.skydome = skydome;
         this.skydome.material = skydomeMaterial;

@@ -1,6 +1,5 @@
 import { Engine, Scene, FreeCamera, Vector3 } from '@babylonjs/core';
 import { Ship } from './physicalObjects/ship.js';
-import { Projectile } from './physicalObjects/projectile.js';
 import { Planet } from './physicalObjects/planet.js';
 import { Camera } from './physicalObjects/camera.js';
 import { Particle } from './physicalObjects/particle/particle.js';
@@ -9,15 +8,18 @@ import { drawFpsGraph } from './ui/graph.js';
 import { toggleInfoVisibility } from './ui/utils.js';
 import { Mouse } from './controlManagers/mouse.js';
 import { Keyboard } from './controlManagers/keyboard.js';
+import { Bullet } from './physicalObjects/bullet.js';
+import { setAxesVisibilityFromObject } from './ui/axis.js';
+import { Skydome } from './physicalObjects/skydome.js';
 
 class SpaceBattleGame {
     constructor() {
         this.socket = new WebSocket('ws://localhost:8080');
         this.ships = {};
+        this.playerShip = null;
         this.projectiles = {};
         this.planets = {};
         this.particles = {};
-        this.playerShip = null;
         this.canvas = document.getElementById('renderCanvas');
         this.engine = new Engine(this.canvas, true);
         this.scene = new Scene(this.engine);
@@ -26,8 +28,11 @@ class SpaceBattleGame {
         this.scene.activeCamera = this.defaultCamera;
         this.defaultCamera.detachControl(this.canvas);
         this.scene.isCockpitView = false;
-        this.scene.infoVisible = true;
+        this.scene.infoVisible = false;
         createSceneAxis(this.scene, 5);
+        this.scene.skydome = new Skydome(this.scene);
+        this.lastTime = performance.now(); // Initialize lastTime correctly
+        this.deltaTime = 0;
         this.fpsInfos = {
             fps: 0,
             data: [],
@@ -64,6 +69,8 @@ class SpaceBattleGame {
     }
 
     updateGameState(data) {
+        this.updateDeltaTime();
+
         data.ships.forEach(shipData => {
             if (!this.ships[shipData.id]) {
                 this.ships[shipData.id] = new Ship(this.scene, shipData.id, !this.playerShip);
@@ -82,7 +89,9 @@ class SpaceBattleGame {
                 }
 
                 this.playerShip.mouse = new Mouse(this.canvas, document, this.playerShip);
-                this.playerShip.keyboard = new Keyboard(this.scene, this.playerShip, this.socket);
+                this.playerShip.keyboard = new Keyboard(this.canvas, this.scene, this.playerShip, this.projectiles, this.socket);
+
+                setAxesVisibilityFromObject(this.playerShip.mesh.axes, false);
             }
         });
 
@@ -97,28 +106,33 @@ class SpaceBattleGame {
             }
         });
 
+        /*
         Object.keys(this.projectiles).forEach(id => {
             if (!data.projectiles.some(p => p.id === id)) {
                 this.projectiles[id].dispose();
                 delete this.projectiles[id];
             }
-        });
+        });*/
 
-        data.projectiles.forEach(projData => {
-            if (!this.projectiles[projData.id]) {
-                this.projectiles[projData.id] = new Projectile(this.scene, projData);
-            } else {
-                this.projectiles[projData.id].update(projData);
-            }
-        });
+        if (this.playerShip) {
+            data.projectiles.forEach(projData => {
+                if (!this.projectiles[projData.id]) {
+                    this.projectiles[projData.id] = new Bullet(this.scene, this.playerShip, projData);
+                } else {
+                    this.projectiles[projData.id].update(projData);
+                }
+            });
 
-        data.planets.forEach(planetData => {
-            if (!this.planets[planetData.id]) {
-                this.planets[planetData.id] = new Planet(this.scene, planetData);
-            }
-        });
+            data.planets.forEach(planetData => {
+                if (!this.planets[planetData.id]) {
+                    this.planets[planetData.id] = new Planet(this.scene, planetData);
+                }
+                this.planets[planetData.id].applyGravitationalForce(this.playerShip);
+            });
 
-        this.updateObjects(data);
+            this.updateObjects(data);
+            this.playerShip.keyboard.checkPressedKeys();
+        }
     }
 
     updatePlayerActions() {
@@ -152,18 +166,25 @@ class SpaceBattleGame {
         requestAnimationFrame(() => this.updatePlayerActions());
     }
 
-    updateObjects(data) {
+    async updateObjects(data) {
+        this.updateDeltaTime();
+        
         if (!data || !data.ships) return;
 
-        Object.values(this.ships).forEach(ship => {
+        await Promise.all(Object.values(this.ships).map(async (ship) => {
             const shipData = data.ships.find(s => s.id === ship.id);
             if (shipData && this.playerShip && ship.id !== this.playerShip.id) {
                 ship.update(shipData);
             }
-        });
+        }));
 
-        Object.values(this.projectiles).forEach(projectile => projectile.update());
-        Object.values(this.particles).forEach(particle => particle.particleSystem.update());
+        await Promise.all(Object.values(this.projectiles).map(async (projectile) => {
+            projectile.update(this.deltaTime);
+        }));
+
+        await Promise.all(Object.values(this.particles).map(async (particle) => {
+            particle.particleSystem.update();
+        }));
 
         requestAnimationFrame(() => this.updateObjects(data));
     }
@@ -172,6 +193,12 @@ class SpaceBattleGame {
         this.fpsInfos.fps = Math.round(1000 / this.engine.getDeltaTime());
         drawFpsGraph(this.fpsInfos);
         requestAnimationFrame(() => this.updateFps());
+    }
+
+    updateDeltaTime() {
+        const currentTime = performance.now(); // Use performance.now() for better precision
+        this.deltaTime = currentTime - this.lastTime;
+        this.lastTime = currentTime;
     }
 }
 

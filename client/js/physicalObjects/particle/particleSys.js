@@ -30,6 +30,7 @@ export class ParticleSys extends ParticleSystem {
         this.minEmitPower = 2;
         this.maxEmitPower = 5;
         this.updateSpeed = 0.01;
+        this.renderingGroupId = 1;
 
         // Activation du système de particules
         this.start();
