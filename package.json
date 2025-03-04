@@ -2,18 +2,25 @@
   "name": "space-battle-game",
   "private": true,
   "version": "1.0.0",
-  "main": "back/server.js",
+  "type": "module",
   "scripts": {
-    "start": "node back/server.js",
-    "dev": "nodemon back/server.js"
+    "dev": "concurrently \"npm run dev:server\" \"npm run dev:client\"",
+    "dev:server": "nodemon server/server.js",
+    "dev:client": "vite --config vite.config.js",
+    "build": "vite build client",
+    "start": "node server/server.js"
   },
   "dependencies": {
+    "@babylonjs/core": "^7.48.3",
     "@babylonjs/gui": "^7.44.0",
-    "@babylonjs/loaders": "^7.44.0",
-    "babylonjs": "^7.44.0",
+    "@babylonjs/loaders": "^7.48.3",
     "express": "^4.21.2",
-    "nodemon": "^3.1.9",
-    "ws": "^8.0.0"
+    "ws": "^8.13.0"
+  },
+  "devDependencies": {
+    "vite": "^6.1.0",
+    "concurrently": "^8.0.1",
+    "nodemon": "^3.1.9"
   },
   "keywords": [],
   "author": "",
