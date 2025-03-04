@@ -2,7 +2,7 @@ import { Vector3 } from '@babylonjs/core';
 import { toggleInfoVisibility } from '../ui/utils.js';
 import { Particle } from '../physicalObjects/particle/particle.js';
 import { Bullet } from '../physicalObjects/bullet.js';
-import { setAxesVisibilityFromObject } from '../ui/axis.js';
+import { setAxesVisibility } from '../ui/axis.js';
 
 export class Keyboard {
     constructor(canvas, scene, ship, projectiles, socket) {
@@ -58,8 +58,8 @@ export class Keyboard {
         if (this.keysPressed['x'] && !this.infoVisibleSwitchCooldown) {
             toggleInfoVisibility(this.ship, this.scene);
             if (this.scene.isCockpitView) {
-                this.ship.mesh.axes = setAxesVisibilityFromObject(this.ship.mesh.axes, false);
-                this.ship.mesh.velocityVector = setAxesVisibilityFromObject(this.ship.mesh.velocityVector, false);
+                this.ship.mesh.axes = setAxesVisibility(this.ship.mesh.axes, false);
+                this.ship.mesh.velocityVector = setAxesVisibility(this.ship.mesh.velocityVector, false);
             }
             this.infoVisibleSwitchCooldown = true;
         } else if (!this.keysPressed['x']) {
@@ -70,11 +70,11 @@ export class Keyboard {
             this.scene.activeCamera.detachControl(this.canvas);
             this.scene.isCockpitView = !this.scene.isCockpitView;
             if (this.scene.isCockpitView) {
-                this.ship.mesh.axes = setAxesVisibilityFromObject(this.ship.mesh.axes, false);
-                this.ship.mesh.velocityVector = setAxesVisibilityFromObject(this.ship.mesh.velocityVector, false);
+                this.ship.mesh.axes = setAxesVisibility(this.ship.mesh.axes, false);
+                this.ship.mesh.velocityVector = setAxesVisibility(this.ship.mesh.velocityVector, false);
             } else if (!this.scene.isCockpitView && this.scene.infoVisible) {
-                this.ship.mesh.axes = setAxesVisibilityFromObject(this.ship.mesh.axes, true);
-                this.ship.mesh.velocityVector = setAxesVisibilityFromObject(this.ship.mesh.velocityVector, true);
+                this.ship.mesh.axes = setAxesVisibility(this.ship.mesh.axes, true);
+                this.ship.mesh.velocityVector = setAxesVisibility(this.ship.mesh.velocityVector, true);
             }
             this.scene.activeCamera = this.scene.isCockpitView ? this.ship.cockpitCamera : this.ship.thirdPersonCamera;
             this.cameraSwitchCooldown = true;

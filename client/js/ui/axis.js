@@ -55,15 +55,19 @@ export function createMeshAxis(mesh, scene, size) {
     axes.zText.position = new Vector3(0, 0, size * 1.1);
     axes.zText.parent = mesh;
 
+    for (let axisInfo of Object.values(axes)) {
+        axisInfo.isVisible = false;
+        axisInfo.renderingGroupId = 2;
+    }
+
     mesh.axes = axes;
-    return mesh;
 }
 
-export function setAxesVisibilityFromObject(axes, visible) {
+export function setAxesVisibility(axes, visibility) {
     if (axes) {
         Object.values(axes).forEach(axis => {
             if (axis && typeof axis.isVisible !== 'undefined') {
-                axis.isVisible = visible;
+                axis.isVisible = visibility;
             }
         });
         return axes;

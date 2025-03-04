@@ -4,13 +4,12 @@ import { Planet } from './physicalObjects/planet.js';
 import { Camera } from './physicalObjects/camera.js';
 import { Particle } from './physicalObjects/particle/particle.js';
 import { createSceneAxis } from './ui/axis.js';
-import { drawFpsGraph } from './ui/graph.js';
-import { toggleInfoVisibility } from './ui/utils.js';
 import { Mouse } from './controlManagers/mouse.js';
 import { Keyboard } from './controlManagers/keyboard.js';
 import { Bullet } from './physicalObjects/bullet.js';
-import { setAxesVisibilityFromObject } from './ui/axis.js';
+import { setAxesVisibility } from './ui/axis.js';
 import { Skydome } from './physicalObjects/skydome.js';
+import { Panel } from './ui/panel.js';
 
 class SpaceBattleGame {
     constructor() {
@@ -37,14 +36,17 @@ class SpaceBattleGame {
             fps: 0,
             data: [],
             canvas: document.getElementById('fpsCanvas'),
-            context: document.getElementById('fpsCanvas').getContext('2d')
+            context: document.getElementById('fpsCanvas').getContext('2d'),
+            display: document.getElementById('fps')
         };
         this.lastMovementUpdateTime = Date.now();
         this.movementUpdateInterval = 100;
+        this.panel = new Panel();
+        this.lastPanelUpdateTime = Date.now();
+        this.panelUpdateInterval = 100;
 
         this.initializeSocket();
         this.updatePlayerActions();
-        this.updateFps();
         this.engine.runRenderLoop(() => {
             this.scene.render();
         });
@@ -91,7 +93,7 @@ class SpaceBattleGame {
                 this.playerShip.mouse = new Mouse(this.canvas, document, this.playerShip);
                 this.playerShip.keyboard = new Keyboard(this.canvas, this.scene, this.playerShip, this.projectiles, this.socket);
 
-                setAxesVisibilityFromObject(this.playerShip.mesh.axes, false);
+                setAxesVisibility(this.playerShip.mesh.axes, false);
             }
         });
 
@@ -132,6 +134,7 @@ class SpaceBattleGame {
 
             this.updateObjects(data);
             this.playerShip.keyboard.checkPressedKeys();
+            this.updatePanel();
         }
     }
 
@@ -189,10 +192,15 @@ class SpaceBattleGame {
         requestAnimationFrame(() => this.updateObjects(data));
     }
 
-    updateFps() {
-        this.fpsInfos.fps = Math.round(1000 / this.engine.getDeltaTime());
-        drawFpsGraph(this.fpsInfos);
-        requestAnimationFrame(() => this.updateFps());
+    updatePanel() {
+        const currentTime = Date.now();
+        if (currentTime - this.lastPanelUpdateTime > this.panelUpdateInterval) {
+            this.panel.fpsInfos.fps = Math.round(1000 / this.engine.getDeltaTime());
+            this.panel.drawFpsGraph();
+            this.lastPanelUpdateTime = currentTime;
+        }
+        this.panel.updatePositionsDisplays(this.playerShip);
+        requestAnimationFrame(() => this.updatePanel());
     }
 
     updateDeltaTime() {

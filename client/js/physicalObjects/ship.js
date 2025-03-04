@@ -1,5 +1,6 @@
 import { MeshBuilder, StandardMaterial, Color3, Quaternion, Vector3 } from '@babylonjs/core';
 import { createVelocityVector, createVelocityVectorArrow } from '../ui/vector.js';
+import { createMeshAxis } from '../ui/axis.js';
 
 export class Ship {
     constructor(scene, id, isPlayer = false) {
@@ -24,6 +25,8 @@ export class Ship {
         shipMaterial.emissiveColor = new Color3(0.5, 0.5, 0.5);
         shipMaterial.specularColor = new Color3(0.2, 0.2, 0.2);
         this.mesh.material = shipMaterial;
+
+        createMeshAxis(this.mesh, this.scene, 2);
     }
 
     /** 🔄 Met à jour la position et la rotation du vaisseau selon les données du serveur */
