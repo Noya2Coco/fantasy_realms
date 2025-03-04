@@ -9,44 +9,52 @@ export class Mouse {
         this.lastUpdateTime = Date.now();
         this.smoothFactor = 0.15; // Facteur d'interpolation pour lisser la rotation
 
-        // Bind event listeners
+        // Bind event listeners to canvas and document
+        this.bindEventListeners(canvas, document);
+    }
+
+    bindEventListeners(canvas, document) {
+        // Enter immersive mode on canvas click
         canvas.addEventListener('click', () => this.enterImmersiveMode(canvas));
+        // Exit immersive mode on Escape key press
         document.addEventListener('keydown', (event) => {
             if (event.key === 'Escape') {
                 this.exitImmersiveMode();
             }
         });
+        // Handle mouse movement
         canvas.addEventListener('mousemove', (event) => this.handleMouseMovement(event));
     }
 
     handleMouseMovement(event) {
-        // Ajout progressif de la rotation
+        // Update rotation force based on mouse movement
         this.rotationForce.x += event.movementY * this.rotationSpeed; // Haut/Bas
         this.rotationForce.y += event.movementX * this.rotationSpeed; // Gauche/Droite
     }
 
     applyRotationForce() {
-        // Vérification si un mouvement significatif est appliqué
+        // Ignore small variations to avoid jitter
         if (Math.abs(this.rotationForce.x) < 0.0001 && Math.abs(this.rotationForce.y) < 0.0001) {
-            return; // Ignore les petites variations pour éviter l'effet de "tremblement"
+            return;
         }
 
         const right = new Vector3(1, 0, 0);
         const up = new Vector3(0, 1, 0);
 
+        // Create quaternions for pitch and yaw rotations
         const pitchQuaternion = Quaternion.RotationAxis(right, this.rotationForce.x);
         const yawQuaternion = Quaternion.RotationAxis(up, this.rotationForce.y);
 
         const currentRotation = this.ship.mesh.rotationQuaternion || Quaternion.Identity();
 
-        // ✅ Utilisation de `Slerp` pour lisser la transition et éviter les saccades
+        // Smoothly interpolate to the new rotation
         const targetRotation = currentRotation.multiply(pitchQuaternion).multiply(yawQuaternion);
         this.ship.mesh.rotationQuaternion = Quaternion.Slerp(currentRotation, targetRotation, this.smoothFactor);
 
-        // Réduction progressive des forces au lieu de les remettre à zéro directement
+        // Gradually reduce the rotation force
         this.rotationForce.scaleInPlace(0.85);
 
-        // Mise à jour serveur à intervalle régulier
+        // Send update to server at regular intervals
         const currentTime = Date.now();
         if (currentTime - this.lastUpdateTime > this.updateInterval) {
             this.sendUpdateToServer();
@@ -60,6 +68,7 @@ export class Mouse {
         const rotation = this.ship.mesh.rotationQuaternion;
         const position = this.ship.mesh.position;
         
+        // Prepare data to send to the server
         const data = {
             type: 'updateShip',
             id: this.ship.id,
@@ -67,10 +76,12 @@ export class Mouse {
             rotation: { x: rotation.x, y: rotation.y, z: rotation.z, w: rotation.w }
         };
 
+        // Send data to the server
         this.ship.socket.send(JSON.stringify(data));
     }
 
     enterImmersiveMode(canvas) {
+        // Request pointer lock for immersive mode
         canvas.requestPointerLock = canvas.requestPointerLock || canvas.mozRequestPointerLock || canvas.webkitRequestPointerLock;
         if (canvas.requestPointerLock) {
             canvas.requestPointerLock();
@@ -78,6 +89,7 @@ export class Mouse {
     }
 
     exitImmersiveMode() {
+        // Exit pointer lock to leave immersive mode
         document.exitPointerLock = document.exitPointerLock || document.mozExitPointerLock || document.webkitExitPointerLock;
         if (document.exitPointerLock) {
             document.exitPointerLock();
