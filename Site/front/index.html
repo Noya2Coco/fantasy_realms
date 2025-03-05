@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Site Jeux Web</title>
+        <link rel="stylesheet" href="css/index.css">
+        <!-- Ajouter le lien vers la police Montserrat -->
+        <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&display=swap" rel="stylesheet">
+    </head>
+    
+
+<body>
+    <header>
+        
+        <div id="hamburger-menu" class="hamburger">
+            <div class="line"></div>
+            <div class="line"></div>
+            <div class="line"></div>
+        </div>
+
+
+        <nav id="overlay" class="overlay div1">
+            <h1>FANTASY REALMS 🌙✨</h1>
+            <div class="ul">
+                <p>Accueil</p>
+                <p>Présentation</p>
+                <p>Contact</p>
+                <a href="login.html">
+                    <button id="button">Se connecter</button>
+                </a>
+            </div>
+        </nav>
+
+
+        <section class="content-wrapper">
+            <div class="product-section">
+                <h1>Bienvenue sur Fantasy Realms ! 🌙✨</h1>
+                <p>Plongez dans l'univers fascinant de Fantasy Realms, un site où les rêves prennent vie sous forme de jeux captivants. Chaque jeu vous transporte dans des mondes imaginaires, où magie, aventures et mystères se mêlent. Conçus par des étudiants en Licence 3 MIAGE, ces jeux web vous offrent une expérience immersive dans des univers de rêve, où chaque moment de jeu est une nouvelle découverte.
+                <br>
+                <br><b>Êtes-vous prêt à explorer ces royaumes fantastiques ? Laissez-vous emporter par la magie et vivez des aventures hors du commun !</b>
+                </p>
+                <button id="button2">Joue maintenant</button>
+                <div class="product-gallery">
+                    <div class="product-item">
+                        <img src="image/vaiseaux.png">
+                    </div>
+                    <div class="product-item">
+                        <img src="image/headball.png">
+                    </div>
+                    <div class="product-item">
+                        <img src="https://cdn.shopify.com/s/files/1/2654/0420/products/RECONSPARK_HEADSET_8.png?v=1571871155">
+                    </div>
+                </div>
+            </div>
+            <div class="image-presentation">
+                <img src="image/licorne.png">
+            </div>
+
+            <script>
+                const productItems = document.querySelectorAll('.product-item img');
+                const presentationImage = document.querySelector('.image-presentation img');
+        
+                productItems.forEach((item) => {
+                    item.addEventListener('click', (event) => {
+                        console.log('Image cliquée:', event.target.src);
+                        presentationImage.src = event.target.src;
+                    });
+                });
+            </script>
+            
+        </section>
+        <section class="presentation-second">
+            <div class="product-presentation">
+                <p class="new">Nouveau produit disponible</p>
+                <h1>Le nouveau casque HeadBoost</h1>
+                <p>
+					Lorem ipsum dolor sit amet consectetur, adipisicing elit. Laborum odio
+					eos beatae labore possimus. Pariatur ipsa, tempore optio placeat
+					expedita minus cupiditate nulla iure quis error. A vitae quibusdam
+					veniam.
+				</p>
+                <button>Voir les spécifications</button>
+            </div>
+            <div class="image-presentation">
+                <img src="https://cdn.shopify.com/s/files/1/2654/0420/products/RECONSPARK_HEADSET_1_e87826ec-226a-4ce0-8782-42403e33a376_480x480.png?v=1571871155">
+            </div>
+        </section>
+        <footer>
+            <div class="column">
+                <h3>Aide</h3>
+                <p>contact@headboost.fr</p>
+                <p>Contactez-nous</p>
+                <p>Comment achetet</p>
+            </div>
+            <div class="column">
+                <h3>Recrutement</h3>
+                <p>business@headboost.fr</p>
+                <p>Postulez en ligne</p>
+                <p>Comment faire ?</p>
+            </div>
+            <div class="column">
+                <h3>Réseaux</h3>
+                <p>Facebook</p>
+                <p>Twitter</p>
+                <p>Instagram</p>
+            </div>
+        </footer>
+    </header>
+
+    <script src="js/index.js"></script>
+</body>
+</html>

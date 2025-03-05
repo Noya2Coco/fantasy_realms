@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Se connecter - HEADBOOST</title>
+    <link rel="stylesheet" href="css/login.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&display=swap" rel="stylesheet">
+</head>
+
+<body class="login-page">
+    <div id="message-container"></div>
+    <div class="login-container">
+        <div class="form-toggle">
+            <button id="login-btn" class="active">Se connecter</button>
+            <button id="signup-btn">Créer un compte</button>
+        </div>
+        <h1 id="form-title">Se connecter</h1>
+        <form id="login-form" method="post">
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" required>
+            <label for="password">Mot de passe:</label>
+            <input type="password" id="password" name="password" required>
+            <button type="submit">Se connecter</button>
+        </form>
+        <form id="signup-form" style="display: none" method="post">
+            <label for="signup-email">Email:</label>
+            <input type="email" id="signup-email" name="email" required>
+            <label for="signup-password">Mot de passe:</label>
+            <input type="password" id="signup-password" name="password" required>
+            <label for="confirm-password">Confirmer le mot de passe:</label>
+            <input type="password" id="confirm-password" name="confirm-password" required>
+            <button type="submit">Créer un compte</button>
+        </form>
+        <button id="home-btn" onclick="location.href='index.html'">Retour à l'accueil</button>
+    </div>
+    <script src="js/loginForm.js"></script>
+    <script src="js/accountManager.js"></script>
+</body>
+</html>
