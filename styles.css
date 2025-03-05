@@ -1,0 +1,40 @@
+body {
+    text-align: center;
+    font-family: Arial, sans-serif;
+    background-color: rgb(179, 204, 211);
+}
+
+.p{
+    font-size: 20px;
+    font-weight: bold;
+    color: rgb(183, 8, 218);
+}
+
+#game-container {
+    position: relative;
+    width: 800px;
+    height: 500px;
+    margin: 20px auto;
+    background-color: rgb(83, 112, 121);
+    border: 2px solid black;
+    overflow: hidden;
+}
+.target {
+    width: 70px;
+    height: 70px;
+    background-image: url('assets/images/diamond.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    position: absolute;
+    cursor: pointer;
+    animation: shrink 1.5s linear forwards;
+}
+
+@keyframes shrink {
+    from {
+        transform: scale(1);
+    }
+    to {
+        transform: scale(0);
+    }
+}
