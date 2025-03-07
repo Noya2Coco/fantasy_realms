@@ -32,15 +32,12 @@ function createTarget() {
             if (distance < 10) {
                 score += 300;
                 timeLeft += 3;
-                message = "Perfect";
+                message = "Perfect (+3s)";
             } else if (distance < 30) {
                 score += 100;
                 timeLeft += 1;
-                message = "Nice";
-            } else {
-                message = "Miss";
-            }
-
+                message = "Nice (+1s)";
+            } 
             scoreDisplay.textContent = `${score} (${message})`;
             target.remove();
         }
@@ -48,7 +45,7 @@ function createTarget() {
 
     setTimeout(() => {
         target.remove();
-    }, 1500);
+    }, 3000);
 
     gameContainer.appendChild(target);
 }
