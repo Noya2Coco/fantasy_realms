@@ -32,11 +32,11 @@ function createTarget() {
             if (distance < 10) {
                 score += 300;
                 timeLeft += 3;
-                message = "Perfect (+3s)";
+                message = "Perfect +3s";
             } else if (distance < 30) {
                 score += 100;
                 timeLeft += 1;
-                message = "Nice (+1s)";
+                message = "Nice +1s";
             } 
             scoreDisplay.textContent = `${score} (${message})`;
 
@@ -47,9 +47,16 @@ function createTarget() {
         }
     });
 
+    // 🟢 Calcul de la durée d'affichage des cibles en fonction du score
+    let baseTime = 3000; // Temps de base en millisecondes (3s)
+    let minTime = 500; // Temps minimum (0.5s)
+    let speedFactor = 1000; // Plus ce nombre est petit, plus la difficulté augmente rapidement
+    let targetDuration = Math.max(baseTime - (score / speedFactor) * 1000, minTime);
+
+    // 🟢 Supprimer la cible après le temps calculé
     setTimeout(() => {
         target.remove();
-    }, 3000);
+    }, targetDuration);
 
     gameContainer.appendChild(target);
 }
@@ -98,3 +105,20 @@ gameContainer.addEventListener("mouseleave", () => {
 
 // Démarrer le jeu au chargement
 startGame();
+
+function updateFPS() {
+    const now = performance.now();
+    const deltaTime = now - (this.lastFrameTime || now);
+    this.lastFrameTime = now;
+
+    if (deltaTime > 0) {
+        this.fps = Math.min(60, Math.round(1000 / deltaTime)); // Limite à 60 FPS max
+    } else {
+        this.fps = 60; // Sécurité en cas de division par zéro
+    }
+
+    // Affichage des FPS
+    document.getElementById('fpsCounter').textContent = `FPS: ${this.fps}`;
+}
+
+setInterval(updateFPS, 1000 / 60); // Appeler updateFPS 60 fois par seconde

@@ -1,35 +1,56 @@
+/* 🎯 Style global */
 body {
     text-align: center;
     font-family: Arial, sans-serif;
-    background-color: rgb(179, 204, 211);
+    background-image: url('assets/images/catback.jpeg'); 
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    margin: 0;
+    padding: 2vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
 }
 
-.p{
-    font-size: 20px;
+/* 🎯 Texte */
+p {
+    font-size: 2vw;
     font-weight: bold;
     color: rgb(183, 8, 218);
+    margin: 1vh 0;
 }
 
+/* 🎯 Conteneur du jeu */
 #game-container {
     position: relative;
-    width: 800px;
-    height: 500px;
-    margin: 20px auto;
-    background-color: rgb(83, 112, 121);
+    width: 80vw;
+    max-width: 800px;
+    height: 55vh;
+    max-height: 500px;
+    background-color: rgba(83, 112, 121, 0.8);
     border: 2px solid black;
     overflow: hidden;
+    border-radius: 15px;
 }
+
+/* 🎯 Cibles */
 .target {
-    width: 70px;
-    height: 70px;
-    background-image: url('assets/images/diamond.png');
+    width: 8vw;
+    max-width: 70px;
+    height: 8vw;
+    max-height: 70px;
+    background-image: url('assets/images/cat.png');
     background-size: contain;
     background-repeat: no-repeat;
     position: absolute;
     cursor: pointer;
-    animation: shrink 1.5s linear forwards;
+    animation: shrink 3s linear forwards;
 }
 
+/* 🎯 Animation des cibles */
 @keyframes shrink {
     from {
         transform: scale(1);
@@ -39,66 +60,17 @@ body {
     }
 }
 
+/* 🎯 Viseur (Crosshair) Fixe */
 #crosshair {
     position: absolute;
-    width: 20px;
+    width: 20px; /* Taille fixe */
     height: 20px;
-    pointer-events: none; /* Permet de cliquer à travers */
-    transform: translate(-50%, -50%); /* Centre le viseur */
-    z-index: 1000;
-}
-
-#crosshair::before,
-#crosshair::after {
-    content: "";
-    position: absolute;
-    background-color: purple; /* Couleur violette */
-}
-
-#crosshair::before {
-    width: 20px;
-    height: 2px;
-    top: 50%;
-    left: 0;
-    transform: translateY(-50%);
-}
-
-#crosshair::after {
-    width: 2px;
-    height: 20px;
-    left: 50%;
-    top: 0;
-    transform: translateX(-50%);
-}
-
-
-/* Cacher le curseur UNIQUEMENT dans la zone de jeu */
-#game-container {
-    cursor: none;
-    position: relative; /* Nécessaire pour le viseur */
-}
-
-/* Empêcher l'affichage de la main de clic sur les cibles */
-.target {
-    cursor: none;
-}
-
-/* Cacher le viseur en dehors de la zone de jeu */
-.hidden {
-    display: none;
-}
-
-/* Style du viseur */
-#crosshair {
-    position: absolute;
-    width: 20px;
-    height: 20px;
-    pointer-events: none; /* Permet de cliquer à travers */
+    pointer-events: none;
     transform: translate(-50%, -50%);
     z-index: 1000;
 }
 
-/* Croix violette */
+/* 🎯 Croix violette */
 #crosshair::before,
 #crosshair::after {
     content: "";
@@ -122,3 +94,79 @@ body {
     transform: translateX(-50%);
 }
 
+/* 🎯 Masquer le viseur en dehors de la zone de jeu */
+.hidden {
+    display: none;
+}
+
+/* 🎯 Cacher le curseur UNIQUEMENT dans la zone de jeu */
+#game-container {
+    cursor: none;
+    position: relative;
+}
+
+/* 🎯 Bouton Restart */
+#restart-button {
+    font-size: 1.5vw;
+    padding: 1vh 2vw;
+    margin-top: 2vh;
+    border: none;
+    border-radius: 10px;
+    background-color: #bf0dc2;
+    color: white;
+    cursor: pointer;
+    transition: background  0.3s;
+}
+
+#restart-button:hover {
+    background-color: #7214c5;
+}
+
+/* 📱💻 RESPONSIVE DESIGN */
+
+/* 🔹 TABLETTES (600px à 1024px) */
+@media (max-width: 1024px) {
+    #game-container {
+        width: 90vw;
+        height: 60vh;
+    }
+
+    .target {
+        width: 9vw;
+        height: 9vw;
+    }
+
+    #crosshair {
+        width: 20px; /* Garder une taille fixe */
+        height: 20px;
+    }
+
+    #restart-button {
+        font-size: 2vw;
+        padding: 1.5vh 3vw;
+    }
+}
+
+/* 🔹 SMARTPHONES (moins de 600px) */
+@media (max-width: 600px) {
+    #game-container {
+        width: 95vw;
+        height: 65vh;
+    }
+
+    .target {
+        width: 12vw; /* Cibles plus grandes */
+        height: 12vw;
+        
+    }
+
+    #crosshair {
+        width: 20px;
+        height: 20px;
+    }
+
+    #restart-button {
+        font-size: 4vw;
+        padding: 2vh 5vw;
+    }
+}
