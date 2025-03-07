@@ -38,16 +38,8 @@ function createTarget() {
                 timeLeft += 1;
                 message = "Nice (+1s)";
             } 
-             // 🟢 Mettre à jour le score
-             scoreDisplay.textContent = score;
-             timeDisplay.textContent = timeLeft;
- 
-             // 🟢 Afficher le message temporairement
-             scoreMessageDisplay.textContent = `(${message})`;
-             setTimeout(() => {
-                 scoreMessageDisplay.textContent = ""; // Effacer après 1 seconde
-             }, 1000);
- 
+            scoreDisplay.textContent = `${score} (${message})`,800;
+
         }
     });
 
