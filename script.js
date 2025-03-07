@@ -38,7 +38,11 @@ function createTarget() {
                 timeLeft += 1;
                 message = "Nice (+1s)";
             } 
-            scoreDisplay.textContent = `${score} (${message})`,800;
+            scoreDisplay.textContent = `${score} (${message})`;
+
+            setTimeout(() => {
+                scoreDisplay.textContent = score;
+            }, 750);
 
         }
     });
