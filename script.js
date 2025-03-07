@@ -31,9 +31,11 @@ function createTarget() {
             let message = "";
             if (distance < 10) {
                 score += 300;
+                timeLeft += 3;
                 message = "Perfect";
             } else if (distance < 30) {
                 score += 100;
+                timeLeft += 1;
                 message = "Nice";
             } else {
                 message = "Miss";
