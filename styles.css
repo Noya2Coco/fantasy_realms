@@ -38,3 +38,87 @@ body {
         transform: scale(0);
     }
 }
+
+#crosshair {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    pointer-events: none; /* Permet de cliquer à travers */
+    transform: translate(-50%, -50%); /* Centre le viseur */
+    z-index: 1000;
+}
+
+#crosshair::before,
+#crosshair::after {
+    content: "";
+    position: absolute;
+    background-color: purple; /* Couleur violette */
+}
+
+#crosshair::before {
+    width: 20px;
+    height: 2px;
+    top: 50%;
+    left: 0;
+    transform: translateY(-50%);
+}
+
+#crosshair::after {
+    width: 2px;
+    height: 20px;
+    left: 50%;
+    top: 0;
+    transform: translateX(-50%);
+}
+
+
+/* Cacher le curseur UNIQUEMENT dans la zone de jeu */
+#game-container {
+    cursor: none;
+    position: relative; /* Nécessaire pour le viseur */
+}
+
+/* Empêcher l'affichage de la main de clic sur les cibles */
+.target {
+    cursor: none;
+}
+
+/* Cacher le viseur en dehors de la zone de jeu */
+.hidden {
+    display: none;
+}
+
+/* Style du viseur */
+#crosshair {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    pointer-events: none; /* Permet de cliquer à travers */
+    transform: translate(-50%, -50%);
+    z-index: 1000;
+}
+
+/* Croix violette */
+#crosshair::before,
+#crosshair::after {
+    content: "";
+    position: absolute;
+    background-color: purple;
+}
+
+#crosshair::before {
+    width: 20px;
+    height: 2px;
+    top: 50%;
+    left: 0;
+    transform: translateY(-50%);
+}
+
+#crosshair::after {
+    width: 2px;
+    height: 20px;
+    left: 50%;
+    top: 0;
+    transform: translateX(-50%);
+}
+
