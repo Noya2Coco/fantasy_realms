@@ -44,11 +44,13 @@ function createTarget() {
                 scoreDisplay.textContent = score;
             }, 750);
 
+            target.remove();
+
         }
     });
 
     // 🟢 Calcul de la durée d'affichage des cibles en fonction du score
-    let baseTime = 3000; // Temps de base en millisecondes (3s)
+    let baseTime = 3000;// Temps de base en millisecondes (3s)
     let minTime = 500; // Temps minimum (0.5s)
     let speedFactor = 1000; // Plus ce nombre est petit, plus la difficulté augmente rapidement
     let targetDuration = Math.max(baseTime - (score / speedFactor) * 1000, minTime);
@@ -117,8 +119,6 @@ function updateFPS() {
         this.fps = 60; // Sécurité en cas de division par zéro
     }
 
-    // Affichage des FPS
-    document.getElementById('fpsCounter').textContent = `FPS: ${this.fps}`;
 }
 
 setInterval(updateFPS, 1000 / 60); // Appeler updateFPS 60 fois par seconde

@@ -34,6 +34,7 @@ p {
     border: 2px solid black;
     overflow: hidden;
     border-radius: 15px;
+    cursor: none;
 }
 
 /* 🎯 Cibles */
@@ -48,6 +49,7 @@ p {
     position: absolute;
     cursor: pointer;
     animation: shrink 3s linear forwards;
+    cursor: none;
 }
 
 /* 🎯 Animation des cibles */
