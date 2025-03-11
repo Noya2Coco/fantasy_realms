@@ -40,13 +40,13 @@ export class Game {
     /** 🛸 Gère les messages WebSocket */
     handleClientMessage(ws, data) {
         if (data.type === 'newShip') {
-            const id = Math.random().toString(36).substr(2, 9); // Génère un ID unique pour le joueur
-
+            const id = Math.random().toString(36).substr(2, 9); // Génère un ID unique
             const newShip = new Ship(id);
             this.ships[id] = newShip;
             ws.shipId = id;
-            console.log('✅ Nouveau vaisseau créé:', id);
+            console.log(`✅ Nouveau vaisseau créé: ${id}`);
 
+            // Envoyer l'état du jeu au nouveau client (lui seul reçoit ça)
             ws.send(JSON.stringify({
                 type: 'init',
                 ships: Object.values(this.ships).map(s => s.toJSON()),
@@ -55,19 +55,15 @@ export class Game {
                 playerId: id
             }));
 
-            this.broadcast({ type: 'newShip', ship: newShip.toJSON() });
+            // Diffuser le NOUVEAU VAISSEAU à TOUS les autres clients
+            this.broadcast({ type: 'newShip', ship: newShip.toJSON() }, ws);
 
         } else if (data.type === 'updateShip') {
             const ship = this.ships[data.id];
             if (ship) {
                 ship.update(data);
-    
-                // ❌ On envoie la mise à jour à tous sauf au joueur lui-même
-                this.wss.clients.forEach(client => {
-                    if (client !== ws && client.readyState === 1) {
-                        client.send(JSON.stringify({ type: 'updateShip', ship: ship.toJSON() }));
-                    }
-                });
+                // Diffuser les nouvelles informations du vaisseau à tous les clients
+                this.broadcast({ type: 'updateShip', ship: ship.toJSON() });
             }
 
         } else if (data.type === 'fireProjectile') {
@@ -75,12 +71,6 @@ export class Game {
             if (ship) {
                 const projectile = new Bullet(ship, data);
                 this.projectiles.push(projectile);
-                this.broadcast({ type: 'newProjectile', projectile: projectile.toJSON() });
-            }
-        } else if (data.type === 'keyPress' || data.type === 'keyRelease') {
-            const ship = this.ships[data.id];
-            if (ship) {
-                this.broadcast({ type: 'updateShip', ship: ship.toJSON() });
             }
         }
     }
@@ -94,22 +84,24 @@ export class Game {
     spawnPlanets(num) {
         for (let i = 0; i < num; i++) {
             const size = Math.random() * 200 + 100;
-            const position = { 
-                x: (Math.random() - 0.5) * 10000, 
-                y: (Math.random() - 0.5) * 10000, 
-                z: (Math.random() - 0.5) * 10000 
+            const position = {
+                x: (Math.random() - 0.5) * 10000,
+                y: (Math.random() - 0.5) * 10000,
+                z: (Math.random() - 0.5) * 10000
             };
             const planet = new Planet(`planet-${i}`, size, position, Math.random() < 0.05);
             this.planets.push(planet);
         }
     }
 
-    /** 🔄 Met à jour les projectiles */
-    updateProjectiles(deltaTime) {
-        this.projectiles = this.projectiles.filter(projectile => {
+    /** 🔄 Met à jour la physique des vaisseaux et projectiles */
+    updatePhysics(deltaTime) {
+        Object.values(this.ships).forEach(ship => {
+            ship.position.addInPlace(ship.velocity.scale(deltaTime / 1000)); // Applique le déplacement
+        });
+
+        this.projectiles.forEach(projectile => {
             projectile.update(deltaTime);
-            return projectile.lifeTime > 0 && 
-                   Vector3.Distance(projectile.position, new Vector3(0, 0, 0)) < 500;
         });
     }
 
@@ -122,23 +114,6 @@ export class Game {
         }
     }
 
-    /** 🌍 Gère la gravité des planètes */
-    applyGravity() {
-        Object.values(this.ships).forEach((ship) => {
-            let totalForce = new Vector3(0, 0, 0);
-            this.planets.forEach((planet) => {
-                const distance = Vector3.Distance(ship.position, planet.position);
-                if (distance < 1000) {
-                    const forceDirection = planet.position.subtract(ship.position).normalize();
-                    const gravitationalForce = forceDirection.scale((planet.size / distance) * 0.1);
-                    totalForce.addInPlace(gravitationalForce);
-                }
-            });
-
-            ship.velocity.addInPlace(totalForce);
-        });
-    }
-
     /** 🔄 Boucle de mise à jour */
     gameLoop() {
         let lastTime = Date.now();
@@ -148,15 +123,14 @@ export class Game {
             const deltaTime = currentTime - lastTime;
             lastTime = currentTime;
 
-            this.applyGravity();
-            this.updateProjectiles(deltaTime);
-            
+            this.updatePhysics(deltaTime);
+
             this.broadcast({
                 type: 'updateGameState',
                 ships: Object.values(this.ships).map(s => s.toJSON()),
                 projectiles: this.projectiles.map(p => p.toJSON()),
                 planets: this.planets.map(p => p.toJSON())
-            });
+            });            
 
             setTimeout(loop, 50);
         };

@@ -18,7 +18,7 @@ html, body, canvas {
   font-family: Arial, sans-serif;
 }
 
-#axisIndicator {
+#axesIndicator {
   position: absolute;
   bottom: 10px;
   right: 10px;
@@ -48,7 +48,7 @@ html, body, canvas {
   height: 75px;
 }
 
-#infoPanel, #fpsPanel, #axisIndicator {
+#infoPanel, #fpsPanel, #axesIndicator {
   display: none; /* Hide by default */
 }
 

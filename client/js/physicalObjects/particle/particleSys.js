@@ -2,7 +2,7 @@ import { ParticleSystem, Texture, Vector3, Color4 } from "@babylonjs/core";
 
 export class ParticleSys extends ParticleSystem {
     constructor(scene, emitter) {
-        super("particleSys", 5000, scene); // Nombre max de particules
+        super("particleSys", 2000, scene); // Reduce max particles
         this.scene = scene;
         this.particleTexture = new Texture("images/flare.jpg", scene);
         this.emitter = emitter;
@@ -16,19 +16,21 @@ export class ParticleSys extends ParticleSystem {
         this.color2 = new Color4(1, 0, 0, 0); // Rouge (disparition)
 
         // Taille et durée de vie des particules
-        this.minSize = 0.3;
-        this.maxSize = 0.8;
-        this.minLifeTime = 1;
-        this.maxLifeTime = 2;
+        this.minSize = 0.5; // Increase size
+        this.maxSize = 1.0; // Increase size
+        this.minLifeTime = 15; // Increase lifetime
+        this.maxLifeTime = 20; // Increase lifetime
 
         // Débit et vitesse des particules
-        this.emitRate = 1000;
+        this.emitRate = 100; // Further reduce number of particles
         this.blendMode = ParticleSystem.BLENDMODE_ONEONE;
         this.gravity = new Vector3(0, 0, 0);
-        this.direction1 = new Vector3(-1, -1, -5);
-        this.direction2 = new Vector3(1, 1, -5);
-        this.minEmitPower = 2;
-        this.maxEmitPower = 5;
+        this.direction1 = new Vector3(-0.1, -0.1, -0.1); // Reduce spread over time
+        this.direction2 = new Vector3(0.1, 0.1, 0.1); // Reduce spread over time
+        this.minAngularSpeed = 0;
+        this.maxAngularSpeed = Math.PI;
+        this.minEmitPower = 1; // Reduce speed
+        this.maxEmitPower = 2; // Reduce speed
         this.updateSpeed = 0.01;
         this.renderingGroupId = 1;
 
@@ -37,14 +39,21 @@ export class ParticleSys extends ParticleSystem {
     }
 
     /** 🔄 Met à jour le système de particules */
-    update() {
-        // Ajoutez ici la logique de mise à jour si nécessaire
-        // Par exemple, ajuster les propriétés des particules en fonction du temps ou des événements
+    update(deltaTime) {
+        if (!this.initialized) {
+            this.initialized = true;
+            this.removeTime = performance.now() + Math.random() * 9000 + 1000;
+        }
+        this.removeTime -= deltaTime; // Update removeTime based on deltaTime
+        if (this.removeTime <= 0) {
+            this.dispose();
+        }
     }
 
     /** 🛑 Arrête proprement le système de particules */
     dispose() {
         this.stop();
         super.dispose();
+        this.isDisposed = true;
     }
 }

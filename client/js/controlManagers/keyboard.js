@@ -40,11 +40,31 @@ export class Keyboard {
 
             // Add exhaust particles to the ship
             if (!this.ship.mesh.exhaustParticles) {
-                console.log('Make exhaust particles');
                 const particle = new Particle(this.scene, this.ship.mesh);
                 this.ship.mesh.exhaustParticles = particle.particleSystem;
                 this.ship.mesh.particleLight = particle.particleLight;
             }
+
+            this.socket.send(JSON.stringify({
+                type: 'updateShip',
+                id: this.ship.id,
+                position: {
+                    x: this.ship.mesh.position.x,
+                    y: this.ship.mesh.position.y,
+                    z: this.ship.mesh.position.z
+                },
+                rotationQuaternion: {
+                    x: this.ship.mesh.rotationQuaternion.x,
+                    y: this.ship.mesh.rotationQuaternion.y,
+                    z: this.ship.mesh.rotationQuaternion.z,
+                    w: this.ship.mesh.rotationQuaternion.w
+                },
+                velocity: {
+                    x: this.ship.mesh.velocity.x,
+                    y: this.ship.mesh.velocity.y,
+                    z: this.ship.mesh.velocity.z
+                }
+            }));
         } else {
             // Stop exhaust particles when not moving forward
             if (this.ship.mesh.exhaustParticles) {
@@ -98,6 +118,13 @@ export class Keyboard {
                     shipId: this.ship.id
                 }));
             }
+
+            bullet.mesh.onDisposeObservable.add(() => {
+                delete this.projectiles[bullet.id];
+            });
         }
+
+        // Update ship data in the worker
+        Bullet.updateShipData(this.ship);
     }
 }

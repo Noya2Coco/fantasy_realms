@@ -8,18 +8,29 @@ export class Panel {
             display: document.getElementById('fps')
         };
         this.positionsInfos = {
-            coordinatesDisplay: document.getElementById('coordinates'),
-            orientationDisplay: document.getElementById('orientation'),
-            shipForcesDisplay: document.getElementById('shipForces'),
-            shipForcesDisplay: document.getElementById('ship-forces')
+            coordinates: document.getElementById('coordinates'),
+            orientation: document.getElementById('orientation'),
+            forces: document.getElementById('ship-forces'),
+            axes: document.getElementById('axesCanvas').getContext('2d')
         };
+        this.elementCountDisplay = {
+            ships: document.getElementById('number-of-ships'),
+            projectiles: document.getElementById('number-of-bullets'),
+            planets: document.getElementById('number-of-planets'),
+            particles: document.getElementById('number-of-particles')
+        };
+        const infoPanel = document.getElementById('infoPanel');
+        infoPanel.appendChild(this.elementCountDisplay.ships);
+        infoPanel.appendChild(this.elementCountDisplay.projectiles);
+        infoPanel.appendChild(this.elementCountDisplay.planets);
+        infoPanel.appendChild(this.elementCountDisplay.particles);
     }
 
     updatePositionsDisplays(ship) {
-        this.positionsInfos.coordinatesDisplay.textContent = `Coordinates: (${ship.mesh.position.x.toFixed(2)}, ${ship.mesh.position.y.toFixed(2)}, ${ship.mesh.position.z.toFixed(2)})`;
+        this.positionsInfos.coordinates.textContent = `Coordinates: (${ship.mesh.position.x.toFixed(2)}, ${ship.mesh.position.y.toFixed(2)}, ${ship.mesh.position.z.toFixed(2)})`;
         const rotation = ship.mesh.rotationQuaternion.toEulerAngles();
-        this.positionsInfos.orientationDisplay.textContent = `Orientation: (${rotation.x.toFixed(2)}, ${rotation.y.toFixed(2)}, ${rotation.z.toFixed(2)})`;
-        this.positionsInfos.shipForcesDisplay.textContent = `Ship Forces: (${ship.mesh.velocity.x.toFixed(2)}, ${ship.mesh.velocity.y.toFixed(2)}, ${ship.mesh.velocity.z.toFixed(2)})`;
+        this.positionsInfos.orientation.textContent = `Orientation: (${rotation.x.toFixed(2)}, ${rotation.y.toFixed(2)}, ${rotation.z.toFixed(2)})`;
+        this.positionsInfos.forces.textContent = `Forces: (${ship.mesh.velocity.x.toFixed(2)}, ${ship.mesh.velocity.y.toFixed(2)}, ${ship.mesh.velocity.z.toFixed(2)})`;
     }
 
     drawFpsGraph() {
@@ -49,5 +60,12 @@ export class Panel {
         });
 
         infos.display.textContent = `FPS: ${infos.fps}`;
+    }
+
+    updateElementCountDisplay(counts) {
+        this.elementCountDisplay.ships.textContent = `Ships: ${counts.ships}`;
+        this.elementCountDisplay.projectiles.textContent = `Bullets: ${counts.projectiles}`;
+        this.elementCountDisplay.planets.textContent = `Planets: ${counts.planets}`;
+        this.elementCountDisplay.particles.textContent = `Particles: ${counts.particles}`;
     }
 }

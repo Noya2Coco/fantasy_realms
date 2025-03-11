@@ -6,7 +6,7 @@ export function toggleInfoVisibility(ship, scene) {
     scene.infoVisible = !scene.infoVisible;
     document.getElementById('infoPanel').style.display = scene.infoVisible ? 'block' : 'none';
     document.getElementById('fpsPanel').style.display = scene.infoVisible ? 'block' : 'none';
-    document.getElementById('axisIndicator').style.display = scene.infoVisible ? 'block' : 'none';
+    document.getElementById('axesIndicator').style.display = scene.infoVisible ? 'block' : 'none';
 
     if (ship.mesh) {
         ship.mesh.axes = setAxesVisibility(ship.mesh.axes, scene.infoVisible);

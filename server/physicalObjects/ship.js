@@ -4,11 +4,11 @@ export class Ship {
     constructor(id) {
         this.id = id;
         this.position = new Vector3(0, 0, 0);
-        this.rotation = new Quaternion(0, 0, 0, 1);
+        this.rotationQuaternion = new Quaternion(0, 0, 0, 1);
         this.velocity = new Vector3(0, 0, 0);
+        this.acceleration = new Vector3(0, 0, 0);
     }
 
-    /** 🔄 Met à jour la position et la rotation du vaisseau */
     update(data) {
         if (data.position) {
             this.position = new Vector3(data.position.x, data.position.y, data.position.z);
@@ -16,18 +16,20 @@ export class Ship {
         if (data.velocity) {
             this.velocity = new Vector3(data.velocity.x, data.velocity.y, data.velocity.z);
         }
-        if (data.rotation) {
-            this.rotation = new Quaternion(data.rotation.x, data.rotation.y, data.rotation.z, data.rotation.w);
+        if (data.rotationQuaternion) {
+            this.rotationQuaternion = new Quaternion(data.rotationQuaternion.x, data.rotationQuaternion.y, data.rotationQuaternion.z, data.rotationQuaternion.w);
         }
+        //console.log(`🚀 Mise à jour du vaisseau ${this.id}`);
     }
 
-    /** 🔧 Génère un objet simplifié pour l'envoi aux clients */
+    /** 📡 Génère un objet simplifié pour le serveur */
     toJSON() {
         return {
             id: this.id,
             position: { x: this.position.x, y: this.position.y, z: this.position.z },
-            rotation: { x: this.rotation.x, y: this.rotation.y, z: this.rotation.z, w: this.rotation.w },
-            velocity: { x: this.velocity.x, y: this.velocity.y, z: this.velocity.z }
+            rotationQuaternion: { x: this.rotationQuaternion.x, y: this.rotationQuaternion.y, z: this.rotationQuaternion.z, w: this.rotationQuaternion.w },
+            velocity: { x: this.velocity.x, y: this.velocity.y, z: this.velocity.z },
+            isPlayer: false // Ensure isPlayer is false for all ships sent to the client
         };
     }
 }
