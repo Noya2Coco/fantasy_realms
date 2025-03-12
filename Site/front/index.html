@@ -11,7 +11,7 @@
     
 
 <body>
-    <header>
+    <header id="acceuil">
         
         <div id="hamburger-menu" class="hamburger">
             <div class="line"></div>
@@ -23,9 +23,9 @@
         <nav id="overlay" class="overlay div1">
             <h1>FANTASY REALMS 🌙✨</h1>
             <div class="ul">
-                <p>Accueil</p>
-                <p>Présentation</p>
-                <p>Contact</p>
+                <a href="index.html">Accueil</a>
+                <a href="#classements">Classements</a>
+                <a href="#contact">Contact</a>
                 <a href="login.html">
                     <button id="button">Se connecter</button>
                 </a>
@@ -35,77 +35,232 @@
 
         <section class="content-wrapper">
             <div class="product-section">
-                <h1>Bienvenue sur Fantasy Realms ! 🌙✨</h1>
-                <p>Plongez dans l'univers fascinant de Fantasy Realms, un site où les rêves prennent vie sous forme de jeux captivants. Chaque jeu vous transporte dans des mondes imaginaires, où magie, aventures et mystères se mêlent. Conçus par des étudiants en Licence 3 MIAGE, ces jeux web vous offrent une expérience immersive dans des univers de rêve, où chaque moment de jeu est une nouvelle découverte.
-                <br>
-                <br><b>Êtes-vous prêt à explorer ces royaumes fantastiques ? Laissez-vous emporter par la magie et vivez des aventures hors du commun !</b>
-                </p>
-                <button id="button2">Joue maintenant</button>
+                <div class="section1">
+                    <div class="texte">
+                        <h1>Bienvenue sur Fantasy Realms ! 🌙✨</h1>
+                        <p>Plongez dans l'univers fascinant de Fantasy Realms, un site où les rêves prennent vie sous forme de jeux captivants. Chaque jeu vous transporte dans des mondes imaginaires, où magie, aventures et mystères se mêlent. Conçus par des étudiants en Licence 3 MIAGE, ces jeux web vous offrent une expérience immersive dans des univers de rêve, où chaque moment de jeu est une nouvelle découverte.
+                        <br>
+                        <br><b>Êtes-vous prêt à explorer ces royaumes fantastiques ? Laissez-vous emporter par la magie et vivez des aventures hors du commun !</b>
+                        </p>
+                        <div class="button-container">
+                            <button id="play-button" class="play-button" style="display:none" onclick="location.href='#jouer'">Jouer</button>
+                            <button id="button2" onclick="location.href='#classements'">Classements générales</button>
+                        </div>
+                    </div>
+                    <div class="image-presentation">
+                        <img src="image/licorne.png" class="default-image">
+                    </div>
+                </div>
                 <div class="product-gallery">
                     <div class="product-item">
-                        <img src="image/vaiseaux.png">
+                        <img class="vaisseaux" src="image/vaisseaux.png" alt="Vaisseaux">
                     </div>
                     <div class="product-item">
-                        <img src="image/headball.png">
+                        <img class="headball" src="image/headball.png" alt="Headball">
                     </div>
                     <div class="product-item">
-                        <img src="https://cdn.shopify.com/s/files/1/2654/0420/products/RECONSPARK_HEADSET_8.png?v=1571871155">
+                        <img class="cible" src="image/cible.png" alt="Cible">
                     </div>
                 </div>
             </div>
-            <div class="image-presentation">
-                <img src="image/licorne.png">
-            </div>
-
-            <script>
-                const productItems = document.querySelectorAll('.product-item img');
-                const presentationImage = document.querySelector('.image-presentation img');
+        </section>
         
-                productItems.forEach((item) => {
-                    item.addEventListener('click', (event) => {
-                        console.log('Image cliquée:', event.target.src);
-                        presentationImage.src = event.target.src;
-                    });
-                });
-            </script>
+        <script>
+            const productItems = document.querySelectorAll('.product-item img');
+            const presentationImage = document.querySelector('.image-presentation img');
+            const playButtonContainer = document.getElementById('playButtonContainer'); // Conteneur du bouton "Jouer"
             
-        </section>
-        <section class="presentation-second">
+            // Création dynamique du bouton "Jouer"
+            const playButton = document.getElementById('play-button');
+            playButton.addEventListener('click', () => {
+                alert('Lancement du jeu...');
+            });
+            
+            productItems.forEach((item) => {
+                item.addEventListener('click', (event) => {
+                    const clickedImage = event.target;
+            
+                    // Met à jour la source de l'image
+                    presentationImage.src = clickedImage.src;
+            
+                    // Réinitialise les classes existantes
+                    presentationImage.className = '';
+            
+                    // Ajoute la classe de l'image sélectionnée
+                    presentationImage.classList.add(clickedImage.classList[0]);
+            
+                    // Affiche le bouton après avoir cliqué sur une image
+                    playButton.style.display = "block";
+            
+                    // Ajouter une logique pour rediriger vers le bon jeu en fonction de l'image
+                    if (clickedImage.classList.contains('vaisseaux')) {
+                        playButton.onclick = () => window.location.href = 'jeu_vaisseaux.html';
+                    } else if (clickedImage.classList.contains('headball')) {
+                        playButton.onclick = () => window.location.href = 'jeu_headball.html';
+                    } else if (clickedImage.classList.contains('cible')) {
+                        playButton.onclick = () => window.location.href = 'jeu_cible.html';
+                    }
+                });
+            });
+        </script>
+        
+                
+        </section>        
+            
+
+        <section class="product-presentation" id="classements">
             <div class="product-presentation">
-                <p class="new">Nouveau produit disponible</p>
-                <h1>Le nouveau casque HeadBoost</h1>
-                <p>
-					Lorem ipsum dolor sit amet consectetur, adipisicing elit. Laborum odio
-					eos beatae labore possimus. Pariatur ipsa, tempore optio placeat
-					expedita minus cupiditate nulla iure quis error. A vitae quibusdam
-					veniam.
-				</p>
-                <button>Voir les spécifications</button>
-            </div>
-            <div class="image-presentation">
-                <img src="https://cdn.shopify.com/s/files/1/2654/0420/products/RECONSPARK_HEADSET_1_e87826ec-226a-4ce0-8782-42403e33a376_480x480.png?v=1571871155">
+                <h1>Classement Général des Jeux</h1>
+                <p>Voici le classement général des jeux Fantasy Realms. Découvrez les meilleurs participants de chaque jeu et leurs scores. <br>Félicitations à tous les participants pour leur performance exceptionnelle ! 🎉🏆</p>
+        
+                <!-- Grille des classements -->
+                <div class="ranking-grid">
+                    <!-- Classement pour le Jeu 1 -->
+                    <div class="game-ranking">
+                        <h2>Starfall: A Warfront Conflict 🚀🪐</h2>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>CLASSEMENT</th>
+                                    <th>PARTICIPANT</th>
+                                    <th>SCORE</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>1</td>
+                                    <td>Yanis Gourar</td>
+                                    <td>1800</td>
+                                </tr>
+                                <tr>
+                                    <td>2</td>
+                                    <td>Noah Rousseau</td>
+                                    <td>1700</td>
+                                </tr>
+                                <tr>
+                                    <td>3</td>
+                                    <td>Adam Chellali</td>
+                                    <td>1600</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+            
+                    <!-- Classement pour le Jeu 2 -->
+                    <div class="game-ranking">
+                        <h2>Ball 2 Goal ⚽️🥅</h2>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>CLASSEMENT</th>
+                                    <th>PARTICIPANT</th>
+                                    <th>SCORE</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>1</td>
+                                    <td>Noah Rousseau</td>
+                                    <td>2000</td>
+                                </tr>
+                                <tr>
+                                    <td>2</td>
+                                    <td>Yanis Gourar</td>
+                                    <td>1900</td>
+                                </tr>
+                                <tr>
+                                    <td>3</td>
+                                    <td>Adam Chellali</td>
+                                    <td>1800</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+            
+                    <!-- Classement pour le Jeu 3 -->
+                    <div class="game-ranking">
+                        <h2>AimMiaw 😼🎯</h2>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>CLASSEMENT</th>
+                                    <th>PARTICIPANT</th>
+                                    <th>SCORE</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>1</td>
+                                    <td>Adam Chellali</td>
+                                    <td>2500</td>
+                                </tr>
+                                <tr>
+                                    <td>2</td>
+                                    <td>Noah Rousseau</td>
+                                    <td>2400</td>
+                                </tr>
+                                <tr>
+                                    <td>3</td>
+                                    <td>Yanis Gourar</td>
+                                    <td>2300</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
         </section>
-        <footer>
-            <div class="column">
-                <h3>Aide</h3>
-                <p>contact@headboost.fr</p>
-                <p>Contactez-nous</p>
-                <p>Comment achetet</p>
-            </div>
-            <div class="column">
-                <h3>Recrutement</h3>
-                <p>business@headboost.fr</p>
-                <p>Postulez en ligne</p>
-                <p>Comment faire ?</p>
-            </div>
-            <div class="column">
-                <h3>Réseaux</h3>
-                <p>Facebook</p>
-                <p>Twitter</p>
-                <p>Instagram</p>
-            </div>
-        </footer>
+        
+                
+
+        <div>
+            <footer id="contact">
+                <div class="linkedin">
+                    <h3>LinkedIn</h3>
+                    <p>
+                        <a href="https://www.linkedin.com/in/yanisgourar/" target="_blank" style="text-decoration: none; color: inherit;">Yanis GOURAR</a>
+                    </p>
+                    <p>
+                        <a href="https://www.linkedin.com/in/rousseaunoah/" target="_blank" style="text-decoration: none; color: inherit;">Noah ROUSSEAU</a>
+                    </p>
+                    <p>
+                        <a href="https://www.linkedin.com/in/adam-chellali-2b2803270/" target="_blank" style="text-decoration: none; color: inherit;">Adam CHELLALI</a>
+                    </p>
+                </div>
+            
+                <div class="github">
+                    <h3>Information</h3>
+                    <p>
+                        <a href="https://github.com/Noya2Coco/fantasy_realms" target="_blank" style="text-decoration: none; color: inherit;">
+                            Dépôt GitHub du projet
+                        </a>                    
+                    </p>
+                    <p> 
+                        <a href="https://www.cgi.com/france/fr-fr/event/games-on-web-2025" target="_blank" style="text-decoration: none; color: inherit;">Games On Web 2025</a>
+                    </p>
+                    <p>ReadMe du projet</p>
+                </div>
+
+                <div class="universite">
+                    <h3>Université</h3>
+                    <p>
+                        <a href= "https://univ-cotedazur.fr/" target="_blank" style="text-decoration: none; color: inherit;">
+                            Université Nice Côte d'Azur
+                        </a>
+                    </p>
+                    <p>
+                        <a href= "https://ds4h.univ-cotedazur.fr/" target="_blank" style="text-decoration: none; color: inherit;">
+                            DS4H
+                        </a>
+                    </p>
+                    <p>
+                        <a href= "https://univ-cotedazur.fr/formation/offre-de-formation/licence-miage/" target="_blank" style="text-decoration: none; color: inherit;">
+                            Licence 3 MIASHS parcours MIAGE
+                        </a>
+                    </p>
+                </div>
+            </footer>
+        </div>  
     </header>
 
     <script src="js/index.js"></script>

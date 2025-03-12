@@ -1,6 +1,14 @@
 @font-face {
     font-family: 'WaltographUI';
-    src: url('assets/waltographUI.ttf') format('truetype');
+    src: url('../assets/waltographUI.ttf') format('truetype');
+}
+
+header nav h1 {
+    font-family: 'WaltographUI', sans-serif;
+    color: #FFFFFF;
+    font-weight: normal;
+    font-size: 2.5em;
+    margin: 0;
 }
 
 /* Appliquer la police Montserrat à tout le corps du texte */
@@ -9,6 +17,10 @@ body {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
 }
 
 /* Styles généraux pour le HTML et le corps */
@@ -27,18 +39,10 @@ header {
 
 header nav {
     display: flex !important;
-    padding: 30px 5% 0px 5%;
+    padding: 10px 5% 0px 5%;
     flex-wrap: wrap;
     justify-content: space-between;
     align-items: center;
-}
-
-header nav h1 {
-    font-family: 'WaltographUI', sans-serif;
-    color: #FFFFFF;
-    font-weight: normal;
-    font-size: 1.5em;
-    margin: 0;
 }
 
 header nav div {
@@ -47,17 +51,14 @@ header nav div {
     gap: 0px;
 }
 
-header nav div p {
+header nav div a {
     color: #FFFFFF;
     font-size: 1rem;
     cursor: pointer;
     margin: 0;
     padding: 5px 10px;
     display: block !important;
-}
-
-header nav div p:hover {
-    color: #FFFFFF;
+    text-decoration: none;
 }
 
 header button {
@@ -84,7 +85,7 @@ header button:hover {
     align-items: flex-start;
     gap: 20px;
     background: linear-gradient(180deg, #2C3E50, #8E44AD);
-    padding: 20px 5%;
+    padding: 0px 5%;
     margin-top: 1%;
 }
 
@@ -98,13 +99,22 @@ header button:hover {
     unicode-bidi: isolate;
 }
 
+.section1 {
+    display: flex;
+}
+
+.texte {
+    width: 100%;
+    margin-bottom: 10%;
+}
+
 .product-section h1 {
     color: #FFFFFF;
     font-weight: normal;
     display:block;
     width: 100%;
-    font-size: 3.8vw;
-    margin: 6% 0 10px 0; /* Réduit l'espace sous le titre */
+    font-size: 2.7vw;
+    margin: 5% 0 10px 0; /* Réduit l'espace sous le titre */
 }
 
 .product-section p {
@@ -113,6 +123,7 @@ header button:hover {
     margin: 10px 0 20px 0; /* Réduit les marges autour du texte */
     display: block;
     unicode-bidi: isolate;
+    text-align: justify;
 }
 
 .product-section button {
@@ -124,8 +135,7 @@ header button:hover {
     font-size: 1rem;
     cursor: pointer;
     transition: background-color 0.5s ease, color 0.3s ease;
-    margin: 10px 0;
-    width:74%;
+    width:100%;
 }
 
 .product-section button:hover {
@@ -133,13 +143,34 @@ header button:hover {
     color: #D5A6FF;
 }
 
+.play-button {
+    padding: 15px 20px;
+    background-color: #D5A6FF;
+    color: #FFFFFF;
+    border: 1px solid #D5A6FF;
+    border-radius: 10px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.5s ease, color 0.3s ease;
+    width: 100%;
+}
+
+.play-button:hover {
+    background-color: inherit; /* La couleur de fond devient transparente */
+    color: #D5A6FF; /* Texte devient violet */
+    border-color: #D5A6FF; /* Bordure reste visible */
+}
+
+
 /* Galerie de produits */
 .product-gallery {
 	display: flex;
-    gap: 15px; /* Réduit l'espacement entre les items */
-    margin-top: 30px;
+    gap: 30px; /* Réduit l'espacement entre les items */
     flex-wrap: wrap;
     align-items: center;
+    object-fit: cover;
+    margin-bottom: 2%;
+    margin-top: -8%;
 }
 
 .product-gallery .product-item img {
@@ -151,7 +182,9 @@ header button:hover {
     padding: 20px;
     background-color: #33314d;
     border-radius: 20px;
-    width: 120px;
+    width: 160px;
+    height: 180px;
+    display: flex;
 	transition: filter 0.5s;
 }
 
@@ -167,15 +200,28 @@ header button:hover {
 }
 
 .product-gallery img {
-    max-width: 100%;
+    max-width: 120%;
     border-radius: 5px;
+    object-fit: contain
 }
 
-.presentation-second {
-    background-color: #13181d;
-    margin: 0% 0px 0px 0;
-    padding: 0 5%;
-    display:flex;
+.product-gallery .cible {
+    margin-left: -10%;
+}
+
+.product-gallery .headball {
+    margin-left: -10%;
+}
+
+.product-gallery .vaisseaux {
+    margin-left: -5%;
+    margin-top:5%;
+}
+
+.product-presentation {
+    background: linear-gradient(180deg, #8E44AD, #000);
+    padding: 0 2%;
+    display:flow-root;
     unicode-bidi: isolate;
     align-items: center;
     justify-content: space-between;
@@ -188,16 +234,20 @@ header button:hover {
 }
 
 header section div h1 {
-    color: white;
-    font-size: 4vw;
-    width: 80%;
+    color: #FFFFFF;
+    font-weight: normal;
     display:block;
+    width: 100%;
+    font-size: 2.7vw;
 }
 
 header section div p {
-    color: white;
-    font-size: 300;
-    display:block;
+    color: #FFFFFF;
+    font-weight: 300;
+    margin: 10px 0 20px 0; /* Réduit les marges autour du texte */
+    display: block;
+    unicode-bidi: isolate;
+    text-align: justify;
 }
 
 header section div button {
@@ -206,19 +256,63 @@ header section div button {
     font-size: 15px;
     border-radius: 10px;
     display:block;
+    margin-bottom: 2%;
+}
+
+
+.ranking-grid {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+.game-ranking {
+    flex: 1;
+    text-align: center;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    padding: 10px;
+    margin-bottom: 2%;
+}
+
+.game-ranking table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.game-ranking th,
+.game-ranking td {
+    border: 1px solid #ddd;
+    padding: 8px;
+}
+
+.game-ranking th {
+    font-weight: bold;
+}
+
+.game-ranking h2 {
+    margin-bottom: 10px;
+    font-size: 20px;
+}
+
+.button-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
 }
 
 footer {
     margin: 0;
     padding: 20px;
-    background-color: black;
+    background-color: #000;
     display: flex;
     flex-wrap: wrap;
     justify-content: space-around;
 }
 
 footer h3 {
-    color: #d33bfd;
+    color: #8E44AD;
     display: block;
     font-size: 1.17em;
     margin-block-start: 1em;
@@ -240,19 +334,33 @@ footer p {
     unicode-bidi: isolate;
 }
 
-/* Présentation de l'image */
-.image-presentation {
-    width: 100%;
-    display: block;
-    justify-content: center;
-    overflow-clip-margin: content-box;
-    align-items: center;
+.image-presentation img {
+    width: 390px !important;   
+    height: auto;
+    transition: all 0.3s ease;
 }
 
-.image-presentation img {
-    border-radius: 10px;
-    object-fit: cover;
-    margin-bottom: 10px;
+.image-presentation .vaisseaux {
+    width: 100%;
+    height: auto;
+    margin-left: 10%;
+}
+
+.image-presentation .headball {
+    width: 65%;
+    height: auto;
+    margin-left: 5%;
+}
+
+.image-presentation .cible {
+    width: 80%;
+    height: auto;
+    margin-left: 5%;
+}
+
+.image-presentation .default-image {
+    height: auto;
+    margin-left:10%;
 }
 
 @media screen and (max-width: 640px) {
@@ -499,16 +607,6 @@ button:hover {
         max-width: 100%;         
         height: auto;            
         border-radius: 5px;
-    }
-
-    .image-presentation {
-        display: flex !important;
-    }
-
-    .image-presentation img {
-        width: 60%;
-        height: auto;
-        margin-bottom: 5%;
     }
 
     .product-presentation h1,
