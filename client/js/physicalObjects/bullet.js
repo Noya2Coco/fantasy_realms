@@ -1,4 +1,4 @@
-import { Vector3, MeshBuilder, StandardMaterial, Color3 } from '@babylonjs/core';
+import { Vector3, MeshBuilder, StandardMaterial, Color3, Quaternion } from '@babylonjs/core';
 import { game } from '../client.js';
 
 export class Bullet {
@@ -7,55 +7,39 @@ export class Bullet {
         this.ship = ship;
         this.id = data ? data.id : `bullet-${Math.random().toString(36).substr(2, 9)}`;
 
-        // Création du mesh (visuel uniquement)
+        // Création du mesh (uniquement visuel)
         this.mesh = MeshBuilder.CreateTube('bullet', { path: [new Vector3(0, 0, 0), new Vector3(0, 0, 2)], radius: 0.05 }, this.scene);
         this.mesh.material = new StandardMaterial('bulletMaterial', this.scene);
         this.mesh.material.emissiveColor = new Color3(1, 0, 0);
         this.mesh.material.disableLighting = true;
 
         // Position et vitesse initiale
-        this.mesh.position = data ? data.position : Vector3.TransformCoordinates(new Vector3(0, 0, 0), ship.mesh.getWorldMatrix());
-        this.mesh.rotationQuaternion = data ? data.rotationQuaternion : ship.mesh.rotationQuaternion.clone();
-        this.mesh.direction = data ? data.direction : Vector3.TransformNormal(new Vector3(0, 0, 1), ship.mesh.getWorldMatrix()).normalize();
-        this.mesh.velocity = data ? data.velocity : this.mesh.direction.scale(100).addInPlace(this.ship.mesh.velocity);
+        if (data && data.position && data.position._x !== undefined) {
+            this.mesh.position = new Vector3(data.position._x, data.position._y, data.position._z);
+        } else {
+            this.mesh.position = data ? new Vector3(data.position.x, data.position.y, data.position.z) : 
+                Vector3.TransformCoordinates(new Vector3(0, 0, 0), ship.mesh.getWorldMatrix());
+        }
 
-        // Ajout de la balle au WebWorker
+        this.mesh.rotationQuaternion = data && data.rotationQuaternion ? 
+            new Quaternion(data.rotationQuaternion.x, data.rotationQuaternion.y,
+                           data.rotationQuaternion.z, data.rotationQuaternion.w)
+            : ship.mesh.rotationQuaternion.clone();
+
+        if (data && data.velocity && data.velocity._x !== undefined) {
+            this.mesh.velocity = new Vector3(data.velocity._x, data.velocity._y, data.velocity._z);
+        } else {
+            this.mesh.velocity = data ? new Vector3(data.velocity.x, data.velocity.y, data.velocity.z) :
+                Vector3.TransformNormal(new Vector3(0, 0, 1), ship.mesh.getWorldMatrix()).normalize().scale(100);
+        }
+
+        // Envoi au Worker pour gestion complète
         Bullet.worker.postMessage({
             type: "addBullet",
             data: this.toJSON()
         });
-
-        this.mesh.renderingGroupId = 1;
-        this.spawnTime = Date.now();
-        this.lifeTime = 5000; // Suppression après 5 secondes
-        this.visible = true;
     }
 
-    dispose() {
-        if (this.mesh) {
-            this.mesh.setEnabled(false);
-            this.visible = false;
-            console.log(`🛑 Suppression du projectile: ${this.id}`);
-            Bullet.worker.postMessage({
-                type: "removeBullet",
-                data: { id: this.id }
-            });
-        }
-    }
-
-    /** 📡 Convertit le projectile en objet JSON */
-    toJSON() {
-        return {
-            id: this.id,
-            position: { x: this.mesh.position.x, y: this.mesh.position.y, z: this.mesh.position.z },
-            rotation: { x: this.mesh.rotationQuaternion.x, y: this.mesh.rotationQuaternion.y, z: this.mesh.rotationQuaternion.z, w: this.mesh.rotationQuaternion.w },
-            direction: { x: this.mesh.direction.x, y: this.mesh.direction.y, z: this.mesh.direction.z },
-            velocity: { x: this.mesh.velocity.x, y: this.mesh.velocity.y, z: this.mesh.velocity.z },
-            visible: this.visible
-        };
-    }
-
-    /** 📡 Met à jour les données du vaisseau dans le WebWorker */
     static updateShipData(ship) {
         Bullet.worker.postMessage({
             type: "updateShip",
@@ -65,33 +49,40 @@ export class Bullet {
             }
         });
     }
+
+    dispose() {
+        if (this.mesh) {
+            this.mesh.dispose();
+            Bullet.worker.postMessage({ type: "removeBullet", data: { id: this.id } });
+        }
+    }
+
+    toJSON() {
+        return {
+            id: this.id,
+            position: { x: this.mesh.position.x, y: this.mesh.position.y, z: this.mesh.position.z },
+            rotationQuaternion: this.mesh.rotationQuaternion ? {
+                x: this.mesh.rotationQuaternion.x, y: this.mesh.rotationQuaternion.y,
+                z: this.mesh.rotationQuaternion.z, w: this.mesh.rotationQuaternion.w
+            } : { x: 0, y: 0, z: 0, w: 1 },
+            velocity: { x: this.mesh.velocity.x, y: this.mesh.velocity.y, z: this.mesh.velocity.z }
+        };
+    }
 }
 
-// Vérifie si le WebWorker est déjà créé
+// Vérification et écoute du Worker
 if (typeof Bullet.worker === 'undefined') {
     Bullet.worker = new Worker(new URL('../worker/bulletWorker.js', import.meta.url));
 }
 
-Bullet.worker.onmessage = function(event) {
+Bullet.worker.onmessage = function (event) {
     if (event.data.type === "updateBullets") {
         event.data.bullets.forEach(updatedBullet => {
-            const bullet = game.projectiles[updatedBullet.id];
-            if (bullet) {
-                // Utilisation de l'interpolation pour lisser les mouvements
-                bullet.mesh.position.x += (updatedBullet.position.x - bullet.mesh.position.x) * 0.2;
-                bullet.mesh.position.y += (updatedBullet.position.y - bullet.mesh.position.y) * 0.2;
-                bullet.mesh.position.z += (updatedBullet.position.z - bullet.mesh.position.z) * 0.2;
-                bullet.mesh.setEnabled(updatedBullet.visible);
+            if (game.projectiles[updatedBullet.id]) {
+                game.projectiles[updatedBullet.id].mesh.position.set(
+                    updatedBullet.position.x, updatedBullet.position.y, updatedBullet.position.z
+                );
             }
         });
-    }
-
-    if (event.data.type === "removeBullet") {
-        console.log(`🛑 Suppression du projectile: ${event.data.id}`);
-        const bullet = game.projectiles[event.data.id];
-        if (bullet) {
-            bullet.dispose();
-            delete game.projectiles[event.data.id];
-        }
     }
 };

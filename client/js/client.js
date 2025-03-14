@@ -63,7 +63,7 @@ class SpaceBattleGame {
 
         this.socket.onmessage = (event) => {
             const data = JSON.parse(event.data);
-            
+
             if (data.type === 'init' || data.type === 'updateGameState') {
                 this.updateGameState(data);
             } else if (data.type === 'updateShip') {
@@ -72,71 +72,76 @@ class SpaceBattleGame {
                     ship.update(data.ship);
                 }
             } else if (data.type === 'newProjectile') {
-                const projectile = new Bullet(this.scene, this.playerShip, data.projectile);
-                this.projectiles[projectile.id] = projectile;
+                if (!this.projectiles[data.projectile.id]) {
+                    console.log('🚀 Nouveau projectile reçu:', data.projectile);
+                    this.projectiles[data.projectile.id] = new Bullet(this.scene, this.playerShip, data.projectile);
+                }
+            }
+            else if (data.type === 'updateGameState') {
+                Bullet.worker.postMessage({ type: "updateBulletsFromServer", bullets: data.projectiles });
             } else if (data.type === 'newShip') {
                 console.log('🚀 Nouveau vaisseau reçu:', data.ship); // DEBUG
-        
+
                 if (!this.ships[data.ship.id]) {
                     // Création du vaisseau avec son mesh
                     const newShip = new Ship(this.scene, data.ship.id, data.ship);
-        
+
                     // Vérification et activation
                     if (!newShip.mesh) {
                         console.error("❌ ERREUR: Le vaisseau reçu n'a pas de mesh !");
                     } else {
                         console.log("✅ Activation du vaisseau reçu:");
                     }
-        
+
                     this.ships[newShip.id] = newShip;
                     this.ships[newShip.id].socket = this.socket;
                     this.ships[newShip.id].update(data.ship); // Mise à jour avec les données reçues
                 }
             }
-        };        
+        };
     }
 
     updateGameState(data) {
         this.updateDeltaTime();
-    
+
         data.ships.forEach(shipData => {
             if (!this.ships[shipData.id]) {
                 console.log('✅ Nouveau vaisseau créé:', shipData);
-    
+
                 // Vérifie si ce vaisseau appartient au joueur
                 const isPlayer = data.playerId === shipData.id;
                 this.ships[shipData.id] = new Ship(this.scene, shipData.id, shipData, isPlayer);
                 this.ships[shipData.id].socket = this.socket;
-    
+
                 if (isPlayer) {
                     this.playerShip = this.ships[shipData.id];
                     this.shipCreated = true; // Flag pour dire que le joueur a bien un vaisseau
-                    
+
                     if (this.defaultCamera instanceof FreeCamera) {
                         this.defaultCamera.dispose();
                         this.playerShip.cockpitCamera = new Camera('cockpitCamera', [0, 0.2, 0], this.scene, this.playerShip.mesh, 1.4, 1.8);
                         this.playerShip.thirdPersonCamera = new Camera('thirdPersonCamera', [0, 10, -20], this.scene, this.playerShip.mesh, 1.0, 1.4, Math.PI / 12);
                         this.scene.activeCamera = this.playerShip.thirdPersonCamera;
                     }
-    
+
                     this.playerShip.mouse = new Mouse(this.canvas, document, this.playerShip);
                     this.playerShip.keyboard = new Keyboard(this.canvas, this.scene, this.playerShip, this.projectiles, this.socket);
-    
+
                     setAxesVisibility(this.playerShip.mesh.axes, false);
                 }
             }
-    
+
             // Met à jour les positions de tous les vaisseaux
             this.ships[shipData.id].update(shipData);
         });
-    
+
         Object.keys(this.ships).forEach(id => {
             if (!data.ships.some(s => s.id === id)) {
                 console.log(`🛑 Suppression du vaisseau ${id}`);
                 this.ships[id].dispose();
                 delete this.ships[id];
             }
-        });    
+        });
 
         Object.keys(this.projectiles).forEach(id => {
             if (this.projectiles[id].isDisposed) {
@@ -149,14 +154,6 @@ class SpaceBattleGame {
         });
 
         if (this.playerShip) {
-            data.projectiles.forEach(projData => {
-                if (!this.projectiles[projData.id]) {
-                    this.projectiles[projData.id] = new Bullet(this.scene, this.playerShip, projData);
-                } else {
-                    this.projectiles[projData.id].mesh.setEnabled(projData.visible);
-                }
-            });
-
             data.planets.forEach(planetData => {
                 if (!this.planets[planetData.id]) {
                     this.planets[planetData.id] = new Planet(this.scene, planetData);
@@ -173,10 +170,10 @@ class SpaceBattleGame {
     updatePlayerActions() {
         if (this.playerShip) {
             const currentTime = Date.now();
-            
+
             const hasMoved = this.playerShip.mesh.velocity.lengthSquared() > 0.0001; // Vérifie s'il y a du mouvement
             const hasRotated = this.playerShip.mesh.rotationQuaternion.lengthSquared() > 0.999; // Vérifie s'il y a une rotation
-    
+
             if ((hasMoved || hasRotated) && (currentTime - this.lastMovementUpdateTime > this.movementUpdateInterval)) {
                 this.socket.send(JSON.stringify({
                     type: 'updateShip',
@@ -186,7 +183,7 @@ class SpaceBattleGame {
                         y: this.playerShip.mesh.position.y,
                         z: this.playerShip.mesh.position.z
                     },
-                    rotation: {
+                    rotationQuaternion: {
                         x: this.playerShip.mesh.rotationQuaternion.x,
                         y: this.playerShip.mesh.rotationQuaternion.y,
                         z: this.playerShip.mesh.rotationQuaternion.z,
@@ -196,19 +193,19 @@ class SpaceBattleGame {
 
                 this.lastMovementUpdateTime = currentTime;
             }
-    
+
             if (this.playerShip.mouse) {
                 this.playerShip.mouse.applyRotationForce();
             }
             this.playerShip.updatePlayer(this.planets);
         }
-    
+
         requestAnimationFrame(() => this.updatePlayerActions());
-    }    
+    }
 
     async updateObjects(data) {
         this.updateDeltaTime();
-        
+
         if (!data || !data.ships) return;
 
         await Promise.all(Object.values(this.ships).map(async (ship) => {

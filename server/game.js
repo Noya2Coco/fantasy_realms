@@ -50,8 +50,8 @@ export class Game {
             ws.send(JSON.stringify({
                 type: 'init',
                 ships: Object.values(this.ships).map(s => s.toJSON()),
-                planets: this.planets,
-                projectiles: this.projectiles,
+                planets: this.planets.map(p => p.toJSON()),
+                projectiles: this.projectiles.map(p => p.toJSON()), // Ensure correct serialization
                 playerId: id
             }));
 
@@ -69,10 +69,14 @@ export class Game {
         } else if (data.type === 'fireProjectile') {
             const ship = this.ships[data.shipId];
             if (ship) {
-                const projectile = new Bullet(ship, data);
-                this.projectiles.push(projectile);
+                if (!this.projectiles.find(p => p.id === data.id)) {
+                    console.log(`🚀 Nouveau projectile ajouté au serveur: ${data.id}`);
+                    const projectile = new Bullet(data);
+                    this.projectiles.push(projectile);
+                    this.broadcast({ type: 'newProjectile', projectile: projectile.toJSON() });
+                }
             }
-        }
+        }        
     }
 
     /** 🚀 Crée un vaisseau */
@@ -102,7 +106,15 @@ export class Game {
 
         this.projectiles.forEach(projectile => {
             projectile.update(deltaTime);
+            // Update projectile properties
+            projectile.position.addInPlace(projectile.velocity.scale(deltaTime / 1000));
+            if (Date.now() - projectile.spawnTime > projectile.lifeTime) {
+                projectile.visible = false;
+            }
         });
+
+        // Supprime les projectiles expirés
+        this.projectiles = this.projectiles.filter(p => p.visible);
     }
 
     /** 🔄 Supprime les vaisseaux inactifs */
@@ -130,7 +142,7 @@ export class Game {
                 ships: Object.values(this.ships).map(s => s.toJSON()),
                 projectiles: this.projectiles.map(p => p.toJSON()),
                 planets: this.planets.map(p => p.toJSON())
-            });            
+            });
 
             setTimeout(loop, 50);
         };

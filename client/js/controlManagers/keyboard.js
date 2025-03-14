@@ -102,18 +102,17 @@ export class Keyboard {
             this.cameraSwitchCooldown = false;
         }
 
-        if (this.keysPressed[' '] && currentTime - this.ship.lastBulletTime > 250) { // Limit to one bullet every 250ms
+        if (this.keysPressed[' '] && currentTime - this.ship.lastBulletTime > 250) {
             const bullet = new Bullet(this.scene, this.ship);
-            this.projectiles[bullet.id] = bullet; // Store bullet internally
-            this.ship.lastBulletTime = currentTime; // Update the last bullet time
-            
+            this.projectiles[bullet.id] = bullet;
+            this.ship.lastBulletTime = currentTime;
+        
             if (this.socket) {
                 this.socket.send(JSON.stringify({
                     type: 'fireProjectile',
                     id: bullet.id,
                     position: bullet.mesh.position,
-                    rotation: bullet.mesh.rotationQuaternion,
-                    direction: bullet.mesh.direction,
+                    rotationQuaternion: bullet.mesh.rotationQuaternion,
                     velocity: bullet.mesh.velocity,
                     shipId: this.ship.id
                 }));

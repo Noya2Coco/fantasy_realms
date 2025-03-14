@@ -73,7 +73,7 @@ export class Mouse {
             type: 'updateShip',
             id: this.ship.id,
             position: { x: position.x, y: position.y, z: position.z },
-            rotation: { x: rotation.x, y: rotation.y, z: rotation.z, w: rotation.w }
+            rotationQuaternion: { x: rotation.x, y: rotation.y, z: rotation.z, w: rotation.w }
         };
 
         // Send data to the server
