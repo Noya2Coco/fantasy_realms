@@ -111,9 +111,15 @@ export class Game {
             if (Date.now() - projectile.spawnTime > projectile.lifeTime) {
                 projectile.visible = false;
             }
+
+            // Suppression des projectiles qui dépassent la limite de coordonnées
+            const maxCoord = 2000;
+            if (Math.abs(projectile.position.x) > maxCoord || Math.abs(projectile.position.y) > maxCoord || Math.abs(projectile.position.z) > maxCoord) {
+                projectile.visible = false;
+            }
         });
 
-        // Supprime les projectiles expirés
+        // Supprime les projectiles expirés ou hors limites
         this.projectiles = this.projectiles.filter(p => p.visible);
     }
 

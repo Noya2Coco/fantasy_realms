@@ -15,9 +15,9 @@ export class Bullet {
         }
 
         if (data && data.rotationQuaternion && data.rotationQuaternion._x !== undefined) {
-            this.rotationQuaternion = new Vector3(data.rotationQuaternion._x, data.rotationQuaternion._y, data.rotationQuaternion._z, data.rotationQuaternion._w);
+            this.rotationQuaternion = new Quaternion(data.rotationQuaternion._x, data.rotationQuaternion._y, data.rotationQuaternion._z, data.rotationQuaternion._w);
         } else {
-            this.rotationQuaternion = data ? new Vector3(data.rotationQuaternion.x, data.rotationQuaternion.y, data.rotationQuaternion.z, data.rotationQuaternion.w) :
+            this.rotationQuaternion = data ? new Quaternion(data.rotationQuaternion.x, data.rotationQuaternion.y, data.rotationQuaternion.z, data.rotationQuaternion.w) :
                 Quaternion.Identity();
         }
 
@@ -31,13 +31,20 @@ export class Bullet {
         this.spawnTime = Date.now();
         this.lifeTime = 15000; // 15 secondes avant suppression
         this.visible = true;
-        console.log(this.rotationQuaternion);
+        console.log("RotationQ:", this.rotationQuaternion);
     }
 
     update(deltaTime) {
         this.position.addInPlace(this.velocity.scale(deltaTime / 1000));
         if (Date.now() - this.spawnTime > this.lifeTime) {
             this.lifeTime = 0;
+            this.visible = false;
+        }
+
+        // Suppression des projectiles qui dépassent la limite de coordonnées
+        const maxCoord = 15000;
+        console.log("Position:", this.position);
+        if (Math.abs(this.position.x) > maxCoord || Math.abs(this.position.y) > maxCoord || Math.abs(this.position.z) > maxCoord) {
             this.visible = false;
         }
     }

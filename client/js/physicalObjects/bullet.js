@@ -65,7 +65,8 @@ export class Bullet {
                 x: this.mesh.rotationQuaternion.x, y: this.mesh.rotationQuaternion.y,
                 z: this.mesh.rotationQuaternion.z, w: this.mesh.rotationQuaternion.w
             } : { x: 0, y: 0, z: 0, w: 1 },
-            velocity: { x: this.mesh.velocity.x, y: this.mesh.velocity.y, z: this.mesh.velocity.z }
+            velocity: { x: this.mesh.velocity.x, y: this.mesh.velocity.y, z: this.mesh.velocity.z },
+            visible: this.mesh.isVisible // Add visibility to JSON
         };
     }
 }
@@ -82,6 +83,14 @@ Bullet.worker.onmessage = function (event) {
                 game.projectiles[updatedBullet.id].mesh.position.set(
                     updatedBullet.position.x, updatedBullet.position.y, updatedBullet.position.z
                 );
+                game.projectiles[updatedBullet.id].mesh.isVisible = updatedBullet.visible; // Update visibility
+
+                // Suppression des projectiles qui dépassent la limite de coordonnées
+                const maxCoord = 15000;
+                if (Math.abs(updatedBullet.position.x) > maxCoord || Math.abs(updatedBullet.position.y) > maxCoord || Math.abs(updatedBullet.position.z) > maxCoord) {
+                    game.projectiles[updatedBullet.id].dispose();
+                    delete game.projectiles[updatedBullet.id];
+                }
             }
         });
     }

@@ -46,6 +46,16 @@ function updateBullets() {
         if (currentTime - bullet.spawnTime > bullet.lifeTime) {
             delete self.bullets[bullet.id];
         }
+
+        // Vérification de la distance pour la visibilité
+        const distance = Math.sqrt(bullet.position.x ** 2 + bullet.position.y ** 2 + bullet.position.z ** 2);
+        bullet.visible = distance <= 400;
+
+        // Suppression des projectiles qui dépassent la limite de coordonnées
+        const maxCoord = 2000;
+        if (Math.abs(bullet.position.x) > maxCoord || Math.abs(bullet.position.y) > maxCoord || Math.abs(bullet.position.z) > maxCoord) {
+            delete self.bullets[bullet.id];
+        }
     });
 
     self.postMessage({ type: "updateBullets", bullets: Object.values(self.bullets) });
