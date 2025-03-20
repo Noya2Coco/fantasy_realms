@@ -8,7 +8,7 @@ export class Bullet {
         this.id = data ? data.id : `bullet-${Math.random().toString(36).substr(2, 9)}`;
 
         // Création du mesh (uniquement visuel)
-        this.mesh = MeshBuilder.CreateTube('bullet', { path: [new Vector3(0, 0, 0), new Vector3(0, 0, 2)], radius: 0.05 }, this.scene);
+        this.mesh = MeshBuilder.CreateTube('bullet', { path: [new Vector3(0, 0, 0), new Vector3(0, 0, 4)], radius: 0.1 }, this.scene); // Increase hitbox dimensions
         this.mesh.material = new StandardMaterial('bulletMaterial', this.scene);
         this.mesh.material.emissiveColor = new Color3(1, 0, 0);
         this.mesh.material.disableLighting = true;
@@ -79,16 +79,16 @@ if (typeof Bullet.worker === 'undefined') {
 Bullet.worker.onmessage = function (event) {
     if (event.data.type === "updateBullets") {
         event.data.bullets.forEach(updatedBullet => {
-            if (game.projectiles[updatedBullet.id]) {
-                game.projectiles[updatedBullet.id].mesh.position.set(
-                    updatedBullet.position.x, updatedBullet.position.y, updatedBullet.position.z
-                );
-                game.projectiles[updatedBullet.id].mesh.isVisible = updatedBullet.visible; // Update visibility
+            const projectile = game.projectiles[updatedBullet.id];
+            if (projectile) {
+                const mesh = projectile.mesh;
+                mesh.position.set(updatedBullet.position.x, updatedBullet.position.y, updatedBullet.position.z);
+                mesh.isVisible = updatedBullet.visible; // Update visibility
 
                 // Suppression des projectiles qui dépassent la limite de coordonnées
-                const maxCoord = 15000;
+                const maxCoord = 2000;
                 if (Math.abs(updatedBullet.position.x) > maxCoord || Math.abs(updatedBullet.position.y) > maxCoord || Math.abs(updatedBullet.position.z) > maxCoord) {
-                    game.projectiles[updatedBullet.id].dispose();
+                    projectile.dispose();
                     delete game.projectiles[updatedBullet.id];
                 }
             }

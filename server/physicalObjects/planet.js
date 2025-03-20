@@ -15,7 +15,7 @@ export class Planet {
         const direction = this.position.subtract(mesh.position);
         const distance = direction.length();
         if (distance > this.gravitationalRange) {
-            return new Vector3(0, 0, 0);
+            return Vector3.Zero();
         }
         const forceMagnitude = (this.gravitationalConstant * this.size) / (distance * distance);
         return direction.normalize().scale(forceMagnitude);

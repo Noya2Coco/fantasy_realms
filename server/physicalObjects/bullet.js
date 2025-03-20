@@ -2,11 +2,9 @@ import { Vector3, Quaternion } from '@babylonjs/core';
 
 export class Bullet {
     constructor(data) {
-        console.log(data);
         this.id = data.id;
         this.shipId = data.shipId;
         
-        console.log("Data:", data);
         if (data && data.position && data.position._x !== undefined) {
             this.position = new Vector3(data.position._x, data.position._y, data.position._z);
         } else {
@@ -29,9 +27,9 @@ export class Bullet {
         }
 
         this.spawnTime = Date.now();
-        this.lifeTime = 15000; // 15 secondes avant suppression
+        this.lifeTime = 15000; // 15 seconds before removal
         this.visible = true;
-        console.log("RotationQ:", this.rotationQuaternion);
+        this.hitbox = { radius: 0.2, length: 3 }; // Increase hitbox dimensions
     }
 
     update(deltaTime) {
@@ -41,9 +39,8 @@ export class Bullet {
             this.visible = false;
         }
 
-        // Suppression des projectiles qui dépassent la limite de coordonnées
-        const maxCoord = 15000;
-        console.log("Position:", this.position);
+        // Remove projectiles that exceed coordinate limits
+        const maxCoord = 2000;
         if (Math.abs(this.position.x) > maxCoord || Math.abs(this.position.y) > maxCoord || Math.abs(this.position.z) > maxCoord) {
             this.visible = false;
         }

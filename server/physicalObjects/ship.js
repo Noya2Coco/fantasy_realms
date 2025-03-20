@@ -7,17 +7,20 @@ export class Ship {
         this.rotationQuaternion = new Quaternion(0, 0, 0, 1);
         this.velocity = new Vector3(0, 0, 0);
         this.acceleration = new Vector3(0, 0, 0);
+        this.lastTeleportTime = null; // Ajout de la propriété lastTeleportTime
+        this.health = 30; // Set health property to 30
+        this.hitbox = { width: 3.5, height: 1.75, depth: 7 }; // Increase hitbox dimensions
     }
 
     update(data) {
         if (data.position) {
-            this.position = new Vector3(data.position.x, data.position.y, data.position.z);
+            this.position.copyFromFloats(data.position.x, data.position.y, data.position.z);
         }
         if (data.velocity) {
-            this.velocity = new Vector3(data.velocity.x, data.velocity.y, data.velocity.z);
+            this.velocity.copyFromFloats(data.velocity.x, data.velocity.y, data.velocity.z);
         }
         if (data.rotationQuaternion) {
-            this.rotationQuaternion = new Quaternion(data.rotationQuaternion.x, data.rotationQuaternion.y, data.rotationQuaternion.z, data.rotationQuaternion.w);
+            this.rotationQuaternion.copyFromFloats(data.rotationQuaternion.x, data.rotationQuaternion.y, data.rotationQuaternion.z, data.rotationQuaternion.w);
         }
         //console.log(`🚀 Mise à jour du vaisseau ${this.id}`);
     }

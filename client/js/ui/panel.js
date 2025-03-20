@@ -27,6 +27,7 @@ export class Panel {
     }
 
     updatePositionsDisplays(ship) {
+        if (!ship || !ship.mesh) return;
         this.positionsInfos.coordinates.textContent = `Coordinates: (${ship.mesh.position.x.toFixed(2)}, ${ship.mesh.position.y.toFixed(2)}, ${ship.mesh.position.z.toFixed(2)})`;
         const rotation = ship.mesh.rotationQuaternion.toEulerAngles();
         this.positionsInfos.orientation.textContent = `Orientation: (${rotation.x.toFixed(2)}, ${rotation.y.toFixed(2)}, ${rotation.z.toFixed(2)})`;

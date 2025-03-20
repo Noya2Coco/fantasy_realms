@@ -45,7 +45,7 @@ export class Keyboard {
                 this.ship.mesh.particleLight = particle.particleLight;
             }
 
-            this.socket.send(JSON.stringify({
+            this.socket.sendMessage({
                 type: 'updateShip',
                 id: this.ship.id,
                 position: {
@@ -64,7 +64,7 @@ export class Keyboard {
                     y: this.ship.mesh.velocity.y,
                     z: this.ship.mesh.velocity.z
                 }
-            }));
+            });
         } else {
             // Stop exhaust particles when not moving forward
             if (this.ship.mesh.exhaustParticles) {
@@ -108,14 +108,14 @@ export class Keyboard {
             this.ship.lastBulletTime = currentTime;
         
             if (this.socket) {
-                this.socket.send(JSON.stringify({
+                this.socket.sendMessage({
                     type: 'fireProjectile',
                     id: bullet.id,
                     position: bullet.mesh.position,
                     rotationQuaternion: bullet.mesh.rotationQuaternion,
                     velocity: bullet.mesh.velocity,
                     shipId: this.ship.id
-                }));
+                });
             }
 
             bullet.mesh.onDisposeObservable.add(() => {

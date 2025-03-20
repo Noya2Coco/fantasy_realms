@@ -46,13 +46,26 @@ export class Planet {
 
     applyGravitationalForce(ship) {
         const direction = this.mesh.position.subtract(ship.mesh.position);
-        const distance = direction.length();
-        if (distance > this.gravitationalRange) {
-            return new Vector3(0, 0, 0); // No force if outside gravitational range
+        const distanceSquared = direction.lengthSquared();
+        if (distanceSquared > this.gravitationalRange * this.gravitationalRange) {
+            return; // No force if outside gravitational range
         }
 
-        const forceMagnitude = (this.gravitationalConstant * this.mesh.size) / (distance * distance);
+        const forceMagnitude = (this.gravitationalConstant * this.mesh.size) / distanceSquared;
+        if (forceMagnitude < 0.001) {
+            return; // No force if the magnitude is too small
+        }
+
         const force = direction.normalize().scale(forceMagnitude);
         ship.mesh.velocity.addInPlace(force); // Apply gravitational force to velocity
     };
+
+    dispose() {
+        if (this.mesh) {
+            this.mesh.dispose();
+        }
+        if (this.mesh.light) {
+            this.mesh.light.dispose();
+        }
+    }
 }

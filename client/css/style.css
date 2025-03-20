@@ -1,10 +1,19 @@
-html, body, canvas {
+html, body {
   margin: 0;
   padding: 0;
   width: 100%;
   height: 100%;
   overflow: hidden;
   background-color: black;
+}
+
+canvas {
+  display: block;
+  position: absolute; 
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
 }
 
 #infoPanel {
@@ -50,6 +59,7 @@ html, body, canvas {
 
 #infoPanel, #fpsPanel, #axesIndicator {
   display: none; /* Hide by default */
+  z-index: 10;
 }
 
 #gravityWarning {
@@ -65,8 +75,67 @@ html, body, canvas {
   animation: blink 1s infinite; /* Add blink animation */
 }
 
+#healthBarContainer {
+    position: absolute;
+    top: 10px; /* Position at the top */
+    left: 5%;
+    width: 40%; /* Adjust width to 50% of the screen */
+    height: 10px; /* Make the health bar thinner */
+    background-color: #444;
+    border: 1px solid #222;
+    border-radius: 5px;
+    overflow: hidden;
+    position: relative;
+    z-index: 1;
+}
+
+#healthBar {
+    height: 100%;
+    background-color: #f00;
+    width: 100%; /* Initial width set to 100% */
+    transition: width 0.3s ease;
+    position: absolute;
+    left: 0;
+}
+
+#recentDamageBar {
+    height: 100%;
+    background-color: #ff0;
+    width: 100%; /* Initial width set to 100% */
+    transition: width 2s ease;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+#healthHeart {
+    position: absolute;
+    top: 18px; /* Center vertically */
+    left: 6.5%;
+    width: 30px; /* Adjust size as needed */
+    height: 30px; /* Adjust size as needed */
+    z-index: 2; /* Ensure it is above other elements */
+    filter: drop-shadow(0 0 5px rgba(0, 0, 0, 1)); /* Add a drop shadow */
+}
 
 @keyframes blink {
   0%, 100% { opacity: 1; }
   50% { opacity: 0; }
+}
+
+#radarContainer {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 200px;
+    height: 200px;
+    background-color: rgba(0, 0, 0, 0.5);
+    border-radius: 50%;
+    overflow: hidden;
+    z-index: 10;
+}
+
+#radarCanvas {
+    width: 100%;
+    height: 100%;
 }

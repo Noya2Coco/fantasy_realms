@@ -60,9 +60,10 @@ Particle.worker.onmessage = function(event) {
             const particle = game.particles[updatedParticle.id];
             if (particle) {
                 // Utilisation de l'interpolation pour lisser les mouvements
-                particle.emitter.position.x += (updatedParticle.position.x - particle.emitter.position.x) * 0.2;
-                particle.emitter.position.y += (updatedParticle.position.y - particle.emitter.position.y) * 0.2;
-                particle.emitter.position.z += (updatedParticle.position.z - particle.emitter.position.z) * 0.2;
+                const emitterPosition = particle.emitter.position;
+                emitterPosition.x += (updatedParticle.position.x - emitterPosition.x) * 0.2;
+                emitterPosition.y += (updatedParticle.position.y - emitterPosition.y) * 0.2;
+                emitterPosition.z += (updatedParticle.position.z - emitterPosition.z) * 0.2;
             }
         });
     }

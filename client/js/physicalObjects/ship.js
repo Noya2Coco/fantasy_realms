@@ -1,4 +1,4 @@
-import { MeshBuilder, StandardMaterial, Color3, Quaternion, Vector3 } from '@babylonjs/core';
+import { MeshBuilder, StandardMaterial, Color3, Quaternion, Vector3, PointLight, HemisphericLight } from '@babylonjs/core';
 import { createVelocityVector, createVelocityVectorArrow } from '../ui/vector.js';
 import { createMeshAxis } from '../ui/axis.js';
 
@@ -27,12 +27,26 @@ export class Ship {
         shipMaterial.specularColor = new Color3(0.2, 0.2, 0.2);
         this.mesh.material = shipMaterial;
 
+        // Add a light source to the ship
+        this.light = new PointLight(`light-${id}`, new Vector3(0, 0, 0), scene);
+        this.light.diffuse = new Color3(1, 1, 1);
+        this.light.specular = new Color3(1, 1, 1);
+        this.light.intensity = 0.5; // Adjust intensity as needed
+        this.light.parent = this.mesh; // Attach light to the ship
+
+        // Add a hemispheric light to illuminate the ship's surface
+        this.hemisphericLight = new HemisphericLight(`hemiLight-${id}`, new Vector3(0, 1, 0), scene);
+        this.hemisphericLight.diffuse = new Color3(1, 1, 1);
+        this.hemisphericLight.specular = new Color3(1, 1, 1);
+        this.hemisphericLight.groundColor = new Color3(0.5, 0.5, 0.5);
+        this.hemisphericLight.intensity = 0.3; // Adjust intensity as needed
+
         createMeshAxis(this.mesh, this.scene, 2);
     }
 
     /** 🔄 Met à jour la position et la rotation du vaisseau selon les données du serveur */
-    update(data) {
-        if (!this.isPlayer) { // Ne pas mettre à jour si c'est le vaisseau du joueur
+    update(data, forceUpdate = false) {
+        if (!this.isPlayer || forceUpdate) { // Ne pas mettre à jour si c'est le vaisseau du joueur, sauf si forceUpdate est vrai
             if (data.position) {
                 this.mesh.position = new Vector3(data.position.x, data.position.y, data.position.z);
             }
@@ -99,6 +113,7 @@ export class Ship {
 
             if (this.mesh.velocityVector) {
                 this.mesh.velocityVector.dispose();
+                this.mesh.velocityVector = null;
             }
             this.mesh.velocityVector = createVelocityVector(this.scene, this.mesh.position, endPoint);
 
@@ -128,6 +143,19 @@ export class Ship {
     dispose() {
         if (this.mesh) {
             this.mesh.dispose();
+        }
+        if (this.mesh.velocityVector) {
+            this.mesh.velocityVector.dispose();
+        }
+        if (this.mesh.velocityVectorArrow) {
+            this.mesh.velocityVectorArrow.dispose();
+        }
+        if (this.mesh.exhaustParticles) {
+            this.mesh.exhaustParticles.stop();
+            this.mesh.exhaustParticles.dispose();
+        }
+        if (this.mesh.particleLight) {
+            this.mesh.particleLight.dispose();
         }
     }
 }

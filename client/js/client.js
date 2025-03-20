@@ -1,4 +1,4 @@
-import { Engine, Scene, FreeCamera, Vector3 } from '@babylonjs/core';
+import { Engine, Scene, FreeCamera, Vector3, Matrix } from '@babylonjs/core';
 import { Ship } from './physicalObjects/ship.js';
 import { Planet } from './physicalObjects/planet.js';
 import { Camera } from './physicalObjects/camera.js';
@@ -13,6 +13,7 @@ import { Panel } from './ui/panel.js';
 class SpaceBattleGame {
     constructor() {
         this.socket = new WebSocket('ws://localhost:8080');
+        this.socket.sendMessage = this.sendMessage.bind(this); // Bind sendMessage method
         this.ships = {};
         this.playerShip = null;
         this.projectiles = {};
@@ -44,6 +45,8 @@ class SpaceBattleGame {
         this.lastPanelUpdateTime = Date.now();
         this.panelUpdateInterval = 100;
         this.shipCreated = false; // Flag to check if the ship is created
+        this.radarCanvas = document.getElementById('radarCanvas');
+        this.radarContext = this.radarCanvas.getContext('2d');
 
         this.initializeSocket();
         this.updatePlayerActions();
@@ -57,7 +60,7 @@ class SpaceBattleGame {
 
     initializeSocket() {
         this.socket.onopen = () => {
-            console.log('✅ Connecté au serveur');
+            console.log('✅ Connected to server');
             this.socket.send(JSON.stringify({ type: 'newShip' }));
         };
 
@@ -71,34 +74,84 @@ class SpaceBattleGame {
                 if (ship) {
                     ship.update(data.ship);
                 }
+            } else if (data.type === 'teleportShip') {
+                const ship = this.ships[data.ship.id];
+                if (ship) {
+                    ship.update(data.ship, true); // Force update for teleportation
+                }
             } else if (data.type === 'newProjectile') {
                 if (!this.projectiles[data.projectile.id]) {
-                    console.log('🚀 Nouveau projectile reçu:', data.projectile);
+                    console.log('🚀 New projectile received:', data.projectile);
                     this.projectiles[data.projectile.id] = new Bullet(this.scene, this.playerShip, data.projectile);
                 }
-            }
-            else if (data.type === 'updateGameState') {
+            } else if (data.type === 'updateGameState') {
                 Bullet.worker.postMessage({ type: "updateBulletsFromServer", bullets: data.projectiles });
             } else if (data.type === 'newShip') {
-                console.log('🚀 Nouveau vaisseau reçu:', data.ship); // DEBUG
+                console.log('🚀 New ship received:', data.ship); // DEBUG
 
                 if (!this.ships[data.ship.id]) {
-                    // Création du vaisseau avec son mesh
+                    // Create the ship with its mesh
                     const newShip = new Ship(this.scene, data.ship.id, data.ship);
 
-                    // Vérification et activation
+                    // Check and activate
                     if (!newShip.mesh) {
-                        console.error("❌ ERREUR: Le vaisseau reçu n'a pas de mesh !");
+                        console.error("❌ ERROR: The received ship has no mesh!");
                     } else {
-                        console.log("✅ Activation du vaisseau reçu:");
+                        console.log("✅ Activating received ship:");
                     }
 
                     this.ships[newShip.id] = newShip;
                     this.ships[newShip.id].socket = this.socket;
-                    this.ships[newShip.id].update(data.ship); // Mise à jour avec les données reçues
+                    this.ships[newShip.id].update(data.ship); // Update with received data
+                }
+            } else if (data.type === 'updateShipHealth') {
+                const ship = this.ships[data.id];
+                if (ship && ship.isPlayer) {
+                    ship.health = data.health;
+                    this.updateHealthBar(ship); // Update the health bar only for the player's ship
                 }
             }
         };
+
+        this.socket.onclose = () => {
+            console.log('❌ Disconnected from server');
+            this.cleanup();
+        };
+
+        this.socket.onerror = (error) => {
+            console.error('❌ WebSocket error:', error);
+            this.cleanup(); // Ensure proper cleanup on error
+            this.socket.close();
+        };
+    }
+
+    sendMessage(data) {
+        if (this.socket.readyState === WebSocket.OPEN) {
+            try {
+                this.socket.send(JSON.stringify(data));
+            } catch (error) {
+                console.error('❌ Error sending WebSocket message:', error);
+            }
+        }
+    }
+
+    cleanup() {
+        Object.values(this.ships).forEach(ship => ship.dispose());
+        this.ships = {};
+        Object.values(this.projectiles).forEach(projectile => projectile.dispose());
+        this.projectiles = {};
+        Object.values(this.planets).forEach(planet => planet.dispose());
+        this.planets = {};
+        Object.values(this.particles).forEach(particle => particle.dispose());
+        this.particles = {};
+        if (this.playerShip) {
+            this.playerShip.dispose();
+            this.playerShip = null;
+        }
+        if (this.socket) {
+            this.socket.close(); // Ensure WebSocket connection is closed
+            this.socket = null;
+        }
     }
 
     updateGameState(data) {
@@ -106,16 +159,16 @@ class SpaceBattleGame {
 
         data.ships.forEach(shipData => {
             if (!this.ships[shipData.id]) {
-                console.log('✅ Nouveau vaisseau créé:', shipData);
+                console.log('✅ New ship created:', shipData);
 
-                // Vérifie si ce vaisseau appartient au joueur
+                // Check if this ship belongs to the player
                 const isPlayer = data.playerId === shipData.id;
                 this.ships[shipData.id] = new Ship(this.scene, shipData.id, shipData, isPlayer);
                 this.ships[shipData.id].socket = this.socket;
 
                 if (isPlayer) {
                     this.playerShip = this.ships[shipData.id];
-                    this.shipCreated = true; // Flag pour dire que le joueur a bien un vaisseau
+                    this.shipCreated = true; // Flag to indicate the player has a ship
 
                     if (this.defaultCamera instanceof FreeCamera) {
                         this.defaultCamera.dispose();
@@ -131,13 +184,13 @@ class SpaceBattleGame {
                 }
             }
 
-            // Met à jour les positions de tous les vaisseaux
+            // Update positions of all ships
             this.ships[shipData.id].update(shipData);
         });
 
         Object.keys(this.ships).forEach(id => {
             if (!data.ships.some(s => s.id === id)) {
-                console.log(`🛑 Suppression du vaisseau ${id}`);
+                console.log(`🛑 Removing ship ${id}`);
                 this.ships[id].dispose();
                 delete this.ships[id];
             }
@@ -171,11 +224,11 @@ class SpaceBattleGame {
         if (this.playerShip) {
             const currentTime = Date.now();
 
-            const hasMoved = this.playerShip.mesh.velocity.lengthSquared() > 0.0001; // Vérifie s'il y a du mouvement
-            const hasRotated = this.playerShip.mesh.rotationQuaternion.lengthSquared() > 0.999; // Vérifie s'il y a une rotation
+            const hasMoved = this.playerShip.mesh.velocity.lengthSquared() > 0.0001; // Check for movement
+            const hasRotated = this.playerShip.mesh.rotationQuaternion.lengthSquared() > 0.999; // Check for rotation
 
             if ((hasMoved || hasRotated) && (currentTime - this.lastMovementUpdateTime > this.movementUpdateInterval)) {
-                this.socket.send(JSON.stringify({
+                this.sendMessage({
                     type: 'updateShip',
                     id: this.playerShip.id,
                     position: {
@@ -189,7 +242,7 @@ class SpaceBattleGame {
                         z: this.playerShip.mesh.rotationQuaternion.z,
                         w: this.playerShip.mesh.rotationQuaternion.w
                     }
-                }));
+                });
 
                 this.lastMovementUpdateTime = currentTime;
             }
@@ -239,17 +292,94 @@ class SpaceBattleGame {
         }
         this.panel.updatePositionsDisplays(this.playerShip);
         createPanelAxisIndicator(this.panel.positionsInfos.axes, this.playerShip.mesh.rotationQuaternion);
+        this.updateRadar();
         requestAnimationFrame(() => this.updatePanel());
     }
+
+    updateRadar() {
+        const ctx = this.radarContext;
+        const radarRadius = this.radarCanvas.width / 2;
+        const playerPos = this.playerShip.mesh.position;
+        const playerRotation = this.playerShip.mesh.rotationQuaternion;
+    
+        ctx.clearRect(0, 0, this.radarCanvas.width, this.radarCanvas.height);
+    
+        // 🔥 Dessiner le fond du radar
+        ctx.beginPath();
+        ctx.arc(radarRadius, radarRadius, radarRadius, 0, 2 * Math.PI);
+        ctx.fillStyle = 'rgba(0, 0, 0, 0.5)';
+        ctx.fill();
+    
+        // 🔥 Convertir la rotation du vaisseau en matrice pour obtenir ses axes locaux
+        const rotationMatrix = new Matrix();
+        playerRotation.toRotationMatrix(rotationMatrix);
+    
+        // 🔥 Parcourir tous les vaisseaux pour calculer leur position relative
+        Object.values(this.ships).forEach(ship => {
+            if (ship.id !== this.playerShip.id) {
+                const shipPos = ship.mesh.position;
+    
+                // 🛑 Étape 1 : Trouver la position relative (dans le référentiel global)
+                const relativePos = shipPos.subtract(playerPos);
+    
+                // 🔥 Étape 2 : Transformer cette position en coordonnées LOCALES du joueur
+                const localPos = Vector3.TransformCoordinates(relativePos, rotationMatrix.invert());
+    
+                // ✅ Étape 3 : Inverser la logique du radar
+                // - Plus `localPos.x` et `localPos.y` sont proches de 0, plus l'ennemi doit être centré sur le radar.
+                // - Plus `localPos.x` et `localPos.y` s'écartent de 0, plus l'ennemi doit être éloigné du centre.
+    
+                const maxRadarDistance = 500; // Distance maximale prise en compte
+                const scaleFactor = radarRadius / maxRadarDistance;
+    
+                // ✅ Inversion de la logique pour centrer les ennemis quand ils sont en face
+                let x = radarRadius + (localPos.x * scaleFactor); // Plus X est élevé, plus l'ennemi est à droite sur le radar
+                let y = radarRadius - (localPos.y * scaleFactor); // Plus Y est élevé, plus l'ennemi est en haut sur le radar
+    
+                // 🔥 Limiter les points à l'intérieur du radar
+                const distance = Math.sqrt(localPos.x * localPos.x + localPos.y * localPos.y);
+                if (distance > maxRadarDistance) {
+                    x = radarRadius - (localPos.x / distance) * radarRadius;
+                    y = radarRadius - (localPos.y / distance) * radarRadius;
+                }
+    
+                // ✅ Dessiner le point sur le radar
+                ctx.beginPath();
+                ctx.arc(x, y, 5, 0, 2 * Math.PI);
+                ctx.fillStyle = 'red';
+                ctx.fill();
+            }
+        });
+    
+        // ✅ Dessiner le point du joueur au centre du radar
+        ctx.beginPath();
+        ctx.arc(radarRadius, radarRadius, 6, 0, 2 * Math.PI);
+        ctx.fillStyle = 'cyan';
+        ctx.fill();
+    }    
 
     updateDeltaTime() {
         const currentTime = performance.now(); // Use performance.now() for better precision
         this.deltaTime = currentTime - this.lastTime;
         this.lastTime = currentTime;
     }
+
+    updateHealthBar(ship) {
+        const healthBar = document.getElementById('healthBar');
+        const recentDamageBar = document.getElementById('recentDamageBar');
+        if (healthBar && recentDamageBar) {
+            const maxHealth = 30; // Ensure the max health is set correctly
+            const previousHealth = parseFloat(healthBar.style.width) * maxHealth / 100;
+            healthBar.style.width = `${(ship.health / maxHealth) * 100}%`;
+            recentDamageBar.style.width = `${(previousHealth / maxHealth) * 100}%`;
+            setTimeout(() => {
+                recentDamageBar.style.width = `${(ship.health / maxHealth) * 100}%`;
+            }, 2000); // Delay the reduction of the recent damage bar by 2 seconds
+        }
+    }
 }
 
-// Vérifie si le WebWorker est déjà initialisé
+// Check if the WebWorker is already initialized
 if (typeof Bullet.worker === 'undefined') {
     Bullet.worker = new Worker(new URL('./worker/bulletWorker.js', import.meta.url));
 }

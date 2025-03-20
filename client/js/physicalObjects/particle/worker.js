@@ -25,14 +25,19 @@ function updateParticles() {
     const deltaTime = (currentTime - lastUpdateTime) / 1000; // Conversion en secondes
     lastUpdateTime = currentTime;
 
-    self.particles = self.particles.filter(particle => {
+    const updatedParticles = [];
+    for (let i = 0; i < self.particles.length; i++) {
+        const particle = self.particles[i];
         particle.position.x += particle.velocity.x * deltaTime;
         particle.position.y += particle.velocity.y * deltaTime;
         particle.position.z += particle.velocity.z * deltaTime;
 
         // Vérifie si la particule doit être supprimée
-        return currentTime - particle.spawnTime < particle.lifeTime;
-    });
+        if (currentTime - particle.spawnTime < particle.lifeTime) {
+            updatedParticles.push(particle);
+        }
+    }
+    self.particles = updatedParticles;
 
     // Envoie les nouvelles positions au thread principal
     self.postMessage({ type: "updateParticles", particles: self.particles });

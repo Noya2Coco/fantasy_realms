@@ -14,13 +14,15 @@
     "@babylonjs/core": "^7.48.3",
     "@babylonjs/gui": "^7.44.0",
     "@babylonjs/loaders": "^7.48.3",
+    "compression": "^1.8.0",
     "express": "^4.21.2",
+    "helmet": "^8.1.0",
     "ws": "^8.13.0"
   },
   "devDependencies": {
-    "vite": "^6.1.0",
     "concurrently": "^8.0.1",
-    "nodemon": "^3.1.9"
+    "nodemon": "^3.1.9",
+    "vite": "^6.1.0"
   },
   "keywords": [],
   "author": "",
