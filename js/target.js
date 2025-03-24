@@ -44,9 +44,28 @@ function createTarget() {
     let speedFactor = 1000;
     let targetDuration = Math.max(baseTime - (score / speedFactor) * 1000, minTime);
 
-    setTimeout(() => {
-        target.remove();
-    }, targetDuration);
+    // Shrink the target over time toward its center
+    let shrinkInterval = setInterval(() => {
+        let currentWidth = parseFloat(getComputedStyle(target).width);
+        let currentHeight = parseFloat(getComputedStyle(target).height);
+
+        if (currentWidth <= 10 || currentHeight <= 10) { // Stop shrinking at a minimum size
+            clearInterval(shrinkInterval);
+        } else {
+            let shrinkAmount = 1; // Amount to shrink per interval
+            target.style.width = `${currentWidth - shrinkAmount}px`;
+            target.style.height = `${currentHeight - shrinkAmount}px`;
+
+            // Adjust position to keep shrinking toward the center
+            target.style.left = `${parseFloat(target.style.left) + shrinkAmount / 2}px`;
+            target.style.top = `${parseFloat(target.style.top) + shrinkAmount / 2}px`;
+
+            // Apply zoom-out effect
+            let scaleFactor = currentWidth / (currentWidth - shrinkAmount);
+            target.style.transformOrigin = "center";
+            target.style.transform = `scale(${scaleFactor})`;
+        }
+    }, targetDuration / 70); // Adjust shrinking speed based on duration
 
     gameContainer.appendChild(target);
 }

@@ -77,7 +77,7 @@ p {
 #crosshair::after {
     content: "";
     position: absolute;
-    background-color: purple;
+    background-color: rgb(251, 45, 179);
 }
 
 #crosshair::before {
