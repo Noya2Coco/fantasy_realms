@@ -59,8 +59,7 @@ function updateBullets() {
     });
 
     self.postMessage({ type: "updateBullets", bullets: Object.values(self.bullets) });
-    setTimeout(updateBullets, 50); // Réduire la fréquence à 20 FPS
 }
 
 // Démarrer la mise à jour continue
-updateBullets();
+setInterval(updateBullets, 50); // 20 FPS

@@ -12,6 +12,11 @@ export function toggleInfoVisibility(ship, scene) {
         ship.mesh.axes = setAxesVisibility(ship.mesh.axes, scene.infoVisible);
         ship.mesh.velocityVector = setAxesVisibility(ship.mesh.velocityVector, scene.infoVisible);
         ship.mesh.velocityVectorArrow = setAxesVisibility(ship.mesh.velocityVectorArrow, scene.infoVisible);
+
+        // Vérifiez si le matériau a la méthode needAlphaTestingForMesh
+        if (ship.mesh.material && typeof ship.mesh.material.needAlphaTestingForMesh !== 'function') {
+            ship.mesh.material.needAlphaTestingForMesh = () => false; // Ajoutez une méthode par défaut
+        }
     }
     scene.axes = setAxesVisibility(scene.axes, scene.infoVisible);
 }

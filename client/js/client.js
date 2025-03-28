@@ -9,6 +9,7 @@ import { Keyboard } from './controlManagers/keyboard.js';
 import { Bullet } from './physicalObjects/bullet.js';
 import { Skydome } from './physicalObjects/skydome.js';
 import { Panel } from './ui/panel.js';
+import { VelocityVector } from './ui/velocityVector.js';
 
 class SpaceBattleGame {
     constructor() {
@@ -47,6 +48,7 @@ class SpaceBattleGame {
         this.shipCreated = false; // Flag to check if the ship is created
         this.radarCanvas = document.getElementById('radarCanvas');
         this.radarContext = this.radarCanvas.getContext('2d');
+        this.recentDamageTimeout = null;
 
         this.initializeSocket();
         this.updatePlayerActions();
@@ -55,6 +57,13 @@ class SpaceBattleGame {
         });
         window.addEventListener('resize', () => {
             this.engine.resize();
+        });
+
+        // Ajouter un raccourci clavier pour activer/désactiver l'Inspector
+        window.addEventListener('keydown', (event) => {
+            if (event.key === 'i') { // Appuyer sur "i" pour ouvrir/fermer l'Inspector
+                this.toggleInspector();
+            }
         });
     }
 
@@ -217,6 +226,12 @@ class SpaceBattleGame {
             this.updateObjects(data);
             this.playerShip.keyboard.checkPressedKeys();
             this.updatePanel();
+            this.playerShip.updatePlayer(this.planets);
+            this.playerShip.velocityVector.update(
+                this.playerShip.mesh.position,
+                this.playerShip.mesh.position.add(this.playerShip.mesh.velocity.scale(100))
+            );
+            this.playerShip.adjustVectorLine(this.planets); // Mettre à jour le velocityVector
         }
     }
 
@@ -369,13 +384,26 @@ class SpaceBattleGame {
         const healthBar = document.getElementById('healthBar');
         const recentDamageBar = document.getElementById('recentDamageBar');
         if (healthBar && recentDamageBar) {
-            const maxHealth = 30; // Ensure the max health is set correctly
+            const maxHealth = 30;
             const previousHealth = parseFloat(healthBar.style.width) * maxHealth / 100;
             healthBar.style.width = `${(ship.health / maxHealth) * 100}%`;
             recentDamageBar.style.width = `${(previousHealth / maxHealth) * 100}%`;
-            setTimeout(() => {
+    
+            if (this.recentDamageTimeout) clearTimeout(this.recentDamageTimeout);
+            this.recentDamageTimeout = setTimeout(() => {
                 recentDamageBar.style.width = `${(ship.health / maxHealth) * 100}%`;
-            }, 2000); // Delay the reduction of the recent damage bar by 2 seconds
+            }, 2000);
+        }
+    }
+
+    toggleInspector() {
+        const radarContainer = document.getElementById('radarContainer');
+        if (this.scene.debugLayer.isVisible()) {
+            this.scene.debugLayer.hide();
+            radarContainer.style.display = 'block'; // Réactiver le radar
+        } else {
+            this.scene.debugLayer.show();
+            radarContainer.style.display = 'none'; // Désactiver le radar
         }
     }
 }

@@ -41,9 +41,7 @@ function updateParticles() {
 
     // Envoie les nouvelles positions au thread principal
     self.postMessage({ type: "updateParticles", particles: self.particles });
-
-    setTimeout(updateParticles, 16); // 60 FPS
 }
 
 // Lancer la boucle d'update en continu
-updateParticles();
+setInterval(updateParticles, 16); // 60 FPS

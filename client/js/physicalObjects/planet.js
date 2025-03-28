@@ -18,6 +18,10 @@ export class Planet {
         material.diffuseColor = this.isStar ? new Color3(1, 1, 0) : new Color3(0, 1, 0);
         material.specularColor = new Color3(0.1, 0.1, 0.1);
         if (this.isStar) material.emissiveColor = new Color3(1, 1, 0);
+
+        // Ajoutez une méthode par défaut pour éviter les erreurs
+        material.needAlphaTestingForMesh = () => false;
+
         this.mesh.material = material;
 
         if (this.isStar) {
@@ -44,10 +48,23 @@ export class Planet {
         }
     }
 
+    /** 🔄 Affiche ou masque le halo rouge */
+    toggleGravityWarning(show) {
+        const gravityWarning = document.getElementById('gravityWarning');
+        if (gravityWarning) {
+            gravityWarning.style.display = show ? 'block' : 'none';
+        }
+    }
+
     applyGravitationalForce(ship) {
         const direction = this.mesh.position.subtract(ship.mesh.position);
         const distanceSquared = direction.lengthSquared();
-        if (distanceSquared > this.gravitationalRange * this.gravitationalRange) {
+        const isWithinRange = distanceSquared <= this.gravitationalRange * this.gravitationalRange;
+
+        // Afficher le halo rouge si le vaisseau est proche
+        this.toggleGravityWarning(isWithinRange);
+
+        if (!isWithinRange) {
             return; // No force if outside gravitational range
         }
 
@@ -58,7 +75,7 @@ export class Planet {
 
         const force = direction.normalize().scale(forceMagnitude);
         ship.mesh.velocity.addInPlace(force); // Apply gravitational force to velocity
-    };
+    }
 
     dispose() {
         if (this.mesh) {

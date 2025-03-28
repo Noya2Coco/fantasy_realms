@@ -1,5 +1,5 @@
 import { MeshBuilder, StandardMaterial, Color3, Quaternion, Vector3, PointLight, HemisphericLight } from '@babylonjs/core';
-import { createVelocityVector, createVelocityVectorArrow } from '../ui/vector.js';
+import { VelocityVector } from '../ui/velocityVector.js';
 import { createMeshAxis } from '../ui/axis.js';
 
 export class Ship {
@@ -25,6 +25,10 @@ export class Ship {
         shipMaterial.diffuseColor = new Color3(0.5, 0.5, 0.5);
         shipMaterial.emissiveColor = new Color3(0.5, 0.5, 0.5);
         shipMaterial.specularColor = new Color3(0.2, 0.2, 0.2);
+
+        // Ajoutez une méthode par défaut pour éviter les erreurs
+        shipMaterial.needAlphaTestingForMesh = () => false;
+
         this.mesh.material = shipMaterial;
 
         // Add a light source to the ship
@@ -42,6 +46,8 @@ export class Ship {
         this.hemisphericLight.intensity = 0.3; // Adjust intensity as needed
 
         createMeshAxis(this.mesh, this.scene, 2);
+
+        this.velocityVector = new VelocityVector(scene, `velocityVector-${id}`);
     }
 
     /** 🔄 Met à jour la position et la rotation du vaisseau selon les données du serveur */
@@ -97,46 +103,15 @@ export class Ship {
     }
 
     adjustVectorLine(planets) {
-        if (this.mesh.velocity.length() > 0.003 && !this.scene.isCockpitView && this.scene.infoVisible) {
-            const displacement = this.mesh.velocity.scale(100);
-            let endPoint = this.mesh.position.add(displacement);
+        if (this.mesh.velocity.length() > 0.003 && this.scene.infoVisible) {
+            console.log(`[Ship] Adjusting velocity vector for ship: ${this.id}`);
+            console.log(`[Ship] Velocity: ${this.mesh.velocity}, Damping: ${this.mesh.damping}`);
 
-            // Deform the velocity vector line if near planets
-            Object.values(planets).forEach(planet => {
-                const distance = Vector3.Distance(this.mesh.position, planet.mesh.position);
-                if (distance < planet.gravitationalRange) { // Use planet's gravitational range
-                    const direction = planet.mesh.position.subtract(this.mesh.position).normalize();
-                    const deformation = direction.scale(50 / distance); // Adjust the deformation factor as needed
-                    endPoint.addInPlace(deformation);
-                }
-            });
-
-            if (this.mesh.velocityVector) {
-                this.mesh.velocityVector.dispose();
-                this.mesh.velocityVector = null;
-            }
-            this.mesh.velocityVector = createVelocityVector(this.scene, this.mesh.position, endPoint);
-
-            // Add arrowhead at the end of the velocity vector line
-            const arrowSize = Math.min(5, this.mesh.velocity.length() * 20); // Adjust arrow size based on vector length
-            const arrowDirection = endPoint.subtract(this.mesh.position).normalize();
-            const arrowBase = endPoint.subtract(arrowDirection.scale(arrowSize));
-            const arrowLeft = arrowBase.add(Vector3.Cross(arrowDirection, new Vector3(0, 1, 0)).normalize().scale(arrowSize / 2));
-            const arrowRight = arrowBase.add(Vector3.Cross(arrowDirection, new Vector3(0, -1, 0)).normalize().scale(arrowSize / 2));
-
-            if (this.mesh.velocityVectorArrow) {
-                this.mesh.velocityVectorArrow.dispose();
-            }
-            this.mesh.velocityVectorArrow = createVelocityVectorArrow(this.scene, this.mesh.position, endPoint, arrowLeft, arrowRight);
+            // Mettre à jour le vecteur de vitesse en 3D
+            this.velocityVector.update(this.mesh.position, this.mesh.velocity, this.mesh.damping);
         } else {
-            if (this.mesh.velocityVector) {
-                this.mesh.velocityVector.dispose();
-                this.mesh.velocityVector = null;
-            }
-            if (this.mesh.velocityVectorArrow) {
-                this.mesh.velocityVectorArrow.dispose();
-                this.mesh.velocityVectorArrow = null;
-            }
+            console.log(`[Ship] Velocity too low or info not visible. Disposing velocity vector.`);
+            this.velocityVector.dispose();
         }
     }
 
@@ -156,6 +131,9 @@ export class Ship {
         }
         if (this.mesh.particleLight) {
             this.mesh.particleLight.dispose();
+        }
+        if (this.velocityVector) {
+            this.velocityVector.dispose();
         }
     }
 }
