@@ -301,62 +301,63 @@ class SpaceBattleGame {
         const radarRadius = this.radarCanvas.width / 2;
         const playerPos = this.playerShip.mesh.position;
         const playerRotation = this.playerShip.mesh.rotationQuaternion;
-    
+
         ctx.clearRect(0, 0, this.radarCanvas.width, this.radarCanvas.height);
-    
+
         // 🔥 Dessiner le fond du radar
         ctx.beginPath();
         ctx.arc(radarRadius, radarRadius, radarRadius, 0, 2 * Math.PI);
         ctx.fillStyle = 'rgba(0, 0, 0, 0.5)';
         ctx.fill();
-    
+
         // 🔥 Convertir la rotation du vaisseau en matrice pour obtenir ses axes locaux
         const rotationMatrix = new Matrix();
         playerRotation.toRotationMatrix(rotationMatrix);
-    
+
         // 🔥 Parcourir tous les vaisseaux pour calculer leur position relative
         Object.values(this.ships).forEach(ship => {
             if (ship.id !== this.playerShip.id) {
                 const shipPos = ship.mesh.position;
-    
-                // 🛑 Étape 1 : Trouver la position relative (dans le référentiel global)
+
                 const relativePos = shipPos.subtract(playerPos);
-    
-                // 🔥 Étape 2 : Transformer cette position en coordonnées LOCALES du joueur
+
                 const localPos = Vector3.TransformCoordinates(relativePos, rotationMatrix.invert());
-    
-                // ✅ Étape 3 : Inverser la logique du radar
-                // - Plus `localPos.x` et `localPos.y` sont proches de 0, plus l'ennemi doit être centré sur le radar.
-                // - Plus `localPos.x` et `localPos.y` s'écartent de 0, plus l'ennemi doit être éloigné du centre.
-    
+
                 const maxRadarDistance = 500; // Distance maximale prise en compte
                 const scaleFactor = radarRadius / maxRadarDistance;
-    
-                // ✅ Inversion de la logique pour centrer les ennemis quand ils sont en face
+
                 let x = radarRadius + (localPos.x * scaleFactor); // Plus X est élevé, plus l'ennemi est à droite sur le radar
                 let y = radarRadius - (localPos.y * scaleFactor); // Plus Y est élevé, plus l'ennemi est en haut sur le radar
-    
-                // 🔥 Limiter les points à l'intérieur du radar
+
                 const distance = Math.sqrt(localPos.x * localPos.x + localPos.y * localPos.y);
                 if (distance > maxRadarDistance) {
                     x = radarRadius - (localPos.x / distance) * radarRadius;
                     y = radarRadius - (localPos.y / distance) * radarRadius;
                 }
-    
+
+                const forward = new Vector3(0, 0, 1); // Direction "devant" du joueur
+                const dotProduct = Vector3.Dot(localPos.clone().normalize(), forward);
+                const size = 5 * (1 + dotProduct); // Taille entre 3 et 8 en fonction de dotProduct
+
                 // ✅ Dessiner le point sur le radar
                 ctx.beginPath();
-                ctx.arc(x, y, 5, 0, 2 * Math.PI);
-                ctx.fillStyle = 'red';
+                ctx.arc(x, y, size, 0, 2 * Math.PI);
+                ctx.fillStyle = 'red'; // Couleur fixe
                 ctx.fill();
             }
         });
-    
-        // ✅ Dessiner le point du joueur au centre du radar
+
+        // ✅ Dessiner une petite croix blanche pour le joueur au centre du radar
+        const crossSize = 6; // Taille de la croix
         ctx.beginPath();
-        ctx.arc(radarRadius, radarRadius, 6, 0, 2 * Math.PI);
-        ctx.fillStyle = 'cyan';
-        ctx.fill();
-    }    
+        ctx.strokeStyle = 'white';
+        ctx.lineWidth = 2;
+        ctx.moveTo(radarRadius - crossSize / 2, radarRadius);
+        ctx.lineTo(radarRadius + crossSize / 2, radarRadius);
+        ctx.moveTo(radarRadius, radarRadius - crossSize / 2);
+        ctx.lineTo(radarRadius, radarRadius + crossSize / 2);
+        ctx.stroke();
+    }
 
     updateDeltaTime() {
         const currentTime = performance.now(); // Use performance.now() for better precision

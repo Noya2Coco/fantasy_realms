@@ -13,6 +13,8 @@ export class Bullet {
         this.mesh.material.emissiveColor = new Color3(1, 0, 0);
         this.mesh.material.disableLighting = true;
 
+        this.mesh.renderingGroupId = 1;
+        
         // Position et vitesse initiale
         if (data && data.position && data.position._x !== undefined) {
             this.mesh.position = new Vector3(data.position._x, data.position._y, data.position._z);
