@@ -7,12 +7,29 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <h1>Click</h1>
-    <p>Score : <span id="score">0</span></p>
-    <p>Temps restant : <span id="time">30</span> s</p>
-    <div id="game-container"></div>
-    <button id="restart-button">Recommencer</button>
-    <div id="crosshair"></div>
+    <!-- Menu de démarrage (VISIBLE) -->
+    <div id="start-menu" class="menu-overlay">
+        <h2>🎯 Jeu de tir - Click Game</h2>
+        <button id="play-button">Jouer</button>
+    </div>
+
+    <!-- Menu de fin (CACHÉ) -->
+    <div id="end-menu" class="menu-overlay hidden">
+        <h2>💥 Temps écoulé !</h2>
+        <p id="final-score">Score final : 0</p>
+        <button id="replay-button">Rejouer</button>
+    </div>
+
+    <!-- Interface de jeu (CACHÉ) -->
+    <div id="game-ui" class="hidden">
+        <h1>Click</h1>
+        <p>Score : <span id="score">0</span></p>
+        <p>Temps restant : <span id="time">30</span> s</p>
+        <div id="game-container"></div>
+        <button id="restart-button">Recommencer</button>
+        <div id="crosshair"></div>
+    </div>
+
     <audio autoplay loop>
         <source src="assets/audio/background.mp3" type="audio/mp3">
     </audio>

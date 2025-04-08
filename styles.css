@@ -65,7 +65,7 @@ p {
 /* 🎯 Viseur (Crosshair) Fixe */
 #crosshair {
     position: absolute;
-    width: 20px; /* Taille fixe */
+    width: 20px;
     height: 20px;
     pointer-events: none;
     transform: translate(-50%, -50%);
@@ -96,15 +96,9 @@ p {
     transform: translateX(-50%);
 }
 
-/* 🎯 Masquer le viseur en dehors de la zone de jeu */
+/* 🎯 Masquer le viseur */
 .hidden {
-    display: none;
-}
-
-/* 🎯 Cacher le curseur UNIQUEMENT dans la zone de jeu */
-#game-container {
-    cursor: none;
-    position: relative;
+    display: none !important;
 }
 
 /* 🎯 Bouton Restart */
@@ -124,9 +118,7 @@ p {
     background-color: #7214c5;
 }
 
-/* 📱💻 RESPONSIVE DESIGN */
-
-/* 🔹 TABLETTES (600px à 1024px) */
+/* 📱💻 Responsive design */
 @media (max-width: 1024px) {
     #game-container {
         width: 90vw;
@@ -139,7 +131,7 @@ p {
     }
 
     #crosshair {
-        width: 20px; /* Garder une taille fixe */
+        width: 20px;
         height: 20px;
     }
 
@@ -149,7 +141,6 @@ p {
     }
 }
 
-/* 🔹 SMARTPHONES (moins de 600px) */
 @media (max-width: 600px) {
     #game-container {
         width: 95vw;
@@ -157,9 +148,8 @@ p {
     }
 
     .target {
-        width: 12vw; /* Cibles plus grandes */
+        width: 12vw;
         height: 12vw;
-        
     }
 
     #crosshair {
@@ -171,4 +161,45 @@ p {
         font-size: 4vw;
         padding: 2vh 5vw;
     }
+}
+
+/* 🎯 Menus overlay */
+.menu-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(24, 24, 24, 0.9);
+    color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 3000;
+    font-size: 2vw;
+    gap: 2vh;
+    padding: 2vh;
+    text-align: center;
+}
+
+.menu-overlay h2 {
+    font-size: 3vw;
+    margin-bottom: 2vh;
+    color: #f23ad6;
+}
+
+.menu-overlay button {
+    font-size: 1.8vw;
+    padding: 1vh 3vw;
+    border: none;
+    border-radius: 12px;
+    background-color: #d019c7;
+    color: white;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.menu-overlay button:hover {
+    background-color: #7c1bd4;
 }

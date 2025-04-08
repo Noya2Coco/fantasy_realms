@@ -42,14 +42,14 @@ function createTarget() {
     let baseTime = 3000;
     let minTime = 500;
     let speedFactor = 1000;
-    let targetDuration = Math.max(baseTime - (score / speedFactor) * 1000, minTime);
+    let targetDuration = Math.max(baseTime - (score / speedFactor) * 300, minTime);
 
     // Shrink the target over time toward its center
     let shrinkInterval = setInterval(() => {
         let currentWidth = parseFloat(getComputedStyle(target).width);
         let currentHeight = parseFloat(getComputedStyle(target).height);
 
-        if (currentWidth <= 10 || currentHeight <= 10) { // Stop shrinking at a minimum size
+        if (currentWidth <= 10 || currentHeight <= 0) { // Stop shrinking at a minimum size
             clearInterval(shrinkInterval);
         } else {
             let shrinkAmount = 1; // Amount to shrink per interval
@@ -68,4 +68,6 @@ function createTarget() {
     }, targetDuration / 70); // Adjust shrinking speed based on duration
 
     gameContainer.appendChild(target);
+
+    
 }
