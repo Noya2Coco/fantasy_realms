@@ -222,3 +222,24 @@ p {
 .menu-overlay button:hover {
     background-color: #7c1bd4;
 }
+
+#score-message {
+    position: absolute;
+    top: 3vh;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0, 0, 0, 0.6);
+    color: #f3a5f5;
+    padding: 1vh 2vw;
+    border-radius: 12px;
+    font-size: 1.8vw;
+    font-family: 'Cinzel Decorative', cursive;
+    text-shadow: 1px 1px 4px black;
+    z-index: 999;
+    transition: opacity 0.3s ease;
+}
+
+#score-message.hidden {
+    opacity: 0;
+    pointer-events: none;
+}

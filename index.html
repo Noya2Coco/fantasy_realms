@@ -7,20 +7,23 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <!-- Menu de démarrage (VISIBLE) -->
+    <!-- Menu de démarrage -->
     <div id="start-menu" class="menu-overlay">
         <h2>🎯 Jeu de tir - Click Game</h2>
         <button id="play-button">Jouer</button>
     </div>
 
-    <!-- Menu de fin (CACHÉ) -->
+    <!-- Menu de fin -->
     <div id="end-menu" class="menu-overlay hidden">
         <h2>💥 Temps écoulé !</h2>
         <p id="final-score">Score final : 0</p>
         <button id="replay-button">Rejouer</button>
     </div>
 
-    <!-- Interface de jeu (CACHÉ) -->
+    <!-- Message flottant -->
+    <div id="score-message" class="hidden">Perfect +2s</div>
+
+    <!-- Interface de jeu -->
     <div id="game-ui" class="hidden">
         <h1>Click</h1>
         <p>Score : <span id="score">0</span></p>

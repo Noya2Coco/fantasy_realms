@@ -32,17 +32,19 @@ function createTarget() {
                 message = "Nice +1s";
             }
 
-            // Limiter à un maximum de 60 secondes
             timeLeft = Math.min(timeLeft + bonusTime, 60);
             timeDisplay.textContent = timeLeft;
+            scoreDisplay.textContent = score;
 
-            // Afficher le score temporairement avec message
-            scoreDisplay.textContent = `${score} (${message})`;
-            scoreDisplay.style.minWidth = '280px'; // Empêche les sauts de mise en page
+            const scoreMsg = document.getElementById("score-message");
+            if (message) {
+                scoreMsg.textContent = message;
+                scoreMsg.classList.remove("hidden");
 
-            setTimeout(() => {
-                scoreDisplay.textContent = score;
-            }, 750);
+                setTimeout(() => {
+                    scoreMsg.classList.add("hidden");
+                }, 1000);
+            }
 
             target.remove();
         }
