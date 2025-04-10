@@ -1,7 +1,8 @@
-/* 🎯 Style global */
+@import url('https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&display=swap');
+
 body {
     text-align: center;
-    font-family: Arial, sans-serif;
+    font-family: 'Cinzel Decorative', cursive, fantasy;
     background-image: url('assets/images/catback.jpeg'); 
     background-size: cover;
     background-position: center;
@@ -15,12 +16,32 @@ body {
     height: 100vh;
 }
 
-/* 🎯 Texte */
+/* 📝 Texte avec effet fantasy + stabilité */
+h1, h2, p, span {
+    text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.7);
+    font-family: 'Cinzel Decorative', cursive, fantasy;
+}
+
+h1 {
+    font-size: 4vw;
+    color: #ffffff;
+    background: rgba(0, 0, 0, 0.4);
+    padding: 1vh 2vw;
+    border-radius: 12px;
+    margin-bottom: 1vh;
+}
+
 p {
     font-size: 2vw;
     font-weight: bold;
-    color: rgb(183, 8, 218);
+    color: rgb(255, 255, 255);
+    background: rgba(0, 0, 0, 0.3);
+    padding: 0.5vh 1vw;
+    border-radius: 8px;
+    display: inline-block;
     margin: 1vh 0;
+    text-align: center;
+    min-width: 280px;
 }
 
 /* 🎯 Conteneur du jeu */
@@ -30,7 +51,7 @@ p {
     max-width: 800px;
     height: 55vh;
     max-height: 500px;
-    background-color: rgba(83, 112, 121, 0.8);
+    background-color: rgba(0, 0, 0, 0.4);
     border: 2px solid black;
     overflow: hidden;
     border-radius: 15px;
@@ -52,17 +73,12 @@ p {
     cursor: none;
 }
 
-/* 🎯 Animation des cibles */
 @keyframes shrink {
-    from {
-        transform: scale(1);
-    }
-    to {
-        transform: scale(0);
-    }
+    from { transform: scale(1); }
+    to { transform: scale(0); }
 }
 
-/* 🎯 Viseur (Crosshair) Fixe */
+/* 🎯 Viseur */
 #crosshair {
     position: absolute;
     width: 20px;
@@ -72,7 +88,6 @@ p {
     z-index: 1000;
 }
 
-/* 🎯 Croix violette */
 #crosshair::before,
 #crosshair::after {
     content: "";
@@ -96,7 +111,7 @@ p {
     transform: translateX(-50%);
 }
 
-/* 🎯 Masquer le viseur */
+/* 🎯 Cacher */
 .hidden {
     display: none !important;
 }
@@ -111,14 +126,15 @@ p {
     background-color: #bf0dc2;
     color: white;
     cursor: pointer;
-    transition: background  0.3s;
+    transition: background 0.3s;
+    font-family: 'Cinzel Decorative', cursive;
 }
 
 #restart-button:hover {
     background-color: #7214c5;
 }
 
-/* 📱💻 Responsive design */
+/* 📱 Responsive */
 @media (max-width: 1024px) {
     #game-container {
         width: 90vw;
@@ -181,12 +197,14 @@ p {
     gap: 2vh;
     padding: 2vh;
     text-align: center;
+    font-family: 'Cinzel Decorative', cursive;
 }
 
 .menu-overlay h2 {
     font-size: 3vw;
     margin-bottom: 2vh;
     color: #f23ad6;
+    text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.7);
 }
 
 .menu-overlay button {
@@ -198,6 +216,7 @@ p {
     color: white;
     cursor: pointer;
     transition: background 0.3s;
+    font-family: 'Cinzel Decorative', cursive;
 }
 
 .menu-overlay button:hover {
