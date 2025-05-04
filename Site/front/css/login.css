@@ -1,0 +1,137 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400&display=swap');
+
+/* Variables */
+:root {
+    --violet: #d33bfd;
+}
+
+/* Global Styles */
+body {
+    margin: 0;
+    font-family: 'Montserrat', sans-serif;
+    color: white;
+}
+
+/* Login Page Styles */
+body.login-page {
+    background: linear-gradient(#13181d, #20212e);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+.login-container {
+    max-width: 400px;
+    margin: 50px auto;
+    padding: 20px;
+    background-color: #20212e;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    overflow: hidden;
+    transition: height 0.3s ease;
+}
+
+.login-container h1 {
+    text-align: center;
+    color: var(--violet);
+}
+
+.login-container form {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    opacity: 0;
+    transform: translateY(-100%);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.login-container form.active {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.login-container label {
+    margin: 10px 0 5px;
+    color: #ccc;
+}
+
+.login-container input {
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    margin-bottom: 15px;
+}
+
+.login-container button {
+    padding: 10px;
+    background-color: var(--violet);
+    border: none;
+    border-radius: 5px;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.login-container button:hover {
+    background-color: #a029d9;
+}
+
+.form-toggle {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.form-toggle button {
+    background: none;
+    border: none;
+    color: #ccc;
+    padding: 10px 20px;
+    cursor: pointer;
+    transition: color 0.3s;
+}
+
+.form-toggle button.active {
+    color: var(--violet);
+    border-bottom: 2px solid var(--violet);
+}
+
+.form-toggle button:hover {
+    color: white;
+}
+
+#home-btn {
+    margin-top: 20px;
+    background-color: #333;
+    border: none;
+    border-radius: 5px;
+    color: white;
+    cursor: pointer;
+    padding: 10px;
+    text-align: center;
+    width: 100%;
+    transition: background-color 0.3s;
+}
+
+#home-btn:hover {
+    background-color: #555;
+}
+
+#message-container {
+    display: block;
+    position: absolute;
+    top: -100px;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 10px;
+    border-radius: 5px;
+    background-color: rgba(0, 0, 0, 0.7);
+    color: white;
+    text-align: center;
+    font-size: 14px;
+    max-width: 400px;
+    transition: top 0.5s ease-in-out;
+}
