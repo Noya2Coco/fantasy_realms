@@ -1,0 +1,247 @@
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background-color: black;
+}
+
+canvas {
+  display: block;
+  position: absolute; 
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+#infoPanel {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  color: white;
+  background-color: rgba(0, 0, 0, 0.5);
+  padding: 10px;
+  border-radius: 5px;
+  font-family: Arial, sans-serif;
+}
+
+#axesIndicator {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  width: 100px;
+  height: 100px;
+  background-color: rgba(0, 0, 0, 0.5);
+  border-radius: 5px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#fpsPanel {
+  position: absolute;
+  bottom: 10px;
+  left: 10px;
+  color: white;
+  background-color: rgba(0, 0, 0, 0.5);
+  padding: 10px;
+  border-radius: 5px;
+  font-family: Arial, sans-serif;
+}
+
+#fpsCanvas {
+  margin-top: 5px;
+  width: 150px;
+  height: 75px;
+}
+
+#infoPanel, #fpsPanel, #axesIndicator {
+  display: none; /* Hide by default */
+  z-index: 10;
+}
+
+#gravityWarning {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    box-sizing: border-box;
+    display: none; /* Caché par défaut */
+    pointer-events: none; /* Permet de cliquer à travers */
+    background: radial-gradient(circle, rgba(255, 0, 0, 0) 50%, rgba(255, 0, 0, 1) 100%);
+    transform: scale(1); /* Taille initiale */
+    opacity: 0; /* Opacité initiale */
+    transition: transform 0.1s ease, opacity 0.1s ease; /* Transition fluide */
+}
+
+@keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
+}
+
+#healthBarContainer {
+    position: absolute;
+    top: 10px; /* Position at the top */
+    left: 5%;
+    width: 40%; /* Adjust width to 50% of the screen */
+    height: 10px; /* Make the health bar thinner */
+    background-color: #444;
+    border: 1px solid #222;
+    border-radius: 5px;
+    overflow: hidden;
+    position: relative;
+    z-index: 1;
+}
+
+#healthBar {
+    height: 100%;
+    background-color: #f00;
+    width: 100%; /* Initial width set to 100% */
+    transition: width 0.3s ease;
+    position: absolute;
+    left: 0;
+}
+
+#recentDamageBar {
+    height: 100%;
+    background-color: #ff0;
+    width: 100%; /* Initial width set to 100% */
+    transition: width 2s ease;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+#healthHeart {
+    position: absolute;
+    top: 18px; /* Center vertically */
+    left: 6.5%;
+    width: 30px; /* Adjust size as needed */
+    height: 30px; /* Adjust size as needed */
+    z-index: 2; /* Ensure it is above other elements */
+    filter: drop-shadow(0 0 5px rgba(0, 0, 0, 1)); /* Add a drop shadow */
+}
+
+#radarContainer {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 200px;
+    height: 200px;
+    background-color: rgba(0, 0, 0, 0.5);
+    border-radius: 50%;
+    overflow: hidden;
+    z-index: 10;
+}
+
+#radarCanvas {
+    width: 100%;
+    height: 100%;
+}
+
+#killCount {
+  position: absolute;
+  bottom: 10px; /* Position en bas */
+  left: 50%; /* Centrer horizontalement */
+  transform: translateX(-50%); /* Ajuster pour centrer */
+  color: white;
+  background-color: rgba(0, 0, 0, 0.5);
+  padding: 10px;
+  border-radius: 5px;
+  font-family: Arial, sans-serif;
+  z-index: 10;
+}
+
+#startScreen {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.8); /* Semi-transparent black */
+  display: flex;
+  flex-direction: column; /* Arrange elements vertically */
+  justify-content: center;
+  align-items: center;
+  z-index: 20; /* Above everything else */
+}
+
+#playButton {
+  padding: 20px 40px;
+  font-size: 24px;
+  color: white;
+  background-color: #007bff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+#playButton:hover {
+  background-color: #0056b3;
+}
+
+#deathMessage {
+  color: red; /* Rouge vif */
+  font-size: 24px;
+  font-weight: bold; /* Texte en gras */
+  text-transform: uppercase; /* Texte en majuscules */
+  margin-bottom: 20px; /* Espacement entre le message et le bouton */
+  text-align: center;
+}
+
+#renderCanvas {
+  transition: filter 0.3s ease; /* Smooth transition for blur effect */
+}
+
+#startScreen.active + #renderCanvas {
+  filter: blur(10px); /* Apply blur effect when startScreen is active */
+}
+
+#controlsList {
+  margin-top: 20px;
+  color: white;
+  text-align: center;
+  font-family: Arial, sans-serif;
+}
+
+#controlsList h3 {
+  margin-bottom: 10px;
+  font-size: 24px;
+  text-transform: uppercase;
+}
+
+#controlsList ul {
+  list-style: none;
+  padding: 0;
+}
+
+#controlsList li {
+  margin: 5px 0;
+  font-size: 18px;
+}
+
+#gameTitle {
+  font-size: 48px;
+  font-weight: bold;
+  color: white;
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.8), 0 0 20px rgba(255, 255, 255, 0.6);
+  margin-bottom: 20px;
+  text-align: center;
+  font-family: 'Arial', sans-serif;
+}
+
+#cockpitViewImage {
+    display: none; /* Caché par défaut */
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: 15; /* Au-dessus de tout */
+    pointer-events: none; /* Permet de cliquer à travers */
+}
