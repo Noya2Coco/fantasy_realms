@@ -3,11 +3,60 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Head Ball</title>
-    <link rel="stylesheet" href="css/styles.css">
+    <title>⚽️🥅 Ball 2 Goal</title>
+    <!-- Import des polices et feuilles de style -->
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/buttons.css">
+    <link rel="stylesheet" href="css/scoreboard.css">
+    <link rel="stylesheet" href="css/messages.css">
+    <link rel="stylesheet" href="css/game.css">
+    <link rel="stylesheet" href="css/pause-menu.css">
 </head>
 <body>
+    <!-- Menu principal avec le titre du jeu et les boutons de jeu -->
+    <div id="menu">
+        <h1 id="title">⚽️ Ball 2 Goal ⚽️</h1>
+        <button id="startGame">Jouer</button>
+        <button id="restartButton" style="display: none;">Recommencer</button>
+    </div>
+
+    <!-- Message de but qui s'affiche lorsque un but est marqué -->
+    <div id="message">BUUUT !!!</div>
+
+    <!-- Message de fin de jeu, indiquant qui a gagné ou si c'est un match nul -->
+    <div id="endMessage">
+        <h1 id="winnerText"></h1>
+    </div>
+
+    <!-- Tableau de score affichant les scores des joueurs et le timer -->
+    <div id="scoreboard">
+        <div id="player1" class="score-panel">
+            <div id="player1Name">Hôte</div>
+            <div id="player1Score">0</div>
+        </div>
+        <div id="timer" class="score-panel">
+            <div id="timerText">Temps restant</div>
+            <div id="timeRemaining">90s</div>
+        </div>
+        <div id="player2" class="score-panel">
+            <div id="player2Name">Invité</div>
+            <div id="player2Score">0</div>
+        </div>
+    </div>    
+
+    <!-- Canvas pour le jeu, utilisé pour afficher la zone de jeu -->
+    <div id="gameContainer">
+        <canvas id="gameCanvas" style="display: none;"></canvas>
+    </div>
+
+    <!-- Images des buts, qui sont cachées au départ et affichées pendant le jeu -->
+    <img id="leftGoalImage" src="../assets/cage_gauche.png" class="goal-image hidden">
+    <img id="rightGoalImage" src="../assets/cage_droite.png" class="goal-image hidden">
+
+    <!-- Importation de Matter.js pour la gestion de la physique du jeu -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/matter-js/0.19.0/matter.min.js"></script>
-    <script src="js/script.js"></script>
+    <!-- Lien vers le script principal du jeu -->
+    <script type="module" src="js/script.js"></script>
 </body>
 </html>

@@ -28,6 +28,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const expiryTime = now.getTime() + 24 * 60 * 60 * 1000; // 24 hours
         const sessionData = { email, expiryTime };
         sessionStorage.setItem('userSession', JSON.stringify(sessionData));
+        updateLoginButtons();
     }
 
     function checkSession() {
@@ -45,24 +46,26 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function updateLoginButtons() {
         const userEmail = checkSession();
-        const loginButtons = document.querySelectorAll('.btn-se-connecter, .btn-se-connecter-horizontal');
+        const loginButtons = document.querySelectorAll('.btn-se-connecter, .btn-se-connecter-horizontal, #button');
         if (userEmail) {
             loginButtons.forEach(button => {
                 button.textContent = 'Se déconnecter';
                 button.onclick = () => {
                     sessionStorage.removeItem('userSession');
-                    location.reload();
+                    window.location.reload();
                 };
             });
         } else {
             loginButtons.forEach(button => {
                 button.textContent = 'Se connecter';
                 button.onclick = () => {
-                    location.href = 'login.html';
+                    window.location.href = 'login.html';
                 };
             });
         }
     }
+
+    updateLoginButtons();
 
     loginForm.addEventListener('submit', (e) => {
         e.preventDefault();
@@ -120,6 +123,4 @@ document.addEventListener('DOMContentLoaded', () => {
             document.getElementById('login-btn').click();
         }, 1000);
     });
-
-    updateLoginButtons();
 });

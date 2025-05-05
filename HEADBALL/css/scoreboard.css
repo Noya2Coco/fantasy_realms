@@ -1,0 +1,64 @@
+#scoreboard {
+    position: absolute;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 30%;
+    height: 120px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-radius: 20px;
+    background: rgba(0, 0, 0, 0.7);
+    box-shadow: 0px 0px 15px 5px rgba(255, 255, 255, 0.5);
+    padding: 0 30px;
+    color: #fff;
+    font-size: 27px;
+    z-index: 1000;
+}
+
+#player1Score {
+    color: blue;
+    font-size: 50px;
+    font-weight: bold;
+    letter-spacing: 2px;
+    text-align: center;
+    text-shadow: 0 0 10px rgba(0, 0, 255, 0.7);
+    transition: transform 0.3s ease;
+}
+
+#player1Score:hover {
+    transform: scale(1.1);
+}
+
+#timeRemaining {
+    font-size: 60px;
+    font-weight: bold;
+    color: #f0f0f0;
+    letter-spacing: 3px;
+    text-align: center;
+    text-shadow: 0 0 15px rgba(255, 255, 255, 0.8);
+    animation: blink 1s infinite;
+    min-width: 100px;
+    display: block !important;
+}
+
+@keyframes blink {
+    0% { color: #f0f0f0; }
+    50% { color: #ff3b3b; }
+    100% { color: #f0f0f0; }
+}
+
+#player2Score {
+    color: yellow;
+    font-size: 50px;
+    font-weight: bold;
+    letter-spacing: 2px;
+    text-align: center;
+    text-shadow: 0 0 10px rgba(255, 255, 0, 0.7);
+    transition: transform 0.3s ease;
+}
+
+#player2Score:hover {
+    transform: scale(1.1);
+} 
