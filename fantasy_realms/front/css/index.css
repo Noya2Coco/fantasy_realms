@@ -165,7 +165,7 @@ header button:hover {
 /* Galerie de produits */
 .product-gallery {
 	display: flex;
-    gap: 30px; /* Réduit l'espacement entre les items */
+    gap: 40px; /* Réduit l'espacement entre les items */
     flex-wrap: wrap;
     align-items: center;
     object-fit: cover;
@@ -180,12 +180,12 @@ header button:hover {
 
 .product-gallery .product-item {
     padding: 20px;
-    background-color: #33314d;
+    background-color: #1f2933;
     border-radius: 20px;
     width: 160px;
     height: 180px;
     display: flex;
-	transition: filter 0.5s;
+	transition: filter 0.2s;
 }
 
 .product-gallery .product-item:hover {
@@ -356,6 +356,7 @@ footer p {
     width: 80%;
     height: auto;
     margin-left: 5%;
+    margin-top:10%;;
 }
 
 .image-presentation .default-image {
@@ -363,49 +364,155 @@ footer p {
     margin-left:10%;
 }
 
-@media screen and (max-width: 640px) {
-    header nav div p {
-        display: none !important;
+
+/* Thème pour le jeu "Vaisseaux" */
+.theme-vaisseaux {
+    header button {
+        background-color: inherit;
+        color: #d32f2f;
+        border: 1px solid #d32f2f;
+        border-radius: 5px;
+        transition: background-color 0.5s ease, color 0.3s ease;
     }
-
-    .ul{
-        flex-direction: column;
-        gap: 50px;
+    header button:hover {
+        background-color: #d32f2f;
+        color: #FFFFFF;
     }
-
-    .image-presentation {
-        display: none;
+    .content-wrapper {
+        background: linear-gradient(180deg, #2C3E50, #c5141d);
+        background-size: cover;
+        color: white;
     }
-
-    header h1 {
-        font-size: 3em;
-    }
-
-    .product-section h1 {
-        font-size: 1.9em;
-    }
-
-    .product-section p {
-        font-size: 0.9em;
-    }
-
-    .product-presentation {
-        margin-bottom: 3em;
-    }
-
-    footer {
-		justify-content: flex-start;
-	}
-
-    footer .column {
-		width: 80%;
-        padding: 0 20px;
-	}
-
     .product-section button {
-        width: 89%;
+        background-color: #d32f2f; 
+        border: 1px solid #d32f2f;
+        border-radius: 10px;
+        transition: background-color 0.5s ease, color 0.3s ease;
+        color: white;
+    }
+    .product-section button:hover {
+        background-color: inherit;
+        color: white;
+    }
+    .product-item .vaisseaux {
+        height: auto;
+        filter: drop-shadow(0px 0px 30px #d32f2f)
+                drop-shadow(0 0 60px rgba(255, 0, 0, 0.8)) 
+                drop-shadow(0 0 90px rgba(255, 0, 0, 0.5))
+                brightness(1.2);
+        transform: scale(1.05); /* Ajoute un léger zoom au survol */
+    }
+    .product-presentation {
+        background: linear-gradient(180deg, #c5141d, #000);
+    }
+    footer h3 {
+        color: #c5141d;
+    }
+    .image-presentation .default-image {
+        height: auto;
+        margin-left:10%;
+        margin-top: 10%;
     }
 }
+
+
+/* Thème pour le jeu "Headball" */
+.theme-headball {
+    header button {
+        background-color: inherit;
+        color: #66BB6A;
+        border: 1px solid #66BB6A;
+        border-radius: 5px;
+        transition: background-color 0.5s ease, color 0.3s ease;
+    }
+    header button:hover {
+        background-color: #66BB6A;
+        color: #FFFFFF;
+    }
+    .content-wrapper {
+        background: linear-gradient(180deg, #2C3E50, #4CAF50);
+        background-size: cover;
+        color: white;
+    }
+    .product-section button {
+        background-color: #66BB6A; 
+        border: 1px solid #66BB6A;
+        border-radius: 10px;
+        transition: background-color 0.5s ease, color 0.3s ease;
+        color: white;
+    }
+    .product-section button:hover {
+        background-color: inherit;
+        color: white;
+    }
+    .product-item .headball {
+        height: auto;
+        filter: drop-shadow(0px 0px 30px #66BB6A)
+                drop-shadow(0 0 60px #66BB6A) 
+                drop-shadow(0 0 90px #66BB6A);;
+    }
+    .product-presentation {
+        background: linear-gradient(180deg, #4CAF50, #000);
+    }
+    footer h3 {
+        color: #4CAF50;
+    }
+    .image-presentation .default-image {
+        height: auto;
+        margin-left:10%;
+        margin-top: 6%;
+    }
+}
+
+/* Thème pour le jeu "Cible" */
+.theme-cible {
+    header button {
+        background-color: inherit;
+        color: #FFA500;
+        border: 1px solid #FFA500;
+        border-radius: 5px;
+        transition: background-color 0.5s ease, color 0.3s ease;
+    }
+    header button:hover {
+        background-color: #FFA500;
+        color: #FFFFFF;
+    }
+    .content-wrapper {
+        background: linear-gradient(180deg, #2C3E50, #FF8C00);
+        background-size: cover;
+        color: white;
+    }
+    .product-section button {
+        background-color: #FFA500; 
+        border: 1px solid #FFA500;
+        border-radius: 10px;
+        transition: background-color 0.5s ease, color 0.3s ease;
+        color: white;
+    }
+    .product-section button:hover {
+        background-color: inherit;
+        color: white;
+    }
+    .product-item .cible {
+        height: auto;
+        filter: drop-shadow(0px 0px 30px #FFA500)
+                drop-shadow(0 0 60px #FFA500) 
+                drop-shadow(0 0 90px #FFA500);;
+    }
+    .product-presentation {
+        background: linear-gradient(180deg, #FF8C00, #000);
+    }
+    footer h3 {
+        color: #FF8C00;
+    }
+    .image-presentation .default-image {
+        height: auto;
+        margin-left:10%;
+        margin-top: 10%;
+    }
+}
+
+
 
 /* Quand le menu est ouvert */
 .hamburger.open + .overlay {
@@ -484,183 +591,4 @@ button:hover {
 /* Cache l'inscription au début */
 .hidden {
     display: none !important;
-}
-
-
-@media screen and (max-width: 480px) {
-
-    header{
-        padding: 1px !important;
-    }
-
-    header nav div p {
-        display: block !important;
-    }
-
-    .overlay h1 {
-        margin-top: 3rem;
-        margin-bottom: 2rem
-      }
-
-      .hamburger {
-        display: none !important;
-        flex-direction: column;
-        justify-content: space-around;
-        width: 30px;
-        height: 25px;
-        cursor: pointer;
-        position: absolute;
-        top: 20px;
-        right: 20px;
-        z-index: 10;
-    }
-    
-    .hamburger .line {
-        width: 100%;
-        height: 3px;
-        background-color: #d33bfd;
-        border-radius: 5px;
-        transition: all 0.5s ease;
-    }
-    
-    .hamburger.open .line:nth-child(1) {
-        transform: rotate(45deg) translateY(12px);
-    }
-    
-    .hamburger.open .line:nth-child(2) {
-        transform: scale(0);
-    }
-    
-    .hamburger.open .line:nth-child(3) {
-        transform: rotate(-45deg) translateY(-12px);
-    }
-    
-    .overlay {
-        text-align: center;
-        position: fixed;
-        width: 300px;
-        top: 0;
-        right: -350px;
-        height: 100vh;
-        background-color: rgba(0, 0, 0); /* Fond noir semi-transparent */
-        z-index: 1; /* L'overlay derrière le bouton */
-        transition:  1s ease-in-out;
-        display: none !important;
-        align-items: start !important;
-        justify-content: center !important;
-      
-    }
-
-    .hamburger.open + .overlay {
-        display: block !important; /* Affiche l'overlay */
-    }
-
-    .content-wrapper, .presentation-second   {
-        flex-direction: column;
-    }
-
-    .overlay {
-        display: flex !important;
-    }
-    
-    .hamburger {
-        display: flex !important;
-    }
-    
-    .product-section h1,
-    .product-section p,
-    .product-section button {
-        text-align: center;
-        margin: 0 auto 1em;
-        display: block;
-    }
-
-    .product-section h1 {
-        margin-top: 1em;
-        font-size: 1.5em; 
-        color: #d33bfd;
-        font-weight: bold;
-    }
-
-    .product-section p {
-        font-size: 0.8em;
-    }
-
-    .product-section button {
-        font-size: 0.8em; 
-        padding: 10px 12px;
-    }
-
-    .product-gallery {
-        display: flex;
-        justify-content: center;
-        gap: 10px;
-        flex-wrap: wrap; 
-    }
-
-    .product-gallery .product-item {
-        width: 41px;             
-        height: auto;            
-    }
-
-    .product-gallery img {
-        max-width: 100%;         
-        height: auto;            
-        border-radius: 5px;
-    }
-
-    .product-presentation h1,
-    .product-presentation p,
-    .product-presentation button {
-        text-align: center;
-        margin: 0 auto 1em;
-        display: block;
-    }
-
-    .product-presentation h1 {
-        font-size: 1.5em; 
-    }
-
-    .product-presentation p {
-        margin-top: 5%;
-        font-size: 0.8em;
-    }
-
-    .product-presentation button {
-        font-size: 0.8em; 
-        padding: 10px 12px;
-    }
-
-    footer {
-        display: flex; 
-        justify-content: center; 
-        align-items: center; 
-        margin:-10px;
-        padding:20px; 
-        text-align: center;
-    }
-
-    footer h3 {
-        font-size: 1em; 
-    }
-
-    footer p {
-        font-size: 0.8em; 
-    }
-
-    button {
-        width: 70% !important;
-    }
-
-    input {
-        width: 83% !important;
-    }
-
-    .tabs div {
-        width: 100% !important;
-    }
-
-    button {
-        width: 100% !important;
-    }
 }
