@@ -1,4 +1,4 @@
-# 🎯 Neo Clicker
+# 🎯 AimMiaw
 
 **Neo Clicker** est un jeu de **réflexes et de précision** intense développé en JavaScript pur. Plongez dans une session rapide et palpitante où chaque clic peut faire la différence. Testez vos capacités de réaction, de coordination œil-main et d’agilité visuelle dans un environnement stylisé et immersif.
 
