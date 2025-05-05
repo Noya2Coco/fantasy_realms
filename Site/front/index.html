@@ -3,7 +3,7 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Site Jeux Web</title>
+        <title>Fantasy Realms</title>
         <link rel="stylesheet" href="css/index.css">
         <!-- Ajouter le lien vers la police Montserrat -->
         <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&display=swap" rel="stylesheet">
@@ -26,9 +26,7 @@
                 <a href="index.html">Accueil</a>
                 <a href="#classements">Classements</a>
                 <a href="#contact">Contact</a>
-                <a href="login.html">
-                    <button id="button">Se connecter</button>
-                </a>
+                <button id="button" class="btn-se-connecter">Se connecter</button>
             </div>
         </nav>
 
@@ -47,10 +45,12 @@
                             <button id="button2" onclick="location.href='#classements'">Classements générales</button>
                         </div>
                     </div>
+                    
                     <div class="image-presentation">
                         <img src="image/licorne.png" class="default-image">
                     </div>
                 </div>
+
                 <div class="product-gallery">
                     <div class="product-item">
                         <img class="vaisseaux" src="image/vaisseaux.png" alt="Vaisseaux">
@@ -64,49 +64,7 @@
                 </div>
             </div>
         </section>
-        
-        <script>
-            const productItems = document.querySelectorAll('.product-item img');
-            const presentationImage = document.querySelector('.image-presentation img');
-            const playButtonContainer = document.getElementById('playButtonContainer'); // Conteneur du bouton "Jouer"
-            
-            // Création dynamique du bouton "Jouer"
-            const playButton = document.getElementById('play-button');
-            playButton.addEventListener('click', () => {
-                alert('Lancement du jeu...');
-            });
-            
-            productItems.forEach((item) => {
-                item.addEventListener('click', (event) => {
-                    const clickedImage = event.target;
-            
-                    // Met à jour la source de l'image
-                    presentationImage.src = clickedImage.src;
-            
-                    // Réinitialise les classes existantes
-                    presentationImage.className = '';
-            
-                    // Ajoute la classe de l'image sélectionnée
-                    presentationImage.classList.add(clickedImage.classList[0]);
-            
-                    // Affiche le bouton après avoir cliqué sur une image
-                    playButton.style.display = "block";
-            
-                    // Ajouter une logique pour rediriger vers le bon jeu en fonction de l'image
-                    if (clickedImage.classList.contains('vaisseaux')) {
-                        playButton.onclick = () => window.location.href = 'jeu_vaisseaux.html';
-                    } else if (clickedImage.classList.contains('headball')) {
-                        playButton.onclick = () => window.location.href = 'jeu_headball.html';
-                    } else if (clickedImage.classList.contains('cible')) {
-                        playButton.onclick = () => window.location.href = 'jeu_cible.html';
-                    }
-                });
-            });
-        </script>
-        
-                
-        </section>        
-            
+
 
         <section class="product-presentation" id="classements">
             <div class="product-presentation">
@@ -264,5 +222,6 @@
     </header>
 
     <script src="js/index.js"></script>
+    <script src="js/accountManager.js"></script>
 </body>
 </html>
