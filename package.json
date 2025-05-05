@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "concurrently \"npm run dev:server\" \"npm run dev:client\"",
-    "dev:server": "nodemon server/server.js",
+    "dev:server": "nodemon starfall/server/server.js",
     "dev:client": "vite --config vite.config.js",
     "build": "vite build client",
     "start": "node server/server.js"
