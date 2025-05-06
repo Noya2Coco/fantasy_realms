@@ -12,5 +12,8 @@ function connectToStarfall() {
     window.location.href = starfallUrl;
 }
 
-// Appelez cette fonction lorsque l'utilisateur clique sur "Jouer"
-document.getElementById('play-button').addEventListener('click', connectToStarfall);
+// Vérifiez que le bouton existe avant d'ajouter l'écouteur d'événement
+const playButton = document.getElementById('play-button');
+if (playButton) {
+    playButton.addEventListener('click', connectToStarfall);
+}

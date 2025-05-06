@@ -44,7 +44,7 @@ function updateGameContent(game) {
             <br><br><b>Votre mission commence maintenant. Êtes-vous prêt à naviguer dans les étoiles ?</b>
         `;
         playButton.setAttribute('data-href', 'http://localhost:5173');
-        playButton.onclick = connectToStarfall; // Call connectToStarfall for Starfall
+        playButton.onclick = connectToStarfall; // Assurez-vous que la fonction est bien assignée
         changeTheme('theme-vaisseaux');
     } else if (game === 'headball') {
         titleElement.textContent = '⚽️🥅 Ball 2 Goal';
@@ -54,7 +54,7 @@ function updateGameContent(game) {
             <br><br><b>Prêt à faire trembler les filets ? C'est à vous de jouer !</b>
         `;
         playButton.setAttribute('data-href', '/headball/index.html');
-        playButton.onclick = null; // Reset onclick for other games
+        playButton.onclick = null; // Réinitialisez onclick pour les autres jeux
         changeTheme('theme-headball');
     } else if (game === 'cible') {
         titleElement.textContent = '😼🎯 AimMiaw';
@@ -64,7 +64,7 @@ function updateGameContent(game) {
             <br><br><b>Avez-vous ce qu'il faut pour devenir le maître du tir ?</b>
         `;
         playButton.setAttribute('data-href', '/neo_clicker/index.html');
-        playButton.onclick = null; // Reset onclick for other games
+        playButton.onclick = null; // Réinitialisez onclick pour les autres jeux
         changeTheme('theme-cible');
     }
 
