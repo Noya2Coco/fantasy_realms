@@ -11,12 +11,12 @@ export class GoalsManager {
     this.height = (height / screenHeight) * 100; // Hauteur du terrain en pourcentage
 
     this.goalWidth = (1500 / screenWidth) * 100; // Largeur des cages de but en pourcentage
-    this.goalHeight = (1800 / screenHeight) * 100; // Hauteur des cages de but en pourcentage
-    this.cageYOffset = (-3000 / screenHeight) * 100; // Décalage vertical des cages en pourcentage
+    this.goalHeight = (2600 / screenHeight) * 100; // Hauteur des cages de but en pourcentage
+    this.cageYOffset = (-4000 / screenHeight) * 100; // Décalage vertical des cages en pourcentage
     this.topBarHeight = (30 / screenHeight) * 100; // Hauteur des barres transversales en pourcentage
 
-    this.leftGoalX = (1080 / screenWidth) * 100; // Position horizontale de la cage gauche en pourcentage
-    this.rightGoalX = ((width+14000) / screenWidth) * 100; // Position horizontale de la cage droite en pourcentage
+    this.leftGoalX = (1750 / screenWidth) * 100; // Position horizontale de la cage gauche en pourcentage
+    this.rightGoalX = ((width+20000) / screenWidth) * 100; // Position horizontale de la cage droite en pourcentage
 
     this.engine = engine; // Stockage de l'engine pour les événements
 
@@ -62,7 +62,7 @@ export class GoalsManager {
                 isStatic: true,
                 isSensor: true,
                 collisionFilter: { group: -1 },
-                render: { fillStyle: "green" }
+                render: { fillStyle: "transparent" }
             }
         );
 
@@ -74,7 +74,7 @@ export class GoalsManager {
             {
                 isStatic: true,
                 isSensor: true,
-                render: { fillStyle: "green" }
+                render: { fillStyle: "transparent" }
             }
         );
 
@@ -82,7 +82,7 @@ export class GoalsManager {
         const leftTopBar = this.createTopBar(this.leftGoalX);
         const rightTopBar = this.createTopBar(this.rightGoalX);
         const leftVerticalBar = this.createVerticalBar(this.width - 50);
-        const rightVerticalBar = this.createVerticalBar(this.width + 1150);
+        const rightVerticalBar = this.createVerticalBar(this.width + 1360);
         
         // Ajout des nouvelles barres verticales de protection avec décalage
         const leftVerticalProtection = this.createVerticalProtectionBar(this.leftGoalX - this.goalWidth/2, true);
@@ -118,7 +118,7 @@ export class GoalsManager {
                 isTopBar: true, // Marquer comme TopBar pour la détection
                 friction: 0,
                 render: {
-                    fillStyle: "white",
+                    fillStyle: "transparent",
                     strokeStyle: "transparent",
                     lineWidth: 1
                 }
@@ -136,7 +136,7 @@ export class GoalsManager {
             {
                 isStatic: true,
                 render: {
-                    fillStyle: "white",
+                    fillStyle: "transparent",
                     strokeStyle: "transparent", // Pas de contour visible
                     lineWidth: 5
                 }
@@ -165,7 +165,7 @@ export class GoalsManager {
                 isStatic: true,
                 friction: 0,
                 render: {
-                    fillStyle: "white",
+                    fillStyle: "transparent",
                     strokeStyle: "transparent",
                     lineWidth: 1
                 }
@@ -181,12 +181,12 @@ export class GoalsManager {
         const leftGoalImage = document.getElementById("leftGoalImage");
         const rightGoalImage = document.getElementById("rightGoalImage");
 
-        leftGoalImage.style.left = `-2.5%`; // Positionnement en pixels
-        leftGoalImage.style.top = `20.5%`;
+        leftGoalImage.style.left = `-0.5%`; // Positionnement en pixels
+        leftGoalImage.style.top = `23%`;
         leftGoalImage.style.display = "block"; // Rendre visible
 
-        rightGoalImage.style.left = `82%`; // Positionnement en pixels
-        rightGoalImage.style.top = `20.5%`;
+        rightGoalImage.style.left = `82.5%`; // Positionnement en pixels
+        rightGoalImage.style.top = `23%`;
         rightGoalImage.style.display = "block"; // Rendre visible
     }
 
