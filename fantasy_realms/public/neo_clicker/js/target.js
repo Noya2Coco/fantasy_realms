@@ -104,3 +104,34 @@ function createTarget() {
 
     gameContainer.appendChild(target);
 }
+
+function sendScoreToServer(game, score) {
+    const userEmail = window.accountManager.checkSession();
+    if (!userEmail) {
+        console.error("Utilisateur non connecté");
+        return;
+    }
+
+    fetch('/newScore', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            game: game,
+            user: userEmail,
+            score: score
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            console.log("Score sauvegardé avec succès :", data);
+        } else {
+            console.error("Erreur lors de la sauvegarde du score :", data.message);
+        }
+    })
+    .catch(error => {
+        console.error('Erreur réseau lors de la sauvegarde du score :', error);
+    });
+}

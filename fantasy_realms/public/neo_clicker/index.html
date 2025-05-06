@@ -10,13 +10,13 @@
 <body>
   <!-- Menu de démarrage -->
   <div id="start-menu" class="menu-overlay">
-    <h2>🎯 Jeu de tir - Click Game</h2>
+    <h2>Jeu de tir - Click Game</h2>
     <button id="play-button">Jouer</button>
   </div>
 
   <!-- Menu de fin -->
   <div id="end-menu" class="menu-overlay hidden">
-    <h2>💥 Temps écoulé !</h2>
+    <h2>Temps écoulé !</h2>
     <p id="final-score">Score final : 0</p>
     <button id="replay-button">Rejouer</button>
   </div>
@@ -26,12 +26,18 @@
 
   <!-- Interface de jeu -->
   <div id="game-ui" class="hidden">
-    <h1>Click</h1>
+    <h1>Aim Miaw</h1>
     <p>Score : <span id="score">0</span></p>
     <p>Temps restant : <span id="time">30</span> s</p>
     <div id="game-container"></div>
     <button id="restart-button">Recommencer</button>
     <div id="crosshair"></div>
+  </div>
+
+  <!-- Section des scores sauvegardés -->
+  <div id="saved-scores" class="hidden">
+    <h3>Scores sauvegardés</h3>
+    <ul id="score-list"></ul>
   </div>
 
   <!-- 🎵 Audio -->

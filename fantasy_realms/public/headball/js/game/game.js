@@ -34,6 +34,9 @@ export class Game {
                         // Mise à jour du score et affichage d'un message de but
                         this.scoreManager.updateScore(team);
                         this.scoreManager.showGoalMessage();
+
+                        // Log pour confirmer la sauvegarde
+                        console.log(`Score sauvegardé pour ${team === 'left' ? 'Joueur 1' : 'Joueur 2'}`);
                         
                         // Réinitialisation des positions après un délai
                         setTimeout(() => this.resetPositions(), 1000);

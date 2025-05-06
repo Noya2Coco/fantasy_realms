@@ -52,6 +52,18 @@ export class ScoreManager {
         }
         this.updateScoreDisplay(); // Met à jour l'affichage du score
         this.playGoalSound(); // Joue le son de but
+
+        // Sauvegarder le score pour le jeu "headball"
+        if (window.accountManager && typeof window.accountManager.checkSession === 'function') {
+            const userEmail = window.accountManager.checkSession();
+            console.log("Email de l'utilisateur :", userEmail); // Log pour vérifier l'email
+            if (userEmail) {
+                const score = team === 'left' ? this.score1 : this.score2;
+                window.accountManager.saveHeadballScore(userEmail, score);
+            }
+        } else {
+            console.warn("accountManager ou checkSession n'est pas disponible.");
+        }
     }
 
     // Affiche le score mis à jour

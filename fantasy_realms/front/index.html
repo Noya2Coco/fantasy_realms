@@ -59,7 +59,7 @@
                 <div class="product-gallery">
                     <!-- Starfall -->
                     <div class="product-item">
-                        <img class="vaisseaux" src="image/vaisseaux.png" alt="Vaisseaux" />
+                        <img class="vaisseaux" src="image/vaisseaux.png" alt="Vaisseaux" data-game="starfall" />
                     </div>
 
                     <!-- Clicker (DOM) -->
@@ -70,6 +70,31 @@
                     <!-- Canvas -->
                     <div class="product-item">
                         <img class="cible" src="image/cible.png" alt="Cible" />
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Nouvelle section pour les classements -->
+        <section id="classements" class="leaderboards-section">
+            <h2>Classements des joueurs</h2>
+            <div class="leaderboards-container">
+                <div class="leaderboard">
+                    <h3>🚀 Starfall</h3>
+                    <div id="starfall-leaderboard" class="scores-list">
+                        <p>Aucun score enregistré</p>
+                    </div>
+                </div>
+                <div class="leaderboard">
+                    <h3>😼 AimMiaw</h3>
+                    <div id="aim_miaw-leaderboard" class="scores-list">
+                        <p>Aucun score enregistré</p>
+                    </div>
+                </div>
+                <div class="leaderboard">
+                    <h3>⚽️ Ball 2 Goal</h3>
+                    <div id="headball-leaderboard" class="scores-list">
+                        <p>Aucun score enregistré</p>
                     </div>
                 </div>
             </div>
@@ -135,6 +160,8 @@
 
     <script src="js/index.js"></script>
     <script src="js/accountManager.js"></script>
+    <script src="js/leaderboard.js"></script>
+    <script src="js/gameManager.js"></script>
 </body>
 
 </html>
