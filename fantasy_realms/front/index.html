@@ -2,24 +2,20 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Fantasy Realms</title>
-    <link rel="stylesheet" href="css/index.css">
-    <!-- Ajouter le lien vers la police Montserrat -->
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/index.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&display=swap" rel="stylesheet" />
 </head>
-
 
 <body>
     <header id="acceuil">
-
         <div id="hamburger-menu" class="hamburger">
             <div class="line"></div>
             <div class="line"></div>
             <div class="line"></div>
         </div>
-
 
         <nav id="overlay" class="overlay div1">
             <h1>FANTASY REALMS 🌙✨</h1>
@@ -31,159 +27,53 @@
             </div>
         </nav>
 
-
         <section class="content-wrapper">
             <div class="product-section">
                 <div class="section1">
                     <div class="texte">
-                        <h1>Bienvenue sur Fantasy Realms ! 🌙✨</h1>
-                        <p>Plongez dans l'univers fascinant de Fantasy Realms, un site où les rêves prennent vie sous
-                            forme de jeux captivants. Chaque jeu vous transporte dans des mondes imaginaires, où magie,
-                            aventures et mystères se mêlent. Conçus par des étudiants en Licence 3 MIAGE, ces jeux web
-                            vous offrent une expérience immersive dans des univers de rêve, où chaque moment de jeu est
-                            une nouvelle découverte.
-                            <br>
-                            <br><b>Êtes-vous prêt à explorer ces royaumes fantastiques ? Laissez-vous emporter par la
-                                magie et vivez des aventures hors du commun !</b>
+                        <h1 id="game-title">Bienvenue sur Fantasy Realms ! 🌙✨</h1>
+                        <p id="game-description">
+                            Plongez dans l'univers fascinant de Fantasy Realms, un site où les rêves prennent vie sous
+                            forme de jeux
+                            captivants. Chaque jeu vous transporte dans des mondes imaginaires, où magie, aventures et
+                            mystères se
+                            mêlent. Conçus par des étudiants en Licence 3 MIAGE, ces jeux web vous offrent une
+                            expérience immersive
+                            dans des univers de rêve, où chaque moment de jeu est une nouvelle découverte.
+                            <br><br>
+                            <b>Êtes-vous prêt à explorer ces royaumes fantastiques ? Laissez-vous emporter par la magie
+                                et vivez des
+                                aventures hors du commun !</b>
                         </p>
                         <div class="button-container">
-                            <button id="play-button" class="play-button" style="display:none"
-                                onclick="location.href='#jouer'">Jouer</button>
+                            <button id="play-button" class="play-button" style="display: none">Jouer</button>
                             <button id="button2" onclick="location.href='#classements'">Classements générales</button>
                         </div>
                     </div>
 
                     <div class="image-presentation">
-                        <img src="image/licorne.png" class="default-image">
+                        <img src="image/licorne.png" class="default-image" />
                     </div>
                 </div>
 
                 <div class="product-gallery">
-                    <!-- Jeu Babylon.js : Starfall -->
-                    <div class="product-item" onclick="window.location.href='http://localhost:5173'">
-                        <img class="vaisseaux" src="image/vaisseaux.png" alt="Vaisseaux">
+                    <!-- Starfall -->
+                    <div class="product-item">
+                        <img class="vaisseaux" src="image/vaisseaux.png" alt="Vaisseaux" />
                     </div>
 
-                    <!-- Jeu DOM JS : Clicker -->
-                    <div class="product-item" onclick="window.location.href='/headball/index.html'">
-                        <img class="headball" src="image/headball.png" alt="Headball">
+                    <!-- Clicker (DOM) -->
+                    <div class="product-item">
+                        <img class="headball" src="image/headball.png" alt="Headball" />
                     </div>
 
-                    <!-- Jeu Canvas JS -->
-                    <div class="product-item" onclick="window.location.href='/neo_clicker/index.html'">
-                        <img class="cible" src="image/cible.png" alt="Cible">
-                    </div>
-                </div>
-            </div>
-        </section>
-
-
-        <section class="product-presentation" id="classements">
-            <div class="product-presentation">
-                <h1>Classement Général des Jeux</h1>
-                <p>Voici le classement général des jeux Fantasy Realms. Découvrez les meilleurs participants de chaque
-                    jeu et leurs scores. <br>Félicitations à tous les participants pour leur performance exceptionnelle
-                    ! 🎉🏆</p>
-
-                <!-- Grille des classements -->
-                <div class="ranking-grid">
-                    <!-- Classement pour le Jeu 1 -->
-                    <div class="game-ranking">
-                        <h2>Starfall: A Warfront Conflict 🚀🪐</h2>
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>CLASSEMENT</th>
-                                    <th>PARTICIPANT</th>
-                                    <th>SCORE</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>1</td>
-                                    <td>Yanis Gourar</td>
-                                    <td>1800</td>
-                                </tr>
-                                <tr>
-                                    <td>2</td>
-                                    <td>Noah Rousseau</td>
-                                    <td>1700</td>
-                                </tr>
-                                <tr>
-                                    <td>3</td>
-                                    <td>Adam Chellali</td>
-                                    <td>1600</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-
-                    <!-- Classement pour le Jeu 2 -->
-                    <div class="game-ranking">
-                        <h2>Ball 2 Goal ⚽️🥅</h2>
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>CLASSEMENT</th>
-                                    <th>PARTICIPANT</th>
-                                    <th>SCORE</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>1</td>
-                                    <td>Noah Rousseau</td>
-                                    <td>2000</td>
-                                </tr>
-                                <tr>
-                                    <td>2</td>
-                                    <td>Yanis Gourar</td>
-                                    <td>1900</td>
-                                </tr>
-                                <tr>
-                                    <td>3</td>
-                                    <td>Adam Chellali</td>
-                                    <td>1800</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-
-                    <!-- Classement pour le Jeu 3 -->
-                    <div class="game-ranking">
-                        <h2>AimMiaw 😼🎯</h2>
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>CLASSEMENT</th>
-                                    <th>PARTICIPANT</th>
-                                    <th>SCORE</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>1</td>
-                                    <td>Adam Chellali</td>
-                                    <td>2500</td>
-                                </tr>
-                                <tr>
-                                    <td>2</td>
-                                    <td>Noah Rousseau</td>
-                                    <td>2400</td>
-                                </tr>
-                                <tr>
-                                    <td>3</td>
-                                    <td>Yanis Gourar</td>
-                                    <td>2300</td>
-                                </tr>
-                            </tbody>
-                        </table>
+                    <!-- Canvas -->
+                    <div class="product-item">
+                        <img class="cible" src="image/cible.png" alt="Cible" />
                     </div>
                 </div>
             </div>
         </section>
-
-
 
         <div>
             <footer id="contact">

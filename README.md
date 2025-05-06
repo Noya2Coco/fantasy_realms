@@ -1,9 +1,9 @@
-# ✨ FANTASY REALM — COLLECTION DE JEUX WEB
+# ✨ FANTASY REALMS — COLLECTION DE JEUX WEB
 
-**FANTASY REALM** est une collection originale de jeux web conçus pour offrir des expériences ludiques variées, accessibles à tous, directement depuis votre navigateur.  
+**FANTASY REALMS** est une collection originale de jeux web conçus pour offrir des expériences ludiques variées, accessibles à tous, directement depuis votre navigateur.  
 Chaque jeu explore un univers et un style de gameplay distinct, allant de la précision rapide à la compétition sportive en passant par le combat spatial multijoueur.
 
-Que vous ayez une minute à perdre ou envie de vous plonger dans une session plus longue, **FANTASY REALM** a un jeu pour vous.
+Que vous ayez une minute à perdre ou envie de vous plonger dans une session plus longue, **FANTASY REALMS** a un jeu pour vous.
 
 ---
 
@@ -61,7 +61,7 @@ Dans *STARFALL*, vous prenez les commandes d’un vaisseau spatial dans un unive
 
 ## 🛠️ CE QUI ARRIVE BIENTÔT
 
-**FANTASY REALM** est en évolution continue. Des nouveautés sont à venir :
+**FANTASY REALMS** est en évolution continue. Des nouveautés sont à venir :
 
 - NOUVEAUX TYPES DE CIBLES ET DÉFIS (*AIM MIAW*)  
 - REPLAYS ET MODES TOURNOIS (*HEADBALL*)  
@@ -71,7 +71,7 @@ Dans *STARFALL*, vous prenez les commandes d’un vaisseau spatial dans un unive
 
 ---
 
-## 🧩 POURQUOI FANTASY REALM ?
+## 🧩 POURQUOI FANTASY REALMS ?
 
 Parce que chaque jeu est un petit monde à lui seul.  
 **AIM MIAW**, **HEADBALL** et **STARFALL** explorent chacun une facette différente du plaisir de jouer :  
@@ -81,5 +81,5 @@ Réunis dans une seule collection, ils offrent un aperçu créatif et accessible
 
 ---
 
-🎮 **FANTASY REALM** — TROIS JEUX, TROIS MONDES, UNE SEULE ENVIE : S’AMUSER.  
+🎮 **FANTASY REALMS** — TROIS JEUX, TROIS MONDES, UNE SEULE ENVIE : S’AMUSER.  
 🐱 CLIQUEZ. ⚽ SAUTEZ. 🚀 DÉCOLLEZ.
