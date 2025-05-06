@@ -601,6 +601,7 @@ button:hover {
 
     header nav h1 {
         font-size: 1.8em;
+        margin-bottom: 2%;
     }
 
     .section1 {
@@ -614,13 +615,14 @@ button:hover {
 
     .product-section h1 {
         font-size: 1.8em;
-        text-align: center;
     }
 
     .product-section p {
         font-size: 0.9em;
-        text-align: center;
-    }
+        word-wrap: break-word;  /* Permet de couper les mots longs et les forcer à passer à la ligne */
+        word-break: break-word; /* Évite que les mots ne sortent de leur contenant */
+        white-space: normal;    /* Permet le retour à la ligne automatique */
+    }    
 
     .button-container {
         display: flex;
