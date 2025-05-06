@@ -1,4 +1,4 @@
-#startGame, #restartButton {
+#startGame, #restartButton, #homeButton {
     font-family: 'Bebas Neue', sans-serif;
     position: absolute;
     left: 50%;
@@ -23,7 +23,12 @@
     margin-top: 120% !important;
 }
 
-#startGame:hover, #restartButton:hover {
+#homeButton {
+    margin-top: 10%;
+    font-size: 30px !important;
+}
+
+#startGame:hover, #restartButton:hover, #homeButton:hover {
     background: rgba(0, 0, 0, 0.9);
     transform: translateX(-50%) scale(1.3);
 }

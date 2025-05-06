@@ -16,6 +16,15 @@ export class UIManager {
         if (leftGoal) leftGoal.classList.add("hidden");
         if (rightGoal) rightGoal.classList.add("hidden");
 
+        // Ajouter l'événement pour le bouton "Retour à l'écran d'accueil"
+        const homeButton = document.getElementById("homeButton");
+        if (homeButton) {
+            homeButton.addEventListener("click", () => {
+                this.showMenu();
+                document.body.style.backgroundImage = "url('./assets/accueil.png')";
+            });
+        }
+
         // Créer le bouton de pause et l'ajouter à l'UI
         const pauseButton = document.createElement('button');
         pauseButton.id = 'pauseButton';
