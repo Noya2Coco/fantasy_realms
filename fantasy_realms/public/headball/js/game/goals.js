@@ -53,7 +53,7 @@ export class GoalsManager {
                 isStatic: true,
                 isSensor: true,
                 collisionFilter: { group: -1 },
-                render: { fillStyle: "transparent" }
+                render: { fillStyle: "green²" }
             }
         );
 
