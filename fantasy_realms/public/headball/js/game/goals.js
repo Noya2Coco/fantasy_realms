@@ -2,15 +2,24 @@ const { Bodies, Events } = Matter;
 
 export class GoalsManager {
     constructor(engine, width, height) {
-        this.width = width; // Largeur du terrain
-        this.height = height; // Hauteur du terrain
-        this.goalWidth = 150; // Largeur des cages de but
-        this.goalHeight = 260; // Hauteur des cages de but
-        this.cageYOffset = 140; // Décalage vertical des cages
-        this.topBarHeight = 20; // Hauteur des barres transversales
-        this.leftGoalX = 80; // Position horizontale de la cage gauche
-        this.rightGoalX = width - 80; // Position horizontale de la cage droite
-        this.engine = engine; // Stockage de l'engine pour les événements
+    // Dimensions de l'écran
+    const screenWidth = window.innerWidth;
+    const screenHeight = window.innerHeight;
+
+    // Conversion des dimensions en pourcentage de l'écran
+    this.width = (width / screenWidth) * 100; // Largeur du terrain en pourcentage
+    this.height = (height / screenHeight) * 100; // Hauteur du terrain en pourcentage
+
+    this.goalWidth = (1500 / screenWidth) * 100; // Largeur des cages de but en pourcentage
+    this.goalHeight = (1800 / screenHeight) * 100; // Hauteur des cages de but en pourcentage
+    this.cageYOffset = (-3000 / screenHeight) * 100; // Décalage vertical des cages en pourcentage
+    this.topBarHeight = (30 / screenHeight) * 100; // Hauteur des barres transversales en pourcentage
+
+    this.leftGoalX = (1080 / screenWidth) * 100; // Position horizontale de la cage gauche en pourcentage
+    this.rightGoalX = ((width+14000) / screenWidth) * 100; // Position horizontale de la cage droite en pourcentage
+
+    this.engine = engine; // Stockage de l'engine pour les événements
+
 
         // Initialisation des cages de but et des images associées
         this.setupGoals(engine);
@@ -53,7 +62,7 @@ export class GoalsManager {
                 isStatic: true,
                 isSensor: true,
                 collisionFilter: { group: -1 },
-                render: { fillStyle: "green²" }
+                render: { fillStyle: "green" }
             }
         );
 
@@ -65,15 +74,15 @@ export class GoalsManager {
             {
                 isStatic: true,
                 isSensor: true,
-                render: { fillStyle: "transparent" }
+                render: { fillStyle: "green" }
             }
         );
 
         // Création des barres de protection
         const leftTopBar = this.createTopBar(this.leftGoalX);
         const rightTopBar = this.createTopBar(this.rightGoalX);
-        const leftVerticalBar = this.createVerticalBar(15);
-        const rightVerticalBar = this.createVerticalBar(this.width - 15);
+        const leftVerticalBar = this.createVerticalBar(this.width - 50);
+        const rightVerticalBar = this.createVerticalBar(this.width + 1150);
         
         // Ajout des nouvelles barres verticales de protection avec décalage
         const leftVerticalProtection = this.createVerticalProtectionBar(this.leftGoalX - this.goalWidth/2, true);
@@ -98,7 +107,7 @@ export class GoalsManager {
 
     createTopBar(x) {
         // Création d'une barre transversale au-dessus des cages
-        const increasedGoalWidth = this.goalWidth * 1.05; // Légèrement plus large que la cage
+        const increasedGoalWidth = this.goalWidth * 1.1; // Légèrement plus large que la cage
         return Bodies.rectangle(
             x,
             this.height - this.cageYOffset - this.goalHeight / 2 - this.goalHeight / 2 - this.topBarHeight / 2,
@@ -109,7 +118,7 @@ export class GoalsManager {
                 isTopBar: true, // Marquer comme TopBar pour la détection
                 friction: 0,
                 render: {
-                    fillStyle: "transparent",
+                    fillStyle: "white",
                     strokeStyle: "transparent",
                     lineWidth: 1
                 }
@@ -127,7 +136,7 @@ export class GoalsManager {
             {
                 isStatic: true,
                 render: {
-                    fillStyle: "transparent",
+                    fillStyle: "white",
                     strokeStyle: "transparent", // Pas de contour visible
                     lineWidth: 5
                 }
@@ -140,7 +149,11 @@ export class GoalsManager {
         const barHeight = this.height - this.cageYOffset - this.goalHeight / 2 - this.goalHeight / 2 - this.topBarHeight / 2;
         
         // Décalage pour déplacer les barres vers l'intérieur
-        const offset = 120; // Valeur de décalage en pixels
+        const screenWidth = window.innerWidth;
+
+        // Conversion du décalage en pourcentage
+        const offsetPercentage = (110 / screenWidth) * 100;
+        const offset = (offsetPercentage / 100) * screenWidth;
         const adjustedX = isLeft ? x + offset : x - offset;
         
         return Bodies.rectangle(
@@ -152,7 +165,7 @@ export class GoalsManager {
                 isStatic: true,
                 friction: 0,
                 render: {
-                    fillStyle: "transparent",
+                    fillStyle: "white",
                     strokeStyle: "transparent",
                     lineWidth: 1
                 }
@@ -168,12 +181,12 @@ export class GoalsManager {
         const leftGoalImage = document.getElementById("leftGoalImage");
         const rightGoalImage = document.getElementById("rightGoalImage");
 
-        leftGoalImage.style.left = `-30px`; // Positionnement en pixels
-        leftGoalImage.style.top = `140px`;
+        leftGoalImage.style.left = `-2.5%`; // Positionnement en pixels
+        leftGoalImage.style.top = `20.5%`;
         leftGoalImage.style.display = "block"; // Rendre visible
 
-        rightGoalImage.style.left = `1050px`; // Positionnement en pixels
-        rightGoalImage.style.top = `140px`;
+        rightGoalImage.style.left = `82%`; // Positionnement en pixels
+        rightGoalImage.style.top = `20.5%`;
         rightGoalImage.style.display = "block"; // Rendre visible
     }
 
