@@ -1,0 +1,29 @@
+body {
+    margin: 0;
+    overflow: hidden;
+    height: 100vh;
+    background-image: url('../assets/accueil.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Bebas Neue', sans-serif;
+}
+
+#menu {
+    position: absolute;
+    top: 40%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 50px;
+    color: white;
+    text-align: center;
+    font-family: 'Bebas Neue', sans-serif;
+    text-shadow: 0 0 10px rgba(255, 0, 0, 0.7),
+                 0 0 20px rgba(255, 0, 0, 0.6),
+                 0 0 30px rgba(255, 0, 0, 0.5);
+    transition: transform 0.3s ease, text-shadow 0.3s ease;
+}

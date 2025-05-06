@@ -4,11 +4,18 @@
   "version": "1.0.0",
   "type": "module",
   "scripts": {
-    "dev": "concurrently \"npm run dev:server\" \"npm run dev:client\"",
-    "dev:server": "nodemon server/server.js",
-    "dev:client": "vite --config vite.config.js",
-    "build": "vite build client",
-    "start": "node server/server.js"
+    "start": "npm run dev",
+    "dev": "concurrently \"npm run dev:site\" \"npm run dev:client\" \"npm run dev:server\"",
+
+    "dev:site": "vite --config fantasy_realms/vite.config.js",
+    "dev:client": "vite --config starfall/client/vite.config.js",
+    "dev:server": "nodemon starfall/server/server.js",
+
+    "build:site": "vite build --config fantasy_realms/vite.config.js",
+    "build:client": "vite build --config starfall/client/vite.config.js",
+    "build": "npm run build:site && npm run build:client",
+
+    "serve": "node starfall/server/server.js"
   },
   "dependencies": {
     "@babylonjs/core": "^8.0.0",
@@ -25,9 +32,5 @@
     "concurrently": "^8.0.1",
     "nodemon": "^3.1.9",
     "vite": "^6.1.0"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "description": ""
+  }
 }

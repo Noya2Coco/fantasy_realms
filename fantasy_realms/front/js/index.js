@@ -2,97 +2,95 @@
 const productItems = document.querySelectorAll('.product-item img');
 const presentationImage = document.querySelector('.image-presentation img');
 const playButton = document.getElementById('play-button');
-const classementButton = document.getElementById('button2');
-const texteDiv = document.querySelector('.texte'); // Sélection de la div texte
-const hamburger = document.getElementById('hamburger-menu'); // Sélectionne le menu hamburger
-const overlay = document.getElementById('overlay'); // Sélectionne l'overlay
+const hamburger = document.getElementById('hamburger-menu');
+const overlay = document.getElementById('overlay');
+
+// Nouveaux éléments pour titre et description
+const titleElement = document.getElementById('game-title');
+const descriptionElement = document.getElementById('game-description');
+
+let selectedGame = null;
 
 // Gestion du menu hamburger
-hamburger.addEventListener('click', function() {
+hamburger.addEventListener('click', function () {
     hamburger.classList.toggle('open');
     overlay.style.right = overlay.style.right === "0px" ? "-400px" : "0";
 });
 
+// Délégation du clic sur le bouton "Jouer"
+document.addEventListener('click', (event) => {
+    if (event.target && event.target.id === 'play-button') {
+        const href = event.target.getAttribute('data-href');
+        if (href) {
+            console.log("Redirection vers :", href);
+            window.location.href = href;
+        }
+    }
+});
+
 // Fonction pour changer de thème
 function changeTheme(theme) {
-    document.querySelector('body').classList.remove('theme-vaisseaux', 'theme-headball', 'theme-cible');
-    document.querySelector('body').classList.add(theme);
+    document.body.classList.remove('theme-vaisseaux', 'theme-headball', 'theme-cible');
+    document.body.classList.add(theme);
 }
 
-// Mise à jour du lien du bouton "Jouer" pour chaque jeu
-function updateButtonLink(game) {
-    let gameLink = '';
+// Fonction pour mettre à jour le contenu selon le jeu sélectionné
+function updateGameContent(game) {
     if (game === 'vaisseaux') {
-        gameLink = 'jeu_vaisseaux.html';
+        titleElement.textContent = '🚀🪐 Starfall: A Warfront Conflict';
+        descriptionElement.innerHTML = `
+            <p>Plongez dans un univers intergalactique où la stratégie et la précision sont vos meilleures armes. Aux commandes de votre vaisseau, défiez des ennemis redoutables et explorez des galaxies inconnues. Préparez-vous pour des combats épiques et une aventure inoubliable.
+            <br>Conçu par des étudiants en Licence 3 MIAGE, ce jeu vous transporte dans un univers où chaque instant est un défi à relever. Vous aurez l'occasion de tester vos compétences et votre détermination dans des environnements spatiaux variés et immersifs.
+            <br><br><b>Votre mission commence maintenant. Êtes-vous prêt à naviguer dans les étoiles ?</b>
+        `;
+        playButton.setAttribute('data-href', 'http://localhost:5173');
+        playButton.onclick = connectToStarfall; // Call connectToStarfall for Starfall
+        changeTheme('theme-vaisseaux');
     } else if (game === 'headball') {
-        gameLink = 'jeu_headball.html';
+        titleElement.textContent = '⚽️🥅 Ball 2 Goal';
+        descriptionElement.innerHTML = `
+            <p>Entrez dans l'arène et montrez vos talents en marquant des buts spectaculaires. Dans ce jeu dynamique, chaque coup de tête compte ! Défiez vos amis ou l'ordinateur et grimpez dans les classements pour devenir la légende de Ball 2 Goal.
+            <br>Développé par des étudiants en Licence 3 MIAGE, ce jeu vous offre une expérience immersive et amusante, où chaque match est une occasion de surpasser vos adversaires. Affinez vos compétences et devenez le meilleur buteur de tous les temps.
+            <br><br><b>Prêt à faire trembler les filets ? C'est à vous de jouer !</b>
+        `;
+        playButton.setAttribute('data-href', '/headball/index.html');
+        playButton.onclick = null; // Reset onclick for other games
+        changeTheme('theme-headball');
     } else if (game === 'cible') {
-        gameLink = 'jeu_cible.html';
+        titleElement.textContent = '😼🎯 AimMiaw';
+        descriptionElement.innerHTML = `
+            <p>Testez votre précision et votre concentration dans ce jeu captivant. Visez juste pour atteindre les cibles mouvantes et obtenir le meilleur score. Chaque niveau est un nouveau défi à relever, où vos compétences seront mises à l'épreuve.
+            <br>Créé par des étudiants en Licence 3 MIAGE, ce jeu combine plaisir et technique pour offrir une expérience engageante. Explorez différents environnements et affinez vos talents de tir pour devenir un maître incontesté de la précision.
+            <br><br><b>Avez-vous ce qu'il faut pour devenir le maître du tir ?</b>
+        `;
+        playButton.setAttribute('data-href', '/neo_clicker/index.html');
+        playButton.onclick = null; // Reset onclick for other games
+        changeTheme('theme-cible');
     }
-    playButton.setAttribute('onclick', `window.location.href='${gameLink}'`);
+
+    playButton.style.display = "inline-block";
 }
 
-// Gestion des images sélectionnées et mise à jour du contenu
+// Gestion des clics sur les images de jeu
 productItems.forEach((item) => {
     item.addEventListener('click', (event) => {
         const clickedImage = event.target;
-        presentationImage.style.transition = 'opacity 0.5s ease-in-out'; // Transition pour l'image
-        presentationImage.style.opacity = 0; // Diminuer l'opacité pour l'animation
+
+        // Animation de transition d'image
+        presentationImage.style.transition = 'opacity 0.5s ease-in-out';
+        presentationImage.style.opacity = 0;
 
         setTimeout(() => {
             presentationImage.src = clickedImage.src;
-            presentationImage.style.opacity = 1; // Rétablir l'opacité
-        }, 500); // La durée de la transition correspond au délai
+            presentationImage.style.opacity = 1;
+        }, 500);
 
-        // Affichage du bouton "Jouer" après sélection d'une image
-        playButton.style.display = "block";
+        // Identifier le jeu
+        if (clickedImage.classList.contains('vaisseaux')) selectedGame = 'vaisseaux';
+        else if (clickedImage.classList.contains('headball')) selectedGame = 'headball';
+        else if (clickedImage.classList.contains('cible')) selectedGame = 'cible';
 
-        // Mise à jour du contenu texte et des liens en fonction du jeu sélectionné
-        if (clickedImage.classList.contains('vaisseaux')) {
-            texteDiv.innerHTML = `
-                <h1>🚀🪐 Starfall: A Warfront Conflict</h1>
-                <p>Plongez dans un univers intergalactique où la stratégie et la précision sont vos meilleures armes. Aux commandes de votre vaisseau, défiez des ennemis redoutables et explorez des galaxies inconnues. Préparez-vous pour des combats épiques et une aventure inoubliable.
-                <br>Conçu par des étudiants en Licence 3 MIAGE, ce jeu vous transporte dans un univers où chaque instant est un défi à relever. Vous aurez l'occasion de tester vos compétences et votre détermination dans des environnements spatiaux variés et immersifs.
-                <br>
-                <br><b>Votre mission commence maintenant. Êtes-vous prêt à naviguer dans les étoiles ?</b>
-                </p>
-                <div class="button-container">
-                    <button id="play-button" class="play-button">Jouer</button>
-                    <button id="button2" onclick="location.href='#classements'">Classements généraux</button>
-                </div>
-            `;
-            updateButtonLink('vaisseaux');
-            changeTheme('theme-vaisseaux');
-        } else if (clickedImage.classList.contains('headball')) {
-            texteDiv.innerHTML = `
-                <h1>⚽️🥅 Ball 2 Goal</h1>
-                <p>Entrez dans l'arène et montrez vos talents en marquant des buts spectaculaires. Dans ce jeu dynamique, chaque coup de tête compte ! Défiez vos amis ou l'ordinateur et grimpez dans les classements pour devenir la légende de Ball 2 Goal.
-                <br>Développé par des étudiants en Licence 3 MIAGE, ce jeu vous offre une expérience immersive et amusante, où chaque match est une occasion de surpasser vos adversaires. Affinez vos compétences et devenez le meilleur buteur de tous les temps.
-                <br>
-                <br><b>Prêt à faire trembler les filets ? C'est à vous de jouer !</b>
-                </p>
-                <div class="button-container">
-                    <button id="play-button" class="play-button">Jouer</button>
-                    <button id="button2" onclick="location.href='#classements'">Classements généraux</button>
-                </div>
-            `;
-            updateButtonLink('headball');
-            changeTheme('theme-headball');
-        } else if (clickedImage.classList.contains('cible')) {
-            texteDiv.innerHTML = `
-                <h1>😼🎯 AimMiaw</h1>
-                <p>Testez votre précision et votre concentration dans ce jeu captivant. Visez juste pour atteindre les cibles mouvantes et obtenir le meilleur score. Chaque niveau est un nouveau défi à relever, où vos compétences seront mises à l'épreuve.
-                <br>Créé par des étudiants en Licence 3 MIAGE, ce jeu combine plaisir et technique pour offrir une expérience engageante. Explorez différents environnements et affinez vos talents de tir pour devenir un maître incontesté de la précision.
-                <br>
-                <br><b>Avez-vous ce qu'il faut pour devenir le maître du tir ? Montrez-le-nous !</b>
-                </p>
-                <div class="button-container">
-                    <button id="play-button" class="play-button">Jouer</button>
-                    <button id="button2" onclick="location.href='#classements'">Classements généraux</button>
-                </div>
-            `;
-            updateButtonLink('cible');
-            changeTheme('theme-cible');
-        }
+        // Mettre à jour le contenu et bouton
+        updateGameContent(selectedGame);
     });
 });
