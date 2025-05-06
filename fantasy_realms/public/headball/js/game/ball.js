@@ -11,7 +11,7 @@ export class Ball {
             frictionAir: 0.01, // Ajoute une légère résistance de l'air
             render: { 
                 sprite: {
-                    texture: "../assets/ball.png", // Image utilisée pour la balle
+                    texture: "./assets/ball.png", // Image utilisée pour la balle
                     xScale: 0.15, // Échelle horizontale de l'image
                     yScale: 0.15  // Échelle verticale de l'image
                 }

@@ -5,7 +5,7 @@ export class ScoreManager {
         this.score2 = 0; // Score du joueur 2
         this.timeLeft = 90; // Temps restant en secondes
         this.interval = null; // Intervalle du chronomètre
-        this.goalSound = new Audio("../sounds/goal.mp3"); // Son de but
+        this.goalSound = new Audio("./sounds/goal.mp3"); // Son de but
         this.uiManager = uiManager; // Gestion de l'interface utilisateur
         this.isPaused = false; // Indicateur de pause
     }
@@ -120,7 +120,7 @@ export class ScoreManager {
         endMessage.style.display = "block"; // Affiche le message de fin
 
         // Remet l'image d'accueil
-        document.body.style.backgroundImage = "url('../assets/acceuil.png')";
+        document.body.style.backgroundImage = "url('./assets/accueil.png')";
     }
 
     // Réinitialise le score et le chronomètre pour un nouveau jeu

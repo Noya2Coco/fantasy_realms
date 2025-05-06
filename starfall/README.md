@@ -105,7 +105,7 @@ Dans *Starfall*, chaque joueur pilote un vaisseau spatial dans une arène galact
    npm run dev
    ```
 
-2. Ouvrir `http://localhost:22221` dans un navigateur.
+2. Ouvrir `http://localhost:5173` dans un navigateur.
 
 3. Cliquez sur **Jouer**.
 
