@@ -1,84 +1,85 @@
-✨ Fantasy Realm — Collection de Jeux Web
-Fantasy Realm est une collection originale de jeux web dans le théme fantasie conçus pour offrir des expériences ludiques variées, accessibles à tous, directement depuis votre navigateur.
+# ✨ FANTASY REALM — COLLECTION DE JEUX WEB
+
+**FANTASY REALM** est une collection originale de jeux web conçus pour offrir des expériences ludiques variées, accessibles à tous, directement depuis votre navigateur.  
 Chaque jeu explore un univers et un style de gameplay distinct, allant de la précision rapide à la compétition sportive en passant par le combat spatial multijoueur.
 
-Que vous ayez une minute à perdre ou envie de vous plonger dans une session plus longue, Fantasy Realm a un jeu pour vous.
+Que vous ayez une minute à perdre ou envie de vous plonger dans une session plus longue, **FANTASY REALM** a un jeu pour vous.
 
-🐾 Aim Miaw
-Un jeu d’adresse et de réflexes félins.
+---
 
-Dans Aim Miaw, vous incarnez un chasseur ultra-rapide : cliquez sur les cibles dès qu’elles apparaissent à l’écran ! Certaines vous rapportent plus de points, d’autres cachent des pièges. À chaque partie, votre précision est mise à l’épreuve et votre score grimpe selon vos performances.
+## 🐾 AIM MIAW
 
-Points forts :
+**UN JEU D’ADRESSE ET DE RÉFLEXES FÉLINS.**
 
-Gameplay rapide et addictif
+Dans *AIM MIAW*, vous incarnez un chasseur ultra-rapide : cliquez sur les cibles dès qu’elles apparaissent à l’écran ! Certaines vous rapportent plus de points, d’autres cachent des pièges. À chaque partie, votre précision est mise à l’épreuve et votre score grimpe selon vos performances.
 
-Système de score dynamique
+**POINTS FORTS :**
+- GAMEPLAY RAPIDE ET ADDICTIF  
+- SYSTÈME DE SCORE DYNAMIQUE  
+- AMBIANCE VISUELLE ET SONORE VIVANTE  
+- PARFAIT POUR DE COURTES SESSIONS
 
-Ambiance visuelle et sonore vivante
+---
 
-Parfait pour de courtes sessions
+## ⚽ HEADBALL
 
-⚽ Headball
-Le football version cartoon et duel.
+**LE FOOTBALL VERSION CARTOON ET DUEL.**
 
-Headball est un jeu compétitif pour deux joueurs où vous affrontez un ami dans un match de football déjanté. Sautez, tirez, bloquez les tirs et tentez de marquer le plus de buts avant la fin du chrono. Rires, rivalité et esprit de compétition garantis !
+*HEADBALL* est un jeu compétitif pour deux joueurs où vous affrontez un ami dans un match de football déjanté. Sautez, tirez, bloquez les tirs et tentez de marquer le plus de buts avant la fin du chrono. Rires, rivalité et esprit de compétition garantis !
 
-Points forts :
+**POINTS FORTS :**
+- JEU MULTIJOUEUR LOCAL FUN ET IMMÉDIAT  
+- CONTRÔLES SIMPLES ET RAPIDES À PRENDRE EN MAIN  
+- MATCHS COURTS, PARFAITS POUR JOUER À DEUX  
+- AMBIANCE SPORTIVE ET DÉCONTRACTÉE
 
-Jeu multijoueur local fun et immédiat
+---
 
-Contrôles simples et rapides à prendre en main
+## 🚀 STARFALL
 
-Matchs courts, parfaits pour jouer à deux
+**UNE BATAILLE GALACTIQUE EN TEMPS RÉEL.**
 
-Ambiance sportive et décontractée
+Dans *STARFALL*, vous prenez les commandes d’un vaisseau spatial dans un univers 3D. Évitez la gravité des planètes, tirez sur vos adversaires en ligne, et restez en vie le plus longtemps possible. Le jeu combine immersion, compétition et liberté de mouvement dans l’espace.
 
-🚀 Starfall
-Une bataille galactique en temps réel.
+**POINTS FORTS :**
+- EXPÉRIENCE MULTIJOUEUR EN LIGNE  
+- UNIVERS SPATIAL IMMERSIF ET STYLISÉ  
+- CHOIX DE VUE COCKPIT OU EXTÉRIEURE  
+- COMBATS DYNAMIQUES AVEC EFFETS VISUELS
 
-Dans Starfall, vous prenez les commandes d’un vaisseau spatial dans un univers 3D. Évitez la gravité des planètes, tirez sur vos adversaires en ligne, et restez en vie le plus longtemps possible. Le jeu combine immersion, compétition et liberté de mouvement dans l’espace.
+---
 
-Points forts :
+## ✅ FONCTIONNALITÉS GÉNÉRALES
 
-Expérience multijoueur en ligne
+- AUCUN TÉLÉCHARGEMENT NÉCESSAIRE : JOUABLES DANS UN NAVIGATEUR MODERNE  
+- COMPATIBLES CLAVIER/SOURIS  
+- JEUX SOLO, MULTIJOUEUR LOCAL OU EN LIGNE SELON LE TITRE  
+- AMBIANCES SONORES INTÉGRÉES POUR CHAQUE UNIVERS  
+- OPTIMISÉS POUR DES PARTIES RAPIDES OU PROLONGÉES
 
-Univers spatial immersif et stylisé
+---
 
-Choix de vue cockpit ou extérieure
+## 🛠️ CE QUI ARRIVE BIENTÔT
 
-Combats dynamiques avec effets visuels
+**FANTASY REALM** est en évolution continue. Des nouveautés sont à venir :
 
-✅ Fonctionnalités générales
-Aucun téléchargement nécessaire : jouables dans un navigateur moderne
+- NOUVEAUX TYPES DE CIBLES ET DÉFIS (*AIM MIAW*)  
+- REPLAYS ET MODES TOURNOIS (*HEADBALL*)  
+- VAISSEAUX PERSONNALISABLES ET NOUVEAUX MODES (*STARFALL*)  
+- OPTIMISATION MOBILE ET OPTIONS TACTILES  
+- TABLEAU DE SCORES EN LIGNE
 
-Compatibles clavier/souris
+---
 
-Jeux solo, multijoueur local ou en ligne selon le titre
+## 🧩 POURQUOI FANTASY REALM ?
 
-Ambiances sonores intégrées pour chaque univers
-
-Optimisés pour des parties rapides ou prolongées
-
-🛠️ Ce qui arrive bientôt
-Fantasy Realm est en évolution continue. Des nouveautés sont à venir :
-
-Nouveaux types de cibles et défis (Aim Miaw)
-
-Replays et modes tournois (Headball)
-
-Vaisseaux personnalisables et nouveaux modes (Starfall)
-
-Optimisation mobile et options tactiles
-
-Tableau de scores en ligne
-
-🧩 Pourquoi Fantasy Realm ?
-Parce que chaque jeu est un petit monde à lui seul.
-Aim Miaw, Headball et Starfall explorent chacun une facette différente du plaisir de jouer :
-🎯 la précision, ⚽ la compétition, 🚀 l’aventure spatiale.
+Parce que chaque jeu est un petit monde à lui seul.  
+**AIM MIAW**, **HEADBALL** et **STARFALL** explorent chacun une facette différente du plaisir de jouer :  
+🎯 LA PRÉCISION, ⚽ LA COMPÉTITION, 🚀 L’AVENTURE SPATIALE.  
 Réunis dans une seule collection, ils offrent un aperçu créatif et accessible du jeu vidéo sur navigateur.
 
 
-🎮 Fantasy Realm — Trois jeux, trois mondes, une seule envie : s’amuser.
-🐱 Cliquez. ⚽ Sautez. 🚀 Décollez.
+---
+
+🎮 **FANTASY REALM** — TROIS JEUX, TROIS MONDES, UNE SEULE ENVIE : S’AMUSER.  
+🐱 CLIQUEZ. ⚽ SAUTEZ. 🚀 DÉCOLLEZ.
