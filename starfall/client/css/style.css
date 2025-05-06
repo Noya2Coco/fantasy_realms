@@ -169,7 +169,7 @@ canvas {
   z-index: 20; /* Above everything else */
 }
 
-#playButton {
+#playButton, #homeButton {
   padding: 20px 40px;
   font-size: 24px;
   color: white;
@@ -178,6 +178,10 @@ canvas {
   border-radius: 5px;
   cursor: pointer;
   transition: background-color 0.3s ease;
+}
+
+#homeButton {
+  margin-top: 5%;
 }
 
 #playButton:hover {
