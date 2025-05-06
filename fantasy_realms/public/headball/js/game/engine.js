@@ -18,7 +18,7 @@ export class GameEngine {
                 width,
                 height,
                 wireframes: false,
-                background: '../assets/stade.png', // Image de fond du terrain
+                background: './assets/stade.png', // Image de fond du terrain
                 backgroundSize: 'cover',
                 backgroundRepeat: 'no-repeat',
                 backgroundPosition: 'center center',

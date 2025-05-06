@@ -27,7 +27,7 @@ export class Player {
         });
 
         // Chargement du son pour la frappe
-        this.kickSound = new Audio("../sounds/kick.mp3");
+        this.kickSound = new Audio("./sounds/kick.mp3");
     }
 
     // Remet le joueur à sa position de départ et annule sa vitesse
@@ -95,8 +95,8 @@ export class Player {
 export class PlayersManager {
     constructor(engine, width, height) {
         // Crée deux joueurs aux extrémités opposées du terrain
-        this.player1 = new Player(300, height - 50, 45, "../assets/player1.png", engine);
-        this.player2 = new Player(width - 300, height - 50, 50, "../assets/player2.png", engine);
+        this.player1 = new Player(300, height - 50, 45, "./assets/player1.png", engine);
+        this.player2 = new Player(width - 300, height - 50, 50, "./assets/player2.png", engine);
 
         // Ajoute les joueurs au monde physique
         engine.addToWorld([this.player1.body, this.player2.body]);
